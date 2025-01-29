@@ -5,8 +5,10 @@ import JobseekerLogin from './pages/authentication/jobseeker/JobseekerLogin'
 import JobseekerDashboard from './pages/dashboard/jobseeker/JobseekerDashboard'
 import JobSeekerSignUp from './pages/authentication/jobseeker/JobseekerSignUp'
 import AdminDashboard from './pages/dashboard/admin/admin-dashboard'
-import AdminLogin from './pages/authentication/admin/admin-login'
+import AdminSignIn from './pages/authentication/admin/admin-signin'
 import AdminSignUp from './pages/authentication/admin/admin-signup'
+import Auth from './pages/authentication/admin/auth'
+import ForgotPassword from './pages/authentication/admin/admin-forgot-password'
 
 const App = () => {
   return (
@@ -28,8 +30,10 @@ const App = () => {
       <Route path='/admin' element="">
        <Route path='dashboard' element={<AdminDashboard/>}/>
       </Route>
-      <Route path='/admin/login' element={<AdminLogin/>}/>
+      <Route path='/admin/signin' element={<AdminSignIn/>}/>
       <Route path='/admin/signup' element={<AdminSignUp/>}/>
+      <Route path='/admin/forgot-password' element={<ForgotPassword/>}/>
+       <Route path='/admin/auth' element={<Auth/>}/>
 
 
     </Routes>

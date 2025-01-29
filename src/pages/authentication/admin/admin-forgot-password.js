@@ -8,7 +8,7 @@ const flipAnimation = {
   exit: { rotateY: -90, opacity: 0, transition: { duration: 0.6 } }
 };
 
-const AdminSignUp = () => {
+const ForgotPassword = () => {
   return (
     <div className="min-h-screen flex justify-center items-center bg-gray-900 text-white">
       <motion.div
@@ -18,33 +18,23 @@ const AdminSignUp = () => {
         animate="animate"
         exit="exit"
       >
-        <h2 className="text-3xl font-bold text-center">Create an Account</h2>
+        <h2 className="text-3xl font-bold text-center">Forgot Password</h2>
         <form className="mt-6 space-y-4">
-          <div>
-            <label className="block text-sm font-medium">Full Name</label>
-            <input type="text" placeholder="Enter Your Name"
-              className="w-full p-2 mt-1 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-          </div>
           <div>
             <label className="block text-sm font-medium">Email</label>
             <input type="email" placeholder="Enter Your Email"
               className="w-full p-2 mt-1 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
           </div>
-          <div>
-            <label className="block text-sm font-medium">Password</label>
-            <input type="password" placeholder="Create a Password"
-              className="w-full p-2 mt-1 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-          </div>
           <button className="w-full bg-blue-600 py-2 rounded-md hover:bg-blue-500">
-            Sign Up
+            Reset Password
           </button>
         </form>
         <p className="text-center mt-4 text-sm">
-          Already have an account? <Link to="/admin/signin" className="text-blue-500 hover:underline">Sign In</Link>
+          Remembered? <Link to="/admin/signin" className="text-blue-500 hover:underline">Sign In</Link>
         </p>
       </motion.div>
     </div>
   );
 };
 
-export default AdminSignUp;
+export default ForgotPassword;
