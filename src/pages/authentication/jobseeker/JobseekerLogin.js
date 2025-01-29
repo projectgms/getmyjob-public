@@ -12,6 +12,10 @@ const flipAnimation = {
 };
 
 function JobseekerLogin() {
+
+
+
+  
   return (
     <div
       className="min-h-screen flex flex-col md:flex-row justify-center items-center px-6 md:px-16 py-16"
