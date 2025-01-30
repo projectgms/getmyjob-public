@@ -18,7 +18,7 @@ const ForgotPassword = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-    const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
 
   // Handle email input
   const handleEmailChange = (e) => setEmail(e.target.value);
@@ -52,9 +52,9 @@ const ForgotPassword = () => {
 
 
 
-            {/* Sign Up Form Section */}
+      {/* Sign Up Form Section */}
       <div className="flex flex-col justify-center items-center p-6  w-full h-screen bg-white shadow-lg rounded-lg">
-               {step === 1 ? (
+        {step === 1 ? (
           // Step 1: Email Verification
           <motion.div
             initial={{ opacity: 0 }}
@@ -88,11 +88,11 @@ const ForgotPassword = () => {
             </button>
 
             <p className="my-4 text-sm text-gray-500 text-center">
-  Remembered your password?{" "}
-  <Link to="/admin/signin" className="font-semibold text-blue-600 hover:text-blue-500">
-    Return to Sign In
-  </Link>
-</p>
+              Remembered your password?{" "}
+              <Link to="/admin/signin" className="font-semibold text-blue-600 hover:text-blue-500">
+                Return to Sign In
+              </Link>
+            </p>
 
           </motion.div>
         ) : (
@@ -127,7 +127,7 @@ const ForgotPassword = () => {
                   {passwordVisible ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
                 </button>
 
-                
+
               </div>
             </div>
 
@@ -158,18 +158,18 @@ const ForgotPassword = () => {
             </div>
 
             <p className="my-4 text-sm text-gray-500 text-center">
-  Don't need to reset?{" "}
-  <Link to="/admin/signin" className="font-semibold text-blue-600 hover:text-blue-500">
-    Sign In to your account
-  </Link>
-</p>
+              Don't need to reset?{" "}
+              <Link to="/admin/signin" className="font-semibold text-blue-600 hover:text-blue-500">
+                Sign In to your account
+              </Link>
+            </p>
 
           </motion.div>
         )}
       </div>
 
 
-{/* Card Section - Visible on tablets and larger */}
+      {/* Card Section - Visible on tablets and larger */}
       <div className="lg:flex flex-col justify-center bg-blue-600 hidden lg:block px-6 py-12">
         <div className="flex flex-row items-center mb-6">
           <img src={breifcaseLogo} height={50} width={50} />
