@@ -1,8 +1,8 @@
 import React from 'react'
-import group from "../../../assets/images/group.jpg"
+import group from '../../../assets/images/group.jpg'
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
-const RecruitmentLogin = () => {
+import { motion } from 'framer-motion';
+const RecruitmentSignup = () => {
   return (
     <motion.div 
     className="flex items-center justify-center min-h-screen bg-gray-100 p-4"
@@ -16,11 +16,16 @@ const RecruitmentLogin = () => {
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5, ease: 'easeOut' }}
     >
-      {/* Left Side - Login Form */}
+      {/* Left Side - Signup Form */}
       <div className="w-1/2 p-10 bg-gradient-to-br from-yellow-200 to-gray-100">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">Sign in to your account</h2>
-        <p className="text-sm text-gray-600 mb-6">Welcome back! Please login to continue.</p>
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">Create an account</h2>
+        <p className="text-sm text-gray-600 mb-6">Sign up and get 30-day free trial</p>
         <motion.form initial={{ scale: 0.9 }} animate={{ scale: 1 }} transition={{ duration: 0.3 }}>
+          <input
+            type="text"
+            placeholder="Full name"
+            className="w-full p-3 mb-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
+          />
           <input
             type="email"
             placeholder="Email"
@@ -35,7 +40,7 @@ const RecruitmentLogin = () => {
             whileHover={{ scale: 1.05 }} 
             className="w-full bg-yellow-500 text-white py-3 rounded-md hover:bg-yellow-600 transition"
           >
-            Sign In
+            Submit
           </motion.button>
         </motion.form>
         <div className="flex items-center justify-center gap-4 mt-4">
@@ -47,10 +52,7 @@ const RecruitmentLogin = () => {
           </motion.button>
         </div>
         <p className="text-sm text-gray-600 mt-4">
-          Don't have an account? <Link to="/recruiter/signup" className="text-yellow-500">Sign up</Link>
-        </p>
-        <p className="text-sm text-gray-600 mt-2">
-          Forgot your password? <Link to="/recruiter/forgot-password" className="text-yellow-500">Reset here</Link>
+          Have an account? <Link to="/recruiter/login" className="text-yellow-500">Sign in</Link>
         </p>
       </div>
 
@@ -90,4 +92,4 @@ const RecruitmentLogin = () => {
   )
 }
 
-export default RecruitmentLogin
+export default RecruitmentSignup
