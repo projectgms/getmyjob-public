@@ -11,30 +11,23 @@ const flipAnimation = {
   exit: { rotateY: -90, opacity: 0, transition: { duration: 0.6 } },
 };
 
-function AdminSignUp() {
+function AdminSignIn() {
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  
+  const navigate = useNavigate();  // Use navigate hook to programmatically navigate
 
-  const navigate = useNavigate(); // Use the navigate hook
-
-  // Handle new password input
-  const handleNewPasswordChange = (e) => setNewPassword(e.target.value);
-
-  // Handle confirm password input
-  const handleConfirmPasswordChange = (e) => setConfirmPassword(e.target.value);
-
-  // Handle form submission
+  // Form submit handler
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Check if passwords match
-    if (newPassword !== confirmPassword) {
-      alert("Passwords do not match!");
+    // Here you can add form validation logic if needed
+    if (email && password) {
+      // Navigate to the dashboard page after successful login
+      navigate("/admin/dashboard");
     } else {
-      // If passwords match, navigate to the Sign-In page
-      navigate("/admin/signin");
+      alert("Please fill in all fields");
     }
   };
 
@@ -47,7 +40,7 @@ function AdminSignUp() {
         backgroundPosition: "center",
       }}
     >
-      {/* Sign Up Form Section */}
+      {/* Login Form Section */}
       <div className="flex flex-col justify-center items-center p-6 md:p-12 w-full h-screen bg-white shadow-lg rounded-lg">
         <motion.div
           className="w-full p-6"
@@ -57,13 +50,13 @@ function AdminSignUp() {
           exit="exit"
         >
           <h2 className="text-3xl font-bold text-center text-gray-900">
-            Create your account 🎉
+            Welcome back 🎉
           </h2>
           <p className="text-gray-500 text-center mt-2">
-            Please fill in the details to create your admin panel access.
+            Please enter your credentials to access your admin panel.
           </p>
 
-          {/* Sign Up Form */}
+          {/* Sign In Form */}
           <form onSubmit={handleSubmit} className="mt-6 space-y-6">
             <div>
               <label htmlFor="email" className="block text-sm font-semibold text-gray-700">
@@ -74,6 +67,8 @@ function AdminSignUp() {
                   id="email"
                   name="email"
                   type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)} // Bind email state
                   placeholder="Enter Your email"
                   required
                   autoComplete="email"
@@ -82,61 +77,62 @@ function AdminSignUp() {
               </div>
             </div>
 
-                    <div>
-                <label htmlFor="new-password" className="block text-sm font-semibold text-gray-700">New Password</label>
-                <div className="mt-2 relative">
-                  <input
-                    id="new-password"
-                    name="new-password"
-                    type={passwordVisible ? "text" : "password"}
-                    value={newPassword}
-                    onChange={handleNewPasswordChange}
-                    placeholder="Enter new password"
-                    required
-                    className="block w-full rounded-md bg-gray-100 px-4 py-2 text-base text-gray-900 font-medium border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                  <button
-                    type="button"
-                    className="absolute top-2 right-3 text-gray-500"
-                    onClick={() => setPasswordVisible(!passwordVisible)}
-                  >
-                    {passwordVisible ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
-                  </button>
-  
-                  
-                </div>
+            <div>
+              <label htmlFor="password" className="block text-sm font-semibold text-gray-700">
+                Password
+              </label>
+              <div className="mt-2 relative">
+                <input
+                  id="password"
+                  name="password"
+                  type={passwordVisible ? "text" : "password"} // Toggle password visibility
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)} // Bind password state
+                  placeholder="Enter your password"
+                  required
+                  autoComplete="current-password"
+                  className="block w-full rounded-md bg-gray-100 px-4 py-2 text-base text-gray-900 font-medium border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <button
+                  type="button"
+                  className="absolute top-2 right-3 text-gray-500"
+                  onClick={() => setPasswordVisible(!passwordVisible)} // Toggle password visibility
+                >
+                  {passwordVisible ? <FaEyeSlash size={20} /> : <FaEye size={20} />} {/* Show/Hide icon */}
+                </button>
               </div>
-  
-              <div>
-                <label htmlFor="confirm-password" className="block text-sm font-semibold text-gray-700">Confirm Password</label>
-                <div className="mt-2 relative">
+              <div className="flex justify-between mt-4 text-sm">
+                <div className="flex items-center">
                   <input
-                    id="confirm-password"
-                    name="confirm-password"
-                    type={passwordVisible ? "text" : "password"}
-                    value={confirmPassword}
-                    onChange={handleConfirmPasswordChange}
-                    placeholder="Confirm your password"
-                    required
-                    className="block w-full rounded-md bg-gray-100 px-4 py-2 text-base text-gray-900 font-medium border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    type="checkbox"
+                    id="remember-me"
+                    name="remember-me"
+                    className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
                   />
+                  <label htmlFor="remember-me" className="font-semibold text-gray-700 hover:text-blue-500 px-2">
+                    Remember Me
+                  </label>
                 </div>
-              </div>
+                <Link to="/admin/forgot-password" className="font-semibold text-blue-600 hover:text-blue-500">
+                  Forgot password?
+                </Link>
+              </div>  
+            </div>
 
             <div>
               <button
                 type="submit"
                 className="flex w-full justify-center rounded-md bg-blue-600 py-3 text-sm font-semibold text-white shadow-md hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                Create your account
+                Login to your account
               </button>
             </div>
           </form>
 
           <p className="my-4 text-sm text-gray-500 text-center">
-            Already have an account?{" "}
-            <Link to="/admin/signin" className="font-semibold text-blue-600 hover:text-blue-500">
-              Sign In
+            Don't have an account?{" "}
+            <Link to="/admin/signup" className="font-semibold text-blue-600 hover:text-blue-500">
+              Sign Up
             </Link>
           </p>
 
@@ -157,7 +153,7 @@ function AdminSignUp() {
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M7.52364 13.519C7.36364 13.039 7.27273 12.5263 7.27273 11.999C7.27273 11.4717 7.36364 10.959 7.52364 10.479V8.40625H4.85091C4.30909 9.48625 4 10.7081 4 11.999C4 13.2899 4.30909 14.5117 4.85091 15.5917L7.52364 13.519Z" fill="#FBBC05"/>
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M12.0007 7.18182C13.1752 7.18182 14.2297 7.58545 15.0588 8.37818L17.3534 6.08364C15.9679 4.79273 14.157 4 12.0007 4C8.87338 4 6.16793 5.79273 4.85156 8.40727L7.52429 10.48C8.15338 8.58909 9.91702 7.18182 12.0007 7.18182Z" fill="#EA4335"/>
               </svg>
-              Sign up with Google
+              Sign in with Google
             </button>
           </div>
         </motion.div>
@@ -170,11 +166,11 @@ function AdminSignUp() {
           <p className="px-2 font-bold text-2xl text-white">AdminPanel</p>
         </div>
         <h3 className="text-sky-100 lg:text-4xl text-xl font-bold font-inter py-4">
-          Set up your AdminPanel account.
+          Manage your platform effortlessly.
         </h3>
         <p className="font-inter text-sky-50 font-normal text-sm ">
-          With AdminPanel, you gain complete control over your platform's operations. Set up your account and start managing users, content, and data with ease.
-          Our platform is designed to provide admins with a seamless, powerful interface to manage everything in one place.
+          The AdminPanel provides all the tools you need to manage and oversee your platform’s operations.
+          Access reports, user data, and adjust settings in real-time to ensure smooth business operations.
         </p>
         <div className="flex items-center mt-12 justify-stretch">
           <img src={avtarGroupImg} height={150} width={150} />
@@ -188,4 +184,4 @@ function AdminSignUp() {
   );
 }
 
-export default AdminSignUp;
+export default AdminSignIn;
