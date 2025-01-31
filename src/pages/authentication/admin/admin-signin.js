@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import breifcaseLogo from "./../../../assets/images/brief-case.png";
 import avtarGroupImg from "./../../../assets/images/avtar-group.png";
-
 import { FaEye, FaEyeSlash } from "react-icons/fa"; // Add the icons
 
 const flipAnimation = {
@@ -14,8 +13,23 @@ const flipAnimation = {
 
 function AdminSignIn() {
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  
+  const navigate = useNavigate();  // Use navigate hook to programmatically navigate
 
+  // Form submit handler
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
+    // Here you can add form validation logic if needed
+    if (email && password) {
+      // Navigate to the dashboard page after successful login
+      navigate("/admin/dashboard");
+    } else {
+      alert("Please fill in all fields");
+    }
+  };
 
   return (
     <div
@@ -26,8 +40,6 @@ function AdminSignIn() {
         backgroundPosition: "center",
       }}
     >
-
-
       {/* Login Form Section */}
       <div className="flex flex-col justify-center items-center p-6 md:p-12 w-full h-screen bg-white shadow-lg rounded-lg">
         <motion.div
@@ -45,7 +57,7 @@ function AdminSignIn() {
           </p>
 
           {/* Sign In Form */}
-          <form action="#" method="POST" className="mt-6 space-y-6">
+          <form onSubmit={handleSubmit} className="mt-6 space-y-6">
             <div>
               <label htmlFor="email" className="block text-sm font-semibold text-gray-700">
                 Email address
@@ -55,6 +67,8 @@ function AdminSignIn() {
                   id="email"
                   name="email"
                   type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)} // Bind email state
                   placeholder="Enter Your email"
                   required
                   autoComplete="email"
@@ -72,6 +86,8 @@ function AdminSignIn() {
                   id="password"
                   name="password"
                   type={passwordVisible ? "text" : "password"} // Toggle password visibility
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)} // Bind password state
                   placeholder="Enter your password"
                   required
                   autoComplete="current-password"
@@ -131,23 +147,20 @@ function AdminSignIn() {
 
           <div className="space-y-4 mb-6">
             <button className="w-full flex items-center justify-center gap-2 bg-transparent border border-gray-600 text-gray-700 rounded-lg p-2 hover:bg-gray-100 transition-colors">
-             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path fill-rule="evenodd" clip-rule="evenodd" d="M19.68 12.1833C19.68 11.616 19.6291 11.0706 19.5345 10.5469H12V13.6415H16.3055C16.12 14.6415 15.5564 15.4888 14.7091 16.056V18.0633H17.2945C18.8073 16.6706 19.68 14.6197 19.68 12.1833Z" fill="#4285F4"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M12.0007 19.9995C14.1607 19.9995 15.9716 19.2831 17.2952 18.0613L14.7097 16.054C13.9934 16.534 13.077 16.8177 12.0007 16.8177C9.91702 16.8177 8.15338 15.4104 7.52429 13.5195H4.85156V15.5922C6.16793 18.2068 8.87338 19.9995 12.0007 19.9995Z" fill="#34A853"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M7.52364 13.519C7.36364 13.039 7.27273 12.5263 7.27273 11.999C7.27273 11.4717 7.36364 10.959 7.52364 10.479V8.40625H4.85091C4.30909 9.48625 4 10.7081 4 11.999C4 13.2899 4.30909 14.5117 4.85091 15.5917L7.52364 13.519Z" fill="#FBBC05"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M12.0007 7.18182C13.1752 7.18182 14.2297 7.58545 15.0588 8.37818L17.3534 6.08364C15.9679 4.79273 14.157 4 12.0007 4C8.87338 4 6.16793 5.79273 4.85156 8.40727L7.52429 10.48C8.15338 8.58909 9.91702 7.18182 12.0007 7.18182Z" fill="#EA4335"/>
-</svg>
-
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M19.68 12.1833C19.68 11.616 19.6291 11.0706 19.5345 10.5469H12V13.6415H16.3055C16.12 14.6415 15.5564 15.4888 14.7091 16.056V18.0633H17.2945C18.8073 16.6706 19.68 14.6197 19.68 12.1833Z" fill="#4285F4"/>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M12.0007 19.9995C14.1607 19.9995 15.9716 19.2831 17.2952 18.0613L14.7097 16.054C13.9934 16.534 13.077 16.8177 12.0007 16.8177C9.91702 16.8177 8.15338 15.4104 7.52429 13.5195H4.85156V15.5922C6.16793 18.2068 8.87338 19.9995 12.0007 19.9995Z" fill="#34A853"/>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M7.52364 13.519C7.36364 13.039 7.27273 12.5263 7.27273 11.999C7.27273 11.4717 7.36364 10.959 7.52364 10.479V8.40625H4.85091C4.30909 9.48625 4 10.7081 4 11.999C4 13.2899 4.30909 14.5117 4.85091 15.5917L7.52364 13.519Z" fill="#FBBC05"/>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M12.0007 7.18182C13.1752 7.18182 14.2297 7.58545 15.0588 8.37818L17.3534 6.08364C15.9679 4.79273 14.157 4 12.0007 4C8.87338 4 6.16793 5.79273 4.85156 8.40727L7.52429 10.48C8.15338 8.58909 9.91702 7.18182 12.0007 7.18182Z" fill="#EA4335"/>
+              </svg>
               Sign in with Google
             </button>
           </div>
         </motion.div>
       </div>
 
-
-
       {/* Card Section - Visible on tablets and larger */}
-      <div className="lg:flex flex-col justify-center  bg-blue-600 hidden lg:block px-6 py-12">
+      <div className="lg:flex flex-col justify-center bg-blue-600 hidden lg:block px-6 py-12">
         <div className="flex flex-row items-center mb-6">
           <img src={breifcaseLogo} height={50} width={50} />
           <p className="px-2 font-bold text-2xl text-white">AdminPanel</p>
@@ -167,7 +180,6 @@ function AdminSignIn() {
           </p>
         </div>
       </div>
-
     </div>
   );
 }

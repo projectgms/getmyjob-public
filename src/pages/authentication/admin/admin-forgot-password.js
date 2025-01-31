@@ -60,7 +60,7 @@ const ForgotPassword = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="space-y-6 w-full"
+            className="space-y-6 p-6 w-full"
           >
             <h2 className="text-2xl font-bold text-center text-gray-800">Forgot Password</h2>
             <p className="text-center text-gray-500">Please enter your email to reset your password.</p>
@@ -101,7 +101,7 @@ const ForgotPassword = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="space-y-6 w-full"
+            className="space-y-6 p-6 w-full"
           >
             <h2 className="text-2xl font-bold text-center text-gray-800">Create New Password</h2>
             <p className="text-center text-gray-500">Enter your new password below.</p>

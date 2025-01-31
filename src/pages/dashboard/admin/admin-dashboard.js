@@ -5,7 +5,7 @@ const AdminDashboard = () => {
   return (
     <div>
         <div>
-        <h1 style={{color:"#000"}}>JobseekerDashboard</h1>
+        <h1 style={{color:"#000"}}>adminDashboard</h1>
         </div>
        </div>
   )
