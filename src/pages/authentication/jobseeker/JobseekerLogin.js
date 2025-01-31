@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { motion } from "framer-motion";
 import breifcaseLogo from './../../../assets/images/brief-case.png';
 import avtarGroupImg from './../../../assets/images/avtar-group.png';
+import JobSeekerNavbar from '../../../components/navbar/JobSeekerNavbar';
 
 
 const flipAnimation = {
@@ -17,7 +18,10 @@ function JobseekerLogin() {
 
   
   return (
-    <div
+
+    <div>
+      {/* <JobSeekerNavbar/> */}
+       <div
       className="min-h-screen flex flex-col md:flex-row justify-center items-center px-6 md:px-16 py-16"
       style={{
         backgroundImage: 'linear-gradient(135deg, #FFFF 10%, #007FFF 110%)',
@@ -26,6 +30,8 @@ function JobseekerLogin() {
       }}
 
     >
+     
+      
       <div className="flex flex-col md:flex-row w-full max-w-6xl bg-transparent min-h-[500px] md:min-h-[650px]">
 
 
@@ -84,7 +90,7 @@ function JobseekerLogin() {
                     id="password"
                     name="password"
                     type="password"
-                    placeholder='Enter your   '
+                    placeholder='Enter your password'
                     required
                     autoComplete="current-password"
                     className="block w-full rounded-md bg-gray-600 px-3 py-1.5 text-base text-white font-medium outline-slate-500 outline-1 -outline-offset-1 outline-slate-400 placeholder:text-gray-400 placeholder:font-medium focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6"
@@ -162,6 +168,9 @@ function JobseekerLogin() {
         </div>
       </div>
     </div>
+    </div>
+  
+   
   )
 }
 
