@@ -13,6 +13,12 @@ import avtar2 from "./../../../assets/images/avtar2.jpg";
 import adobeLogo from "./../../../assets/images/Adobe_Creative_Cloud_rainbow_icon.png";
 import { motion } from "framer-motion";
 import InfoBoxThree from "../../../components/JobComponents/InfoBoxThree";
+import InfoTitle from "../../../components/JobComponents/InfoTitle";
+import JobSearchInput from "../../../components/JobComponents/JobSearchInput";
+import SelectionChips from "../../../components/JobComponents/SelectionChips";
+import JobInfoCard from "../../../components/JobComponents/JobInfoCard";
+import ShowMoreBtnDark from "../../../components/buttons/ShowMoreBtnDark";
+
 
 const typingVariants = {
   hidden: { opacity: 1 },
@@ -302,8 +308,42 @@ function JobSeekerHomePage() {
       {/* More content here */}
 
       <section>
+        
+        {/* Three Info Cards Here */}
+
         <InfoBoxThree />
+
+        {/* Small Heading and Big SubHeading */}
+
+        <InfoTitle subheading="Realize your Career Dreams" heading="Search and Discover" nextLine="your Jobs Here"/>
+
+        {/*Job Search Input here with Job Title and Location  */}
+
+        <JobSearchInput/>
+
+        <div className="flex w-full justify-center">
+          <SelectionChips/>
+        </div>
+        
+        {/* All Job Cards Here */}
+       
+        <JobInfoCard/>
+
+
+        <div className="flex w-full items-center justify-center">
+              <ShowMoreBtnDark/>   
+        </div>
+
+
+        {/* Small Heading and Big SubHeading */}
+
+        <InfoTitle  subheading="Top Companies" heading="Best Companies for" nextLine="Employees 2025"/>
+      
+
+        
       </section>
+
+
     </div>
   );
 }
