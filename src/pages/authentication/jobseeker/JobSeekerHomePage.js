@@ -18,6 +18,8 @@ import JobSearchInput from "../../../components/JobComponents/JobSearchInput";
 import SelectionChips from "../../../components/JobComponents/SelectionChips";
 import JobInfoCard from "../../../components/JobComponents/JobInfoCard";
 import ShowMoreBtnDark from "../../../components/buttons/ShowMoreBtnDark";
+import CompanyCard from "../../../components/JobComponents/CompanyCard";
+import InterViewProcess from "../../../components/JobComponents/InterViewProcess";
 
 
 const typingVariants = {
@@ -307,7 +309,6 @@ function JobSeekerHomePage() {
 
       {/* More content here */}
 
-      <section>
         
         {/* Three Info Cards Here */}
 
@@ -338,10 +339,21 @@ function JobSeekerHomePage() {
         {/* Small Heading and Big SubHeading */}
 
         <InfoTitle  subheading="Top Companies" heading="Best Companies for" nextLine="Employees 2025"/>
-      
-
         
-      </section>
+        {/* Campany Cards Here */}
+
+        <div className="my-3 px-2">
+          <CompanyCard/>
+        </div>
+
+        <div className="flex w-full items-center justify-center">
+              <ShowMoreBtnDark/>   
+        </div>
+        
+        <InfoTitle  subheading="Simple Process" heading="Effortless Process," nextLine="Optimal Results"/>
+        
+        <InterViewProcess/>
+        
 
 
     </div>
