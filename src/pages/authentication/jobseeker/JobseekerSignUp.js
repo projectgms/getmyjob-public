@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import { motion } from "framer-motion";
 import breifcaseLogo from './../../../assets/images/brief-case.png';
 import avtarGroupImg from './../../../assets/images/avtar-group.png';
+import { BiLeftArrowAlt } from "react-icons/bi";
+
 
 const flipAnimation = {
   initial: { rotateY: 90, opacity: 0 },
