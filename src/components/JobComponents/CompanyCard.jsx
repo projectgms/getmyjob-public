@@ -85,7 +85,7 @@ const companies = [
         logo: "https://res.cloudinary.com/ddpegoqtf/image/upload/v1738651485/download_k1i0en.png",
         name: "Tesla",
         description:
-            "Grab is a Southeast Asian technology company that offers a variety of services. Working at Grab has been an exhilarating journey.",
+            "Tesla is a Southeast Asian technology company that offers a variety of services. Working at Grab has been an exhilarating journey.",
         categories: [
             { name: "UX and Design", color: "#FFB84C" },
             { name: "Technology Solutions", color: "#4ADE80" },
@@ -131,12 +131,12 @@ function CompanyCard() {
             
             // pagination={{ clickable: true }}
             modules={[EffectCoverflow, Autoplay]}
-            className="mySwiper w-full flex justify-center items-center"
+            className="mySwiper w-full flex justify-center items-center h-auto"
             breakpoints={{
                 320: { slidesPerView: 1, spaceBetween: 1 },
                 480: { slidesPerView: 1, spaceBetween: 1 },
                 640: { slidesPerView: 3, spaceBetween: 20 },
-                768: { slidesPerView: 3, spaceBetween: 25 },
+                768: { slidesPerView: 2, spaceBetween: 20 },
                 1024: { slidesPerView: 3, spaceBetween: 30 },
             }}
         >

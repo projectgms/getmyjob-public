@@ -20,6 +20,9 @@ import JobInfoCard from "../../../components/JobComponents/JobInfoCard";
 import ShowMoreBtnDark from "../../../components/buttons/ShowMoreBtnDark";
 import CompanyCard from "../../../components/JobComponents/CompanyCard";
 import InterViewProcess from "../../../components/JobComponents/InterViewProcess";
+import UserReviewCard from "../../../components/JobComponents/UserReviewCard";
+import ArticleComponent from "../../../components/JobComponents/ArticleComponent";
+import SubscribeMail from "../../../components/JobComponents/SubscribeMail";
 
 
 const typingVariants = {
@@ -322,6 +325,8 @@ function JobSeekerHomePage() {
 
         <JobSearchInput/>
 
+        {/* Job Type Selection Chips here */}
+
         <div className="flex w-full justify-center">
           <SelectionChips/>
         </div>
@@ -329,7 +334,8 @@ function JobSeekerHomePage() {
         {/* All Job Cards Here */}
        
         <JobInfoCard/>
-
+        
+         {/* Showmore Btn here */}
 
         <div className="flex w-full items-center justify-center">
               <ShowMoreBtnDark/>   
@@ -346,13 +352,40 @@ function JobSeekerHomePage() {
           <CompanyCard/>
         </div>
 
+        {/* Showmore Btn here */}
+
         <div className="flex w-full items-center justify-center">
               <ShowMoreBtnDark/>   
         </div>
         
         <InfoTitle  subheading="Simple Process" heading="Effortless Process," nextLine="Optimal Results"/>
         
+        {/* Interview Process Component Here  */}
+        
         <InterViewProcess/>
+        
+         {/* Small Heading and Big SubHeading */}
+
+         <InfoTitle subheading="Success Experience" heading="Insights from Connect" nextLine="Users"/>
+          
+         {/* Users Reviews Here */}
+
+         <div className="my-3 px-2">
+          <UserReviewCard/>
+         </div>
+
+         {/* Small Heading and Big SubHeading */}
+
+         <InfoTitle subheading="Insight and Tips" heading="Find Expert Tips and Growth" nextLine="Insights on Our Blog"/>
+         
+         {/* Article component */}
+
+         <ArticleComponent/>
+
+         {/*Subscibe Mail Here   */}
+
+         <SubscribeMail/>
+
         
 
 
