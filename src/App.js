@@ -4,6 +4,14 @@ import JobseekerLayout from './pages/layout/jobseeker/JobseekerLayout'
 import JobseekerLogin from './pages/authentication/jobseeker/JobseekerLogin'
 import JobseekerDashboard from './pages/dashboard/jobseeker/JobseekerDashboard'
 import JobSeekerSignUp from './pages/authentication/jobseeker/JobseekerSignUp'
+import AdminDashboard from './pages/dashboard/admin/admin-dashboard'
+import AdminSignIn from './pages/authentication/admin/admin-signin'
+import AdminSignUp from './pages/authentication/admin/admin-signup'
+import ForgotPassword from './pages/authentication/admin/admin-forgot-password'
+import RecruitmentLogin from './pages/authentication/Recruiter/RecruitmentLogin'
+import RecruitmentResetPassword from './pages/authentication/Recruiter/RecruitmentResetPassword'
+import RecruitmentForgotpassword from './pages/authentication/Recruiter/RecruitmentForgotpassword'
+import RecruitmentSignup from './pages/authentication/Recruiter/RecruitmentSignup'
 import JobseekerForgetPass from './pages/authentication/jobseeker/JobseekerForgetPass'
 import JobseekerResetPass from './pages/authentication/jobseeker/JobseekerResetPass'
 import JobSeekerHomePage from './pages/authentication/jobseeker/JobSeekerHomePage'
@@ -22,14 +30,25 @@ const App = () => {
       
          <Route path='/jobseeker' element={<JobseekerLayout/>}>
              <Route path='dashboard' element={<JobseekerDashboard/>}/>
-             
          </Route>
 
+         <Route path='/recruiter/login' element={<RecruitmentLogin/>}/>
+         <Route path='/recruiter/signup' element={<RecruitmentSignup/>}/>
+         <Route path='/recruiter/reset-password' element={<RecruitmentResetPassword/>}/>
+         <Route path='/recruiter/forgot-password' element={<RecruitmentForgotpassword/>}/>
       <Route path='/recruiter' element="">
+      
       </Route>
 
+
+      {/* admin  */}
       <Route path='/admin' element="">
+       <Route path='dashboard' element={<AdminDashboard/>}/>
       </Route>
+      <Route path='/admin/signin' element={<AdminSignIn/>}/>
+      <Route path='/admin/signup' element={<AdminSignUp/>}/>
+      <Route path='/admin/forgot-password' element={<ForgotPassword/>}/>
+
 
     </Routes>
     </>
