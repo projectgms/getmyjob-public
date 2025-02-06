@@ -114,12 +114,13 @@ function JobseekerLogin() {
                 </div>
               </div>
               <div>
-                <button
+                <Link 
+                  to={"/jobseeker/dashboard"}
                   type="submit"
                   className="flex w-full justify-center rounded-md bg-blue-600 py-3 text-sm font-semibold text-white shadow-md hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
                   Login to your account
-                </button>
+                </Link>
               </div>
             </form>
             <p className="my-4 text-sm text-gray-500 text-center">

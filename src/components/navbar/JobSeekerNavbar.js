@@ -1,21 +1,26 @@
-import React, { useState } from "react"
+import React, { useState } from "react";
 import breifcaseLogo from "./../../assets/images/brief-case.png";
-import { FaMoon } from "react-icons/fa6"
-import { FiSun } from "react-icons/fi"
-import { Link } from "react-router-dom"
+import { FaMoon } from "react-icons/fa6";
+import { FiSun } from "react-icons/fi";
+import { Link } from "react-router-dom";
 
-function JobSeekerNavbar() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [darkMode, setDarkMode] = useState(false)
+function JobSeekerNavbar({ scrollToSection, activeSection }) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
+
+  const handleHamburgerClick = (section) =>{
+    scrollToSection(section);
+    setIsMenuOpen(!isMenuOpen);
+  }
 
   // Toggle dark mode
   React.useEffect(() => {
     if (darkMode) {
-      document.documentElement.classList.add("dark")
+      document.documentElement.classList.add("dark");
     } else {
-      document.documentElement.classList.remove("dark")
+      document.documentElement.classList.remove("dark");
     }
-  }, [darkMode])
+  }, [darkMode]);
 
   return (
     <div className="w-full">
@@ -28,54 +33,40 @@ function JobSeekerNavbar() {
           {/* Top Bar with Logo and Controls */}
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <Link href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
+            <Link
+              href="/"
+              className="flex items-center space-x-3 rtl:space-x-reverse"
+            >
               <img src={breifcaseLogo} className="h-9" alt="JobVerse Logo" />
-              <p className={`px-1 font-bold text-2xl ${darkMode ? "text-white" : "text-black"}`}>JobVerse</p>
+              <p
+                className={`px-1 font-bold text-2xl ${
+                  darkMode ? "text-white" : "text-black"
+                }`}
+              >
+                JobVerse
+              </p>
             </Link>
 
             {/* Desktop Navigation */}
             <div className="hidden lg:flex lg:items-center lg:gap-8">
               <ul className="flex space-x-8">
-                <li>
-                  <Link
-                    href="/"
-                    className={`block py-2 px-3 rounded-sm text-blue-500  border-blue-500 border-b-2 transition-all duration-200 font-semibold ${darkMode ? "text-white" : "text-black"}`}
-                  >
-                    Home
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/about"
-                    className={`block py-2 px-3 rounded-sm hover:text-blue-500 border-b-2 border-transparent hover:border-blue-500 transition-all duration-200 font-semibold ${darkMode ? "text-white" : "text-black"}`}
-                  >
-                    About
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/services"
-                    className={`block py-2 px-3 rounded-sm hover:text-blue-500 border-b-2 border-transparent hover:border-blue-500 transition-all duration-200 font-semibold  ${darkMode ? "text-white" : "text-black"}`}
-                  >
-                    Services
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/pricing"
-                    className={`block py-2 px-3 rounded-sm hover:text-blue-500 border-b-2 border-transparent hover:border-blue-500 transition-all duration-200 font-semibold  ${darkMode ? "text-white" : "text-black"}`}
-                  >
-                    Pricing
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/contact"
-                    className={`block py-2 px-3 rounded-sm hover:text-blue-500 border-b-2 border-transparent hover:border-blue-500 transition-all duration-200 font-semibold  ${darkMode ? "text-white" : "text-black"}`}
-                  >
-                    Contact
-                  </Link>
-                </li>
+                {["job", "companies", "process", "news", "pricing"].map(
+                  (section) => (
+                    <li
+                      key={section}
+                      className={`cursor-pointer block py-2 px-3  font-semibold ${
+                        darkMode ? "text-white" : "text-black"
+                      } ${
+                        activeSection === section
+                          ? "text-blue-500 border-blue-500 border-b-2 transition-all duration-200"
+                          : ""
+                      }`}
+                      onClick={() => scrollToSection(section)}
+                    >
+                      {section.charAt(0).toUpperCase() + section.slice(1)}
+                    </li>
+                  )
+                )}
               </ul>
             </div>
 
@@ -97,7 +88,11 @@ function JobSeekerNavbar() {
                 onClick={() => setDarkMode(!darkMode)}
                 className="p-2 rounded-full border border-gray-300 hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-all duration-200 hover:text-white"
               >
-                {darkMode ? <FiSun size={20} className="dark:text-white" /> : <FaMoon size={20} />}
+                {darkMode ? (
+                  <FiSun size={20} className="dark:text-white" />
+                ) : (
+                  <FaMoon size={20} />
+                )}
               </button>
             </div>
 
@@ -107,7 +102,11 @@ function JobSeekerNavbar() {
                 onClick={() => setDarkMode(!darkMode)}
                 className="p-2 rounded-full border border-gray-300 hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-all duration-200"
               >
-                {darkMode ? <FiSun size={20} className="dark:text-white" /> : <FaMoon size={20} />}
+                {darkMode ? (
+                  <FiSun size={20} className="dark:text-white" />
+                ) : (
+                  <FaMoon size={20} />
+                )}
               </button>
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -117,7 +116,12 @@ function JobSeekerNavbar() {
                 aria-expanded={isMenuOpen}
               >
                 <span className="sr-only">Toggle menu</span>
-                <svg className="w-5 h-5" aria-hidden="true" fill="none" viewBox="0 0 17 14">
+                <svg
+                  className="w-5 h-5"
+                  aria-hidden="true"
+                  fill="none"
+                  viewBox="0 0 17 14"
+                >
                   <path
                     stroke="currentColor"
                     strokeLinecap="round"
@@ -133,49 +137,28 @@ function JobSeekerNavbar() {
           {/* Mobile/Tablet Menu */}
           {isMenuOpen && (
             <div className="lg:hidden mt-4">
-              <ul className={`flex flex-col font-medium space-y-2 ${
-                darkMode ? "text-white" : "text-black"
-              }`}>
-                <li>
-                  <Link
-                    href="/"
-                    className="block py-2 px-3 rounded-sm hover:text-blue-500 transition-all duration-200"
-                  >
-                    Home
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/about"
-                    className="block py-2 px-3 rounded-sm hover:text-blue-500 transition-all duration-200"
-                  >
-                    About
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/services"
-                    className="block py-2 px-3 rounded-sm hover:text-blue-500 transition-all duration-200"
-                  >
-                    Services
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/pricing"
-                    className="block py-2 px-3 rounded-sm hover:text-blue-500 transition-all duration-200"
-                  >
-                    Pricing
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/contact"
-                    className="block py-2 px-3 rounded-sm hover:text-blue-500 transition-all duration-200"
-                  >
-                    Contact
-                  </Link>
-                </li>
+              <ul
+                className={`flex flex-col font-medium space-y-2 ${
+                  darkMode ? "text-white" : "text-black"
+                }`}
+              >
+                {["job", "companies", "process", "news", "pricing"].map(
+                  (section) => (
+                    <li
+                      key={section}
+                      className={`cursor-pointer block py-2 px-3  font-semibold ${
+                        darkMode ? "text-white" : "text-black"
+                      } ${
+                        activeSection === section
+                          ? "text-blue-500 border-blue-500 border-b-2 transition-all duration-200"
+                          : ""
+                      }`}
+                      onClick={() => handleHamburgerClick(section)}
+                    >
+                      {section.charAt(0).toUpperCase() + section.slice(1)}
+                    </li>
+                  )
+                )}
               </ul>
 
               {/* Mobile/Tablet Login/Signup */}
@@ -200,7 +183,7 @@ function JobSeekerNavbar() {
       {/* Add padding to prevent content from hiding under fixed navbar */}
       <div className="h-16"></div>
     </div>
-  )
+  );
 }
 
-export default JobSeekerNavbar
+export default JobSeekerNavbar;
