@@ -369,9 +369,41 @@ function JobSeekerHomePage() {
 
       <InfoBoxThree />
 
+
+        {/* ------------- PROCESS SECTION HERE --------------------- */}
+
+        <section ref={ProcessRef} className="py-12">
+        <InfoTitle
+          subheading="Simple Process"
+          heading="Effortless Process,"
+          nextLine="Optimal Results"
+        />
+
+        {/* Interview Process Component Here  */}
+
+        <InterViewProcess />
+
+        {/* Small Heading and Big SubHeading */}
+
+        <InfoTitle
+          subheading="Success Experience"
+          heading="Insights from Connect"
+          nextLine="Users"
+        />
+
+        {/* Users Reviews Here */}
+
+        <div className="my-3 px-2">
+          <UserReviewCard />
+        </div>
+
+      
+      </section>
+
+
       {/* ------------- JOB SECTION HERE --------------------- */}
 
-      <section ref={jobRef} className="py-12">
+      <section ref={jobRef} className="py-6">
         {/* Small Heading and Big SubHeading */}
 
         <InfoTitle
@@ -403,7 +435,7 @@ function JobSeekerHomePage() {
 
       {/* ------------- COMPANIES SECTION HERE --------------------- */}
 
-      <section ref={companiesRef} className="py-12">
+      <section ref={companiesRef} className="py-6">
         {/* Small Heading and Big SubHeading */}
 
         <InfoTitle
@@ -423,39 +455,15 @@ function JobSeekerHomePage() {
         <div className="flex w-full items-center justify-center">
           <ShowMoreBtnDark />
         </div>
+        
       </section>
 
-      {/* ------------- PROCESS SECTION HERE --------------------- */}
+     
 
-      <section ref={ProcessRef} className="py-12">
-        <InfoTitle
-          subheading="Simple Process"
-          heading="Effortless Process,"
-          nextLine="Optimal Results"
-        />
-
-        {/* Interview Process Component Here  */}
-
-        <InterViewProcess />
-
-        {/* Small Heading and Big SubHeading */}
-
-        <InfoTitle
-          subheading="Success Experience"
-          heading="Insights from Connect"
-          nextLine="Users"
-        />
-
-        {/* Users Reviews Here */}
-
-        <div className="my-3 px-2">
-          <UserReviewCard />
-        </div>
-      </section>
-
+    
       {/* ------------- ARTICLE SECTION HERE --------------------- */}
 
-      <section ref={newsRef} className="py-12">
+      <section ref={newsRef} className="py-6">
         {/* Small Heading and Big SubHeading */}
 
         <InfoTitle

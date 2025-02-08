@@ -46,9 +46,9 @@ function JobseekerLogin() {
 
           <p className='font-inter text-sky-50 font-normal text-sm'>Millions of professionals and top companies around the world connect on JobVerse the home to the best career opportunities and hiring solutions for job seekers and employers alike.</p>
 
-          <div className='flex items-center mt-12 justify-stretch'>
+          <div className='flex items-center mt-12 justify-start'>
             <img src={avtarGroupImg} height={150} width={150} />
-            <p className='text-sky-50 text-2xl px-2 pb-1'>|</p>
+            <p className='text-sky-50 text-2xl px-2 pb-1'>|</p> 
             <p className='text-sky-50 font-normal text-sm pt-1'>Over <span className='text-sky-50 font-bold text-sm'>15.5k</span> Happy users</p>
           </div>
         </div>

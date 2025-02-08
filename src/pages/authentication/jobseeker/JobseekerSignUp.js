@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import { motion } from "framer-motion";
 import breifcaseLogo from './../../../assets/images/brief-case.png';
 import avtarGroupImg from './../../../assets/images/avtar-group.png';
-import { BiLeftArrowAlt } from "react-icons/bi";
 
 
 const flipAnimation = {
@@ -39,7 +38,7 @@ function JobSeekerSignUp() {
   
             <p className='font-inter text-sky-50 font-normal text-sm'>Join millions of professionals and top companies on JobVerse, where new opportunities await. Build your profile, showcase your skills, and connect with employers looking for top talent. Start your journey toward success today! </p>
   
-            <div className='flex items-center mt-12 justify-stretch'>
+            <div className='flex items-center mt-12 justify-start'>
               <img src={avtarGroupImg} height={150} width={150} />
               <p className='text-sky-50 text-2xl px-2 pb-1'>|</p>
               <p className='text-sky-50 font-normal text-sm pt-1'>Over <span className='text-sky-50 font-bold text-sm'>15.5k</span> Happy users</p>
@@ -70,6 +69,22 @@ function JobSeekerSignUp() {
                       placeholder='Enter Your Name  '
                       required
                       autoComplete="email"
+                      className="block w-full rounded-md bg-gray-600 px-3 py-1.5 text-base text-white font-medium outline-slate-500 outline-1 -outline-offset-1 outline-slate-400 placeholder:text-gray-400 placeholder:font-medium focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label htmlFor="mobileNo" className="block text-sm/6 font-semibold text-slate-400">
+                    Mobile No
+                  </label>
+                  <div className="mt-2">
+                    <input
+                      id="mobileNo"
+                      name="mobileNo"
+                      type="mobileNo"
+                      placeholder='Enter Your Mobile Number'
+                      required
+                      autoComplete="mobileNo"
                       className="block w-full rounded-md bg-gray-600 px-3 py-1.5 text-base text-white font-medium outline-slate-500 outline-1 -outline-offset-1 outline-slate-400 placeholder:text-gray-400 placeholder:font-medium focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6"
                     />
                   </div>

@@ -90,7 +90,7 @@ function UserReviewCard() {
     
     // pagination={{ clickable: true }}
     modules={[EffectCoverflow, Autoplay]}
-    className="mySwiper w-full flex justify-center items-center h-[500px] py-4"
+    className="mySwiper w-full flex justify-center items-center h-[500px] py-2"
     breakpoints={{
         320: { slidesPerView: 1, spaceBetween: 1 },
         480: { slidesPerView: 1, spaceBetween: 1 },

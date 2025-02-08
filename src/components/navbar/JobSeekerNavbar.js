@@ -50,7 +50,7 @@ function JobSeekerNavbar({ scrollToSection, activeSection }) {
             {/* Desktop Navigation */}
             <div className="hidden lg:flex lg:items-center lg:gap-8">
               <ul className="flex space-x-8">
-                {["job", "companies", "process", "news", "pricing"].map(
+                {["job", "process", "companies", "news", "pricing"].map(
                   (section) => (
                     <li
                       key={section}
@@ -142,7 +142,7 @@ function JobSeekerNavbar({ scrollToSection, activeSection }) {
                   darkMode ? "text-white" : "text-black"
                 }`}
               >
-                {["job", "companies", "process", "news", "pricing"].map(
+                {["job", "process","companies",  "news", "pricing"].map(
                   (section) => (
                     <li
                       key={section}
