@@ -12,13 +12,20 @@ import RecruitmentLogin from './pages/authentication/Recruiter/RecruitmentLogin'
 import RecruitmentResetPassword from './pages/authentication/Recruiter/RecruitmentResetPassword'
 import RecruitmentForgotpassword from './pages/authentication/Recruiter/RecruitmentForgotpassword'
 import RecruitmentSignup from './pages/authentication/Recruiter/RecruitmentSignup'
+import JobseekerForgetPass from './pages/authentication/jobseeker/JobseekerForgetPass'
+import JobseekerResetPass from './pages/authentication/jobseeker/JobseekerResetPass'
+import JobSeekerHomePage from './pages/authentication/jobseeker/JobSeekerHomePage'
+
 
 const App = () => {
   return (
     <>
     <Routes>
+      <Route path='/jobseeker/' element={<JobSeekerHomePage/>}/>
       <Route path='/jobseeker/login' element={<JobseekerLogin/>}/>
       <Route path='/jobseeker/signup' element={<JobSeekerSignUp/>}/>
+      <Route path='/jobseeker/forgetpassword' element={<JobseekerForgetPass/>}/>
+      <Route path='/jobseeker/resetpassword' element={<JobseekerResetPass/>}/>
 
       
          <Route path='/jobseeker' element={<JobseekerLayout/>}>

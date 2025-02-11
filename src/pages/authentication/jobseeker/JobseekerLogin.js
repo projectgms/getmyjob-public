@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { motion } from "framer-motion";
 import breifcaseLogo from './../../../assets/images/brief-case.png';
 import avtarGroupImg from './../../../assets/images/avtar-group.png';
+import JobSeekerNavbar from '../../../components/navbar/JobSeekerNavbar';
 
 
 const flipAnimation = {
@@ -12,8 +13,15 @@ const flipAnimation = {
 };
 
 function JobseekerLogin() {
+
+
+
+  
   return (
-    <div
+
+    <div>
+      {/* <JobSeekerNavbar/> */}
+       <div
       className="min-h-screen flex flex-col md:flex-row justify-center items-center px-6 md:px-16 py-16"
       style={{
         backgroundImage: 'linear-gradient(135deg, #FFFF 10%, #007FFF 110%)',
@@ -22,6 +30,8 @@ function JobseekerLogin() {
       }}
 
     >
+     
+      
       <div className="flex flex-col md:flex-row w-full max-w-6xl bg-transparent min-h-[500px] md:min-h-[650px]">
 
 
@@ -36,9 +46,9 @@ function JobseekerLogin() {
 
           <p className='font-inter text-sky-50 font-normal text-sm'>Millions of professionals and top companies around the world connect on JobVerse the home to the best career opportunities and hiring solutions for job seekers and employers alike.</p>
 
-          <div className='flex items-center mt-12 justify-stretch'>
+          <div className='flex items-center mt-12 justify-start'>
             <img src={avtarGroupImg} height={150} width={150} />
-            <p className='text-sky-50 text-2xl px-2 pb-1'>|</p>
+            <p className='text-sky-50 text-2xl px-2 pb-1'>|</p> 
             <p className='text-sky-50 font-normal text-sm pt-1'>Over <span className='text-sky-50 font-bold text-sm'>15.5k</span> Happy users</p>
           </div>
         </div>
@@ -80,7 +90,7 @@ function JobseekerLogin() {
                     id="password"
                     name="password"
                     type="password"
-                    placeholder='Enter your   '
+                    placeholder='Enter your password'
                     required
                     autoComplete="current-password"
                     className="block w-full rounded-md bg-gray-600 px-3 py-1.5 text-base text-white font-medium outline-slate-500 outline-1 -outline-offset-1 outline-slate-400 placeholder:text-gray-400 placeholder:font-medium focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6"
@@ -104,12 +114,13 @@ function JobseekerLogin() {
                 </div>
               </div>
               <div>
-                <button
+                <Link 
+                  to={"/jobseeker/dashboard"}
                   type="submit"
                   className="flex w-full justify-center rounded-md bg-blue-600 py-3 text-sm font-semibold text-white shadow-md hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
                   Login to your account
-                </button>
+                </Link>
               </div>
             </form>
             <p className="my-4 text-sm text-gray-500 text-center">
@@ -158,6 +169,9 @@ function JobseekerLogin() {
         </div>
       </div>
     </div>
+    </div>
+  
+   
   )
 }
 
