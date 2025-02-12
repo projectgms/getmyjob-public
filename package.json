@@ -3,8 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@react-three/drei": "^9.121.4",
+    "@react-three/fiber": "^8.17.12",
     "axios": "^1.7.9",
     "cra-template": "1.2.0",
+<<<<<<< HEAD
     "framer-motion": "^12.0.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -14,6 +17,19 @@
     "react-router-dom": "^6.28.0",
     "react-scripts": "5.0.1",
     "swiper": "^11.2.2",
+=======
+    "framer-motion": "^12.4.2",
+    "icons": "^1.0.0",
+    "lucide-react": "^0.474.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.2.0",
+    "react-icons": "^5.4.0",
+    "react-loading-skeleton": "^3.5.0",
+    "react-router-dom": "^6.28.0",
+    "react-scripts": "5.0.1",
+    "recharts": "^2.15.1",
+    "three": "^0.172.0",
+>>>>>>> 92f5161 (added dashboard routes in dev)
     "web-vitals": "^4.2.4"
   },
   "scripts": {

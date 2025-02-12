@@ -1,0 +1,28 @@
+{
+    "dashboardOverview": {
+      "quickStats": {
+        "totalJobPostings": 200,
+        "applicationsReceived": 20,
+        "interviewsScheduled": 10
+      },
+      "recentApplications": [
+        { "id": 1, "candidate": "Alice Johnson", "position": "Frontend Developer", "status": "Pending" },
+        { "id": 2, "candidate": "Mark Smith", "position": "Backend Developer", "status": "Interview Scheduled" },
+        { "id": 3, "candidate": "Emily Davis", "position": "UI/UX Designer", "status": "Hired" }
+      ],
+      "jobPerformance": {
+        "analyticsViews": 40,
+        "applications": 35,
+        "conversionRates": 25
+      },
+      "upcomingInterviews": [
+        { "id": 1, "candidate": "Michael Brown", "position": "Full-Stack Engineer", "date": "2024-02-15", "time": "10:00 AM" },
+        { "id": 2, "candidate": "Jessica Taylor", "position": "Data Scientist", "date": "2024-02-16", "time": "02:30 PM" }
+      ],
+      "notifications": [
+        { "id": 1, "message": "New job application received from Sarah Wilson", "time": "2 hours ago" },
+        { "id": 2, "message": "Your job posting for 'Software Engineer' has 50+ views", "time": "1 day ago" }
+      ]
+    }
+  }
+  
