@@ -4,7 +4,7 @@ import { FaMoon } from "react-icons/fa6";
 import { FiSun } from "react-icons/fi";
 import { Link } from "react-router-dom";
 
-function Navbar({ scrollToSection, activeSection }) {
+function JobSeekerNavbar({ scrollToSection, activeSection }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
 
@@ -186,4 +186,4 @@ function Navbar({ scrollToSection, activeSection }) {
   );
 }
 
-export default Navbar;
+export default JobSeekerNavbar;
