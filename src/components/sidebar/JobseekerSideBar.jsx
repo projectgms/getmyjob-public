@@ -19,9 +19,9 @@ function JobseekerSideBar({ isSidebarOpen }) {
         <aside className={`w-64 bg-white ${isSidebarOpen ? "hidden" : "block"} shadow-xl px-4`}
         >
             <div className="flex items-center p-4">
-          <img src={breifcaseLogo} height={50} width={50} alt="JobVerse Logo" />
-          <h1 className="text-2xl font-bold px-2">JobVerse</h1>
-        </div>
+                <img src={breifcaseLogo} height={50} width={50} alt="JobVerse Logo" />
+                <h1 className="text-2xl font-bold px-2">JobVerse</h1>
+            </div>
 
             <nav className="mt-8">
                 <a href="#" className="flex items-center px-6 py-3 bg-gradient-to-r from-blue-700 to-blue-300 rounded-full my-2">
