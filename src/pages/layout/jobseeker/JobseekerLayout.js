@@ -23,7 +23,7 @@ const JobseekerLayout = () => {
       <main className="flex-1 overflow-y-auto">
         {/* Header */}
 
-        <JobseekerHeader toggleSidebar={toggleSidebar} />
+        <JobseekerHeader/>
 
         <JobseekerDashboard />
 

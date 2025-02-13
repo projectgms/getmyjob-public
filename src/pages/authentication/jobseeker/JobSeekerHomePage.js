@@ -12,18 +12,18 @@ import avatar1 from "./../../../assets/images/avtar1.png";
 import avtar2 from "./../../../assets/images/avtar2.jpg";
 import adobeLogo from "./../../../assets/images/Adobe_Creative_Cloud_rainbow_icon.png";
 import { motion } from "framer-motion";
-import InfoBoxThree from "../../../components/JobComponents/InfoBoxThree";
-import InfoTitle from "../../../components/JobComponents/InfoTitle";
-import JobSearchInput from "../../../components/JobComponents/JobSearchInput";
-import SelectionChips from "../../../components/JobComponents/SelectionChips";
-import JobInfoCard from "../../../components/JobComponents/JobInfoCard";
+import InfoBoxThree from "../../../components/JobSeekerComponents/InfoBoxThree";
+import InfoTitle from "../../../components/JobSeekerComponents/InfoTitle";
+import JobSearchInput from "../../../components/JobSeekerComponents/JobSearchInput";
+import SelectionChips from "../../../components/JobSeekerComponents/SelectionChips";
+import JobInfoCard from "../../../components/JobSeekerComponents/JobInfoCard";
 import ShowMoreBtnDark from "../../../components/buttons/ShowMoreBtnDark";
-import CompanyCard from "../../../components/JobComponents/CompanyCard";
-import InterViewProcess from "../../../components/JobComponents/InterViewProcess";
-import UserReviewCard from "../../../components/JobComponents/UserReviewCard";
-import ArticleComponent from "../../../components/JobComponents/ArticleComponent";
-import SubscribeMail from "../../../components/JobComponents/SubscribeMail";
-import JobSeekerFooter from "../../../components/JobComponents/JobSeekerFooter";
+import CompanyCard from "../../../components/JobSeekerComponents/CompanyCard";
+import InterViewProcess from "../../../components/JobSeekerComponents/InterViewProcess";
+import UserReviewCard from "../../../components/JobSeekerComponents/UserReviewCard";
+import ArticleComponent from "../../../components/JobSeekerComponents/ArticleComponent";
+import SubscribeMail from "../../../components/JobSeekerComponents/SubscribeMail";
+import JobSeekerFooter from "../../../components/JobSeekerComponents/JobSeekerFooter";
 
 const typingVariants = {
   hidden: { opacity: 1 },

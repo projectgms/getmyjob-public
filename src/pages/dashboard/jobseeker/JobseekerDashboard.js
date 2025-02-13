@@ -12,14 +12,37 @@ import { IoLogoJavascript } from "react-icons/io5";
 import { FaReact } from "react-icons/fa";
 
 import avtar from "./../../../assets/images/userImages/avtar2.jpg";
+import JobSearchComponent from "./../../../components/JobSeekerComponents/JobSearchComponent";
+import JobFilterComponent from './../../../components/JobSeekerComponents/JobFilterComponent';
+import JobListingContainer from './../../../components/JobSeekerComponents/JobListingContainer';
+import VerticalProfileCard from './../../../components/JobSeekerComponents/VerticalProfileCard';
 
-const JobseekerDashboard = () => {
+const   JobseekerDashboard = () => {
   return (
-    <div className="flex h-screen bg-gray-400 flex-col">
-      
-        <h1 className="text-white p-56">Dashboard Here</h1>
+<div className="flex min-h-screen bg-white flex-col pt-16 md:pt-20">
+  {/* Job Search Component (Full Width) */}
+  <JobSearchComponent />
 
+  {/* Main Layout Section */}
+  <div className="flex flex-wrap items-start h-full px-6 md:px-12">
+    {/* Left Sidebar - Job Filters */}
+    <div className="w-full md:w-1/5 py-6">
+      <JobFilterComponent  />
     </div>
+
+    {/* Center - Main Job Content */}
+    <div className="w-full md:w-3/5">
+      <JobListingContainer/>
+    </div>
+
+    {/* Right Sidebar (Optional for Extra Content) */}
+    <div className="w-full md:w-1/5 py-6">
+    {/* <JobFilterComponent /> */}
+    <VerticalProfileCard/>
+    </div>
+  </div>
+</div>
+
   );
 };
 
