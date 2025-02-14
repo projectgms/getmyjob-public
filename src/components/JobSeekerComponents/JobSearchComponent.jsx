@@ -6,7 +6,6 @@ import "react-dropdown/style.css"
 import { FiSearch, FiMapPin, FiBriefcase, FiChevronRight } from "react-icons/fi"
 
 export default function JobSearchComponent() {
-  const [bookmarked, setBookmarked] = useState({})
 
   const experienceOptions = ["Entry Level", "Mid Level", "Senior Level"]
 

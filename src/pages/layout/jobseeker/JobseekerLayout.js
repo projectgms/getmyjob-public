@@ -1,6 +1,6 @@
 import { useState } from "react";
 import JobseekerHeader from "./header/JobseekerHeader";
-
+import { Outlet } from "react-router-dom";
 import JobseekerDashboard from "../../dashboard/jobseeker/JobseekerDashboard";
 import JobseekerFooter from "./footer/JobseekerFooter";
 
@@ -25,7 +25,10 @@ const JobseekerLayout = () => {
 
         <JobseekerHeader/>
 
-        <JobseekerDashboard />
+          {/* Dynamic Content (Dashboard or Other Pages) */}
+         <div className="w-full">
+         <Outlet />
+         </div>
 
         <JobseekerFooter />
       </main>
