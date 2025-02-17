@@ -17,7 +17,7 @@ const RecruiterDashboard = () => {
         setLoading(false);
       })
       .catch((error) => console.error("Error fetching dashboard data:", error));
-  }, []);
+  }, );
 
   // ✅ Function to generate random colors for Pie Chart
   function getRandomColor() {

@@ -1,36 +1,25 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Briefcase, FileText, Archive, PlusCircle, Trash2, Edit } from "lucide-react";
 import { motion } from "framer-motion";
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Skeleton from "react-loading-skeleton";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchJobsRequest, deleteJobRequest } from "../../../../store/slices/jobSlice";
 
 const JobManagement = () => {
-  const [jobData, setJobData] = useState(null);
-  const [loading, setLoading] = useState(true);
-
+  const dispatch = useDispatch();
+  const { jobs, loading } = useSelector((state) => state.jobs) || { jobs: { activeJobs: [], draftJobs: [], expiredJobs: [] } };
+// const navigate = useNavigate();
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/jobManagement")
-      .then((response) => {
-        setJobData(response.data);
-        setLoading(false);
-      })
-      .catch((error) => console.error("Error fetching job data:", error));
-  }, []);
+    dispatch(fetchJobsRequest());
+  },[]);
 
-  const handleDelete = async (id) => {
-    try {
-      await axios.delete(`http://localhost:5000/jobManagement/${id}`);
-      setJobData((prevData) => ({
-        activeJobs: prevData.activeJobs.filter((job) => job.id !== id),
-        draftJobs: prevData.draftJobs.filter((job) => job.id !== id),
-        expiredJobs: prevData.expiredJobs.filter((job) => job.id !== id),
-      }));
-    } catch (error) {
-      console.error("Error deleting job:", error);
-    }
+  // Handle Delete Job
+  const handleDelete = (id) => {
+    dispatch(deleteJobRequest(id));
   };
+
+
 
   return (
     <div>
@@ -66,7 +55,7 @@ const JobManagement = () => {
                   </td>
                 </tr>
               ) : (
-                [...jobData.activeJobs, ...jobData.draftJobs, ...jobData.expiredJobs].map((job) => (
+                [...(jobs?.activeJobs || []), ...(jobs?.draftJobs || []), ...(jobs?.expiredJobs || [])].map((job) => (
                   <tr key={job.id} className="border-b">
                     <td className="p-3">{job.title}</td>
                     <td className="p-3">{job.type}</td>
