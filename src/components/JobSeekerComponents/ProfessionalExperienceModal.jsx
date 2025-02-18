@@ -2,6 +2,7 @@ import React from 'react';
 import { IoMdClose } from 'react-icons/io';
 import InputField from './InputField';
 import { Form, Formik, Field } from 'formik';
+import ChipsComponent from './ChipsComponent';
 
 function ProfessionalExperienceModal({ onClose, onSubmit }) {
   return (
@@ -26,13 +27,13 @@ function ProfessionalExperienceModal({ onClose, onSubmit }) {
                 industrySector: "",
                 department: "",
                 ctc: "",
-                from: "",
+                from: "", 
                 to: "",
                 currentlyWorking: false,
                 country: "",
                 state: "",
                 city: "",
-                skills: "",
+                skills: [],
                 description: "",
               }}
               onSubmit={(values) => {
@@ -87,12 +88,25 @@ function ProfessionalExperienceModal({ onClose, onSubmit }) {
                   <Field name="city">
                     {({ field }) => <InputField label="City"  {...field} />}
                   </Field>
+                
+                  <div className="col-span-2 grid grid-cols-1 gap-4 items-center">
+
+
                   <Field name="skills">
-                    {({ field }) => <InputField label="Key Skills / Expertise Involved" {...field} />}
-                  </Field>
+                      {({ field, form }) => (
+                        <ChipsComponent
+                          label="Skills"
+                          name="skills"
+                          placeholder="Enter Your Skills Here"
+                          form={form}
+                        />
+                      )}
+                    </Field>
                   <Field name="description">
                     {({ field }) => <InputField label="Description" {...field} />}
                   </Field>
+                   
+                  </div>
                   <div className="col-span-2 flex justify-end">
                     <button
                       type="button"

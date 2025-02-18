@@ -78,6 +78,8 @@ function PersonalInfoForm() {
     <div className="min-h-screen bg-gray-50 w-full p-8">
       <div className="mx-auto w-full">
 
+        
+
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
@@ -190,7 +192,7 @@ function PersonalInfoForm() {
 
               {/* Submit Button */}
               <div className="flex justify-end">
-                <button
+              <button
                   type="submit"
                   disabled={isSubmitting}
                   className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-6 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"

@@ -27,6 +27,7 @@ import ResearchPaperForm from './routes/jobseeker/completeProfileForms/ResearchP
 import TraningForm from './routes/jobseeker/completeProfileForms/TraningForm';
 import CertificationForm from './routes/jobseeker/completeProfileForms/CertificationForm';
 import OtherDetailsForm from './routes/jobseeker/completeProfileForms/OtherDetailsForm';
+import JobDetailsPage from './pages/jobseekerpages/JobDetailsPage';
 
 
 const App = () => {
@@ -42,6 +43,7 @@ const App = () => {
       
          <Route path='/jobseeker' element={<JobseekerLayout/>}>
              <Route path='dashboard' element={<JobseekerDashboard/>}/>
+             <Route path='job-detail' element={<JobDetailsPage/>}/>
              <Route path='complete-profile-form' element={<CompleteProfileFormSection/>}>
                 <Route path='personal-info' element={<PersonalInfoForm/>}/>
                 <Route path='contact-info' element={<ContactDetailsForm/>}/>

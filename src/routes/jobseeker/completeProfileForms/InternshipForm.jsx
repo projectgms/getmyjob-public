@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import ModalOpenerForms from './../../../components/JobSeekerComponents/ModalOpenerForms';
-import ExperienceDetailsDisplay from './../../../components/JobSeekerComponents/ExperienceDetailsDisplay';
-import InternshipExperienceModal from './../../../components/JobSeekerComponents/InternshipExperienceModal';
-
+import React, { useState } from "react";
+import ModalOpenerForms from "./../../../components/JobSeekerComponents/ModalOpenerForms";
+import ExperienceDetailsDisplay from "./../../../components/JobSeekerComponents/ExperienceDetailsDisplay";
+import InternshipExperienceModal from "./../../../components/JobSeekerComponents/InternshipExperienceModal";
+import { FaSave } from 'react-icons/fa';
 
 function InternshipDetailForm() {
   const [internshipList, setInternshipList] = useState([]);
@@ -16,11 +16,22 @@ function InternshipDetailForm() {
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-8 w-full">
       <div className="mx-auto w-full">
+        
+       {internshipList.length > 0 && <div className="flex justify-end">
+          <button
+            type="submit"
+            className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-6 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 mb-4"
+          >
+            <FaSave/>
+            Save
+          </button>
+        </div>}
+
         {internshipList.length === 0 && (
-          <ModalOpenerForms 
-            title={"Add Internship Experience"} 
-            modalType={"internship"} 
-            onSubmit={handleInternshipSubmit} 
+          <ModalOpenerForms
+            title={"Add Internship Experience"}
+            modalType={"internship"}
+            onSubmit={handleInternshipSubmit}
           />
         )}
 
@@ -31,36 +42,36 @@ function InternshipDetailForm() {
               className="text-white bg-gradient-to-r from-green-500 via-green-600 to-green-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
             >
               Add Another Internship
-            </button> 
+            </button>
           </div>
         )}
 
         {internshipList.map((internship, index) => (
-          <ExperienceDetailsDisplay 
-            key={index} 
-            title={internship.organisation} 
-            data={internship} 
+          <ExperienceDetailsDisplay
+            key={index}
+            title={internship.organisation}
+            data={internship}
           />
         ))}
 
         {isInternshipModalOpen && (
-          <InternshipExperienceModal 
+          <InternshipExperienceModal
             onClose={() => setIsInternshipModalOpen(false)}
-            onSubmit={handleInternshipSubmit} 
+            onSubmit={handleInternshipSubmit}
             initialValues={{
-              title: '',
-              organisation: '',
-              industrySector: '',
-              department: '',
-              stipend: '',
-              from: '',
-              to: '',
+              title: "",
+              organisation: "",
+              industrySector: "",
+              department: "",
+              stipend: "",
+              from: "",
+              to: "",
               currentlyWorking: false,
-              country: '',
-              state: '',
-              city: '',
-              skills: '',
-              description: ''
+              country: "",
+              state: "",
+              city: "",
+              skills: "",
+              description: "",
             }}
           />
         )}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   FaUser,
   FaGraduationCap,
@@ -10,29 +10,14 @@ import {
   FaTrophy,
   FaBook,
 } from "react-icons/fa";
-import { FaInfoCircle } from "react-icons/fa";
-import { FaPhoneAlt } from "react-icons/fa";
-
-import { Navigate, Outlet, useNavigate } from 'react-router-dom';
-
+import { FaInfoCircle, FaPhoneAlt } from "react-icons/fa";
+import { useNavigate, useLocation, Outlet } from "react-router-dom";
+import MobileNavigationBar from './../../components/JobSeekerComponents/MobileNavigationBar';
 
 function CompleteProfileFormSection() {
-
-
   const navigate = useNavigate();
-
-  const [activeTab, setActiveTab] = useState("personalInfo");
-  const [formData, setFormData] = useState({
-    firstName: "",
-    middleName: "",
-    lastName: "",
-    course: "",
-    specialization: "",
-    gender: "",
-    dateOfBirth: "",
-    bloodGroup: "",
-    maritalStatus: "",
-  });
+  const location = useLocation();
+  const [activeTab, setActiveTab] = useState("");
 
   const sidebarItems = [
     { id: "personalInfo", label: "Personal Information", icon: <FaUser size={20} />, route: "/jobseeker/complete-profile-form/personal-info" },
@@ -45,55 +30,54 @@ function CompleteProfileFormSection() {
     { id: "publications", label: "Publications / Research Papers", icon: <FaBook size={20} />, route: "/jobseeker/complete-profile-form/publications" },
     { id: "trainings", label: "Trainings / Workshops", icon: <FaCertificate size={20} />, route: "/jobseeker/complete-profile-form/trainings" },
     { id: "certifications", label: "Certification / Assessments", icon: <FaTrophy size={20} />, route: "/jobseeker/complete-profile-form/certifications" },
-    { id: "otherdetails", label: "Other Details", icon: <FaInfoCircle size={20} />, route: "/jobseeker/complete-profile-form/other-details" }
+    { id: "otherdetails", label: "Other Details", icon: <FaInfoCircle size={20} />, route: "/jobseeker/complete-profile-form/other-details" },
   ];
 
-  const handleInputChange = () => {
-    // const { name, value } = e.target
-    // setFormData((prev) => ({
-    //   ...prev,
-    //   [name]: value,
-    // }))
-    console.log("Handle form function");
+  // Update active tab based on URL
+  useEffect(() => {
+    const activeItem = sidebarItems.find((item) => location.pathname.includes(item.route));
+    if (activeItem) {
+      setActiveTab(activeItem.id);
+    }
+  }, [location.pathname, sidebarItems]);
+
+  const handleTabClick = (id, route) => {
+    setActiveTab(id);
+    navigate(route);
   };
 
-  const handleTabClick = (id,route) =>{
-    setActiveTab(id);
-    navigate(route)
-  }
-
-  // useEffect(()=>{
-  //   setActiveTab(sidebarItems[0].id)
-  // },[])
-
-
-  
-
   return (
-    <div className="flex min-h-screen bg-gray-50 pt-20 ">
-      {/* Sidebar */}
-      <div className="w-1/5 bg-white border-r border-gray-200">
-        <nav className="flex flex-col py-4">
-          {sidebarItems.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => handleTabClick(item.id,item.route)}
-              className={`flex items-center justify-start gap-3 px-4 py-6 text-sm transition-colors rounded-e-lg 
-              ${
-                activeTab === item.id
-                  ? "bg-gradient-to-br from-blue-700 to-blue-500 text-white font-semibold text-sm"
-                  : "text-gray-600 hover:bg-gray-100 text-sm"
-              }`}
-            >
-              {item.icon}
-              <span className="text-wrap">{item.label}</span>
-            </button>
-          ))}
-        </nav>
-      </div>
+    <div className="flex flex-col min-h-screen bg-gray-50 pt-20">
+      {/* Mobile Navigation Bar (Tabs at the top) */}
+      <MobileNavigationBar sidebarItems={sidebarItems} />
 
-      {/* Main Content */}
-      <Outlet/> 
+      <div className="flex flex-row w-full">
+        {/* Sidebar (Visible on Desktop & Tablet) */}
+        <div className="hidden md:block md:w-1/5 bg-white border-r border-gray-200">
+          <nav className="flex flex-col py-4">
+            {sidebarItems.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => handleTabClick(item.id, item.route)}
+                className={`flex items-center justify-start gap-3 px-4 py-6 text-sm transition-colors rounded-e-lg 
+                  ${
+                    activeTab === item.id
+                      ? "bg-gradient-to-br from-blue-700 to-blue-500 text-white font-semibold"
+                      : "text-gray-600 hover:bg-gray-100"
+                  }`}
+              >
+                {item.icon}
+                <span>{item.label}</span>
+              </button>
+            ))}
+          </nav>
+        </div>
+
+        {/* Main Content */}
+        <div className="w-full mt-16 md:mt-0">
+          <Outlet />
+        </div>
+      </div>
     </div>
   );
 }

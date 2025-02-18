@@ -1,7 +1,8 @@
-import React from 'react';
-import { IoMdClose } from 'react-icons/io';
-import InputField from './InputField';
-import { Form, Formik, Field } from 'formik';
+import React from "react";
+import { IoMdClose } from "react-icons/io";
+import InputField from "./InputField";
+import { Form, Formik, Field } from "formik";
+import ChipsComponent from "./ChipsComponent";
 
 function InternshipExperienceModal({ onClose, onSubmit }) {
   return (
@@ -9,7 +10,9 @@ function InternshipExperienceModal({ onClose, onSubmit }) {
       <div className="relative p-4 w-full max-w-4xl max-h-full">
         <div className="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
           <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Add Internship Experience</h3>
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+              Add Internship Experience
+            </h3>
             <button
               type="button"
               className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
@@ -32,7 +35,7 @@ function InternshipExperienceModal({ onClose, onSubmit }) {
                 country: "",
                 state: "",
                 city: "",
-                skills: "",
+                skills: "", 
                 description: "",
               }}
               onSubmit={(values) => {
@@ -42,29 +45,49 @@ function InternshipExperienceModal({ onClose, onSubmit }) {
               }}
             >
               {({ handleSubmit, values, setFieldValue }) => (
-                <Form className="grid grid-cols-2 gap-4" onSubmit={handleSubmit}>
+                <Form
+                  className="grid grid-cols-2 gap-4"
+                  onSubmit={handleSubmit}
+                >
                   <Field name="title">
-                    {({ field }) => <InputField label="Internship Title" {...field} />}
+                    {({ field }) => (
+                      <InputField label="Internship Title" {...field} />
+                    )}
                   </Field>
                   <Field name="organisation">
-                    {({ field }) => <InputField label="Organisation" {...field} />}
+                    {({ field }) => (
+                      <InputField label="Organisation" {...field} />
+                    )}
                   </Field>
                   <Field name="industrySector">
-                    {({ field }) => <InputField label="Industry Sector" {...field} />}
+                    {({ field }) => (
+                      <InputField label="Industry Sector" {...field} />
+                    )}
                   </Field>
                   <Field name="department">
-                    {({ field }) => <InputField label="Department" {...field} />}
+                    {({ field }) => (
+                      <InputField label="Department" {...field} />
+                    )}
                   </Field>
                   <Field name="stipend">
-                    {({ field }) => <InputField label="Stipend (if any)" {...field} />}
+                    {({ field }) => (
+                      <InputField label="Stipend (if any)" {...field} />
+                    )}
                   </Field>
                   <div className="col-span-2 grid grid-cols-3 gap-4 items-center">
                     <Field name="from">
-                      {({ field }) => <InputField label="From" type='date' {...field} />}
+                      {({ field }) => (
+                        <InputField label="From" type="date" {...field} />
+                      )}
                     </Field>
                     <Field name="to">
                       {({ field }) => (
-                        <InputField label="To" type='date' {...field} disabled={values.currentlyWorking} />
+                        <InputField
+                          label="To"
+                          type="date"
+                          {...field}
+                          disabled={values.currentlyWorking}
+                        />
                       )}
                     </Field>
                     <label className="flex items-center">
@@ -72,7 +95,9 @@ function InternshipExperienceModal({ onClose, onSubmit }) {
                         type="checkbox"
                         name="currentlyWorking"
                         className="mr-2"
-                        onChange={(e) => setFieldValue("currentlyWorking", e.target.checked)}
+                        onChange={(e) =>
+                          setFieldValue("currentlyWorking", e.target.checked)
+                        }
                       />
                       I am currently working here
                     </label>
@@ -86,12 +111,23 @@ function InternshipExperienceModal({ onClose, onSubmit }) {
                   <Field name="city">
                     {({ field }) => <InputField label="City" {...field} />}
                   </Field>
-                  <Field name="skills">
-                    {({ field }) => <InputField label="Key Skills / Expertise Involved" {...field} />}
-                  </Field>
-                  <Field name="description">
-                    {({ field }) => <InputField label="Description" {...field} />}
-                  </Field>
+                  <div className="col-span-2 grid grid-cols-1 gap-4 items-center">
+                    <Field name="skills">
+                      {({ field, form }) => (
+                        <ChipsComponent
+                          label="Skills"
+                          name="skills"
+                          placeholder="Enter Your Skills Here"
+                          form={form}
+                        />
+                      )}
+                    </Field>
+                    <Field name="description">
+                      {({ field }) => (
+                        <InputField label="Description" {...field} />
+                      )}
+                    </Field>
+                  </div>
                   <div className="col-span-2 flex justify-end">
                     <button
                       type="button"

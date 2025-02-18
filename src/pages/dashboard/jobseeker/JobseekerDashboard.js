@@ -17,7 +17,7 @@ import JobFilterComponent from './../../../components/JobSeekerComponents/JobFil
 import JobListingContainer from './../../../components/JobSeekerComponents/JobListingContainer';
 import VerticalProfileCard from './../../../components/JobSeekerComponents/VerticalProfileCard';
 
-const   JobseekerDashboard = () => {
+const JobseekerDashboard = () => {
   return (
 <div className="flex min-h-screen bg-white flex-col pt-16 md:pt-20">
   {/* Job Search Component (Full Width) */}

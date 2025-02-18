@@ -3,15 +3,16 @@ import { IoMdClose } from "react-icons/io";
 import InputField from "./InputField";
 import { Form, Formik, Field } from "formik";
 import ChipsComponent from "./ChipsComponent";
+import DropDown from "./DropDown";
 
-function ProjectDetailsModal({ onClose, onSubmit }) {
+function CertificationModal({ onClose, onSubmit }) {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
       <div className="relative p-4 w-full max-w-4xl max-h-full">
         <div className="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
           <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
             <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-              Add Project Details
+              Add Certification Details
             </h3>
             <button
               type="button"
@@ -25,11 +26,12 @@ function ProjectDetailsModal({ onClose, onSubmit }) {
             <Formik
               initialValues={{
                 name: "",
-                projectLink: "",
-                from: "",
-                to: "",
-                mentor: "",
-                teamSize: "",
+                provider: "",
+                enrollmentNumber: "",
+                validUpto: "",
+                marksType: "",
+                aggregate: "",
+                max: "",
                 skills: [],
                 description: "",
               }}
@@ -39,57 +41,69 @@ function ProjectDetailsModal({ onClose, onSubmit }) {
                 onClose();
               }}
             >
-              {({ handleSubmit, values }) => (
+              {({ handleSubmit }) => (
                 <Form
                   className="grid grid-cols-2 gap-4"
                   onSubmit={handleSubmit}
                 >
                   <Field name="name">
                     {({ field }) => (
-                      <InputField label="Project Name" {...field} />
+                      <InputField label="Certification Name" {...field} />
                     )}
                   </Field>
-                  <Field name="projectLink">
+                  <Field name="provider">
+                    {({ field }) => <InputField label="Provider" {...field} />}
+                  </Field>
+                  <Field name="enrollmentNumber">
                     {({ field }) => (
-                      <InputField label="Project Link" {...field} />
+                      <InputField label="Enrollment Number" {...field} />
                     )}
                   </Field>
-                  <Field name="from">
+                  <Field name="validUpto">
                     {({ field }) => (
-                      <InputField label="Start Date" type="date" {...field} />
+                      <InputField label="Valid Upto" type="date" {...field} />
                     )}
-                  </Field>
-                  <Field name="to">
-                    {({ field }) => (
-                      <InputField label="End Date" type="date" {...field} />
-                    )}
-                  </Field>
-                  <Field name="mentor">
-                    {({ field }) => <InputField label="Mentor" {...field} />}
-                  </Field>
-                  <Field name="teamSize">
-                    {({ field }) => <InputField label="Team Size" {...field} />}
                   </Field>
 
+                  <div className="col-span-2 grid grid-cols-1 gap-4 items-center">
+                    <Field name="marksType">
+                      {({ field }) => (
+                        <DropDown
+                          label="Marks Type"
+                          name="type"
+                          options={[
+                            { label: "Percentage", value: "percentage" },
+                            { label: "Percentile", value: "percentile" },
+                            { label: "Other", value: "other" },
+                          ]}
+                          {...field}
+                        />
+                      )}
+                    </Field>
+                  </div>
+                  <Field name="aggregate">
+                    {({ field }) => <InputField label="Aggregate" {...field} />}
+                  </Field>
+                  <Field name="max">
+                    {({ field }) => <InputField label="Max" {...field} />}
+                  </Field>
                   <div className="col-span-2 grid grid-cols-1 gap-4 items-center">
                     <Field name="skills">
                       {({ field, form }) => (
                         <ChipsComponent
-                          label="Skills"
+                          label="Key Skills / Knowledge Involved"
                           name="skills"
-                          placeholder="Enter Your Skills Here"
+                          placeholder="Enter Key Skills Here"
                           form={form}
                         />
                       )}
                     </Field>
-
                     <Field name="description">
                       {({ field }) => (
                         <InputField label="Description" {...field} />
                       )}
                     </Field>
                   </div>
-
                   <div className="col-span-2 flex justify-end">
                     <button
                       type="button"
@@ -115,4 +129,4 @@ function ProjectDetailsModal({ onClose, onSubmit }) {
   );
 }
 
-export default ProjectDetailsModal;
+export default CertificationModal;

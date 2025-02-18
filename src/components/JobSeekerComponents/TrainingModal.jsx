@@ -4,14 +4,14 @@ import InputField from "./InputField";
 import { Form, Formik, Field } from "formik";
 import ChipsComponent from "./ChipsComponent";
 
-function ProjectDetailsModal({ onClose, onSubmit }) {
+function TrainingModal({ onClose, onSubmit }) {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
       <div className="relative p-4 w-full max-w-4xl max-h-full">
         <div className="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
           <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
             <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-              Add Project Details
+              Add Training Details
             </h3>
             <button
               type="button"
@@ -25,11 +25,9 @@ function ProjectDetailsModal({ onClose, onSubmit }) {
             <Formik
               initialValues={{
                 name: "",
-                projectLink: "",
+                instituteName: "",
                 from: "",
                 to: "",
-                mentor: "",
-                teamSize: "",
                 skills: [],
                 description: "",
               }}
@@ -40,56 +38,44 @@ function ProjectDetailsModal({ onClose, onSubmit }) {
               }}
             >
               {({ handleSubmit, values }) => (
-                <Form
-                  className="grid grid-cols-2 gap-4"
-                  onSubmit={handleSubmit}
-                >
+                <Form className="grid grid-cols-2 gap-4" onSubmit={handleSubmit}>
                   <Field name="name">
                     {({ field }) => (
-                      <InputField label="Project Name" {...field} />
+                      <InputField label="Training Name" {...field} />
                     )}
                   </Field>
-                  <Field name="projectLink">
+                  <Field name="instituteName">
                     {({ field }) => (
-                      <InputField label="Project Link" {...field} />
+                      <InputField label="Institute Name" {...field} />
                     )}
                   </Field>
                   <Field name="from">
                     {({ field }) => (
-                      <InputField label="Start Date" type="date" {...field} />
+                      <InputField label="From" type="date" {...field} />
                     )}
                   </Field>
                   <Field name="to">
                     {({ field }) => (
-                      <InputField label="End Date" type="date" {...field} />
+                      <InputField label="To" type="date" {...field} />
                     )}
                   </Field>
-                  <Field name="mentor">
-                    {({ field }) => <InputField label="Mentor" {...field} />}
-                  </Field>
-                  <Field name="teamSize">
-                    {({ field }) => <InputField label="Team Size" {...field} />}
-                  </Field>
-
                   <div className="col-span-2 grid grid-cols-1 gap-4 items-center">
                     <Field name="skills">
                       {({ field, form }) => (
                         <ChipsComponent
-                          label="Skills"
+                          label="Key Skills / Expertise Involved"
                           name="skills"
                           placeholder="Enter Your Skills Here"
                           form={form}
                         />
                       )}
                     </Field>
-
                     <Field name="description">
                       {({ field }) => (
                         <InputField label="Description" {...field} />
                       )}
                     </Field>
                   </div>
-
                   <div className="col-span-2 flex justify-end">
                     <button
                       type="button"
@@ -115,4 +101,4 @@ function ProjectDetailsModal({ onClose, onSubmit }) {
   );
 }
 
-export default ProjectDetailsModal;
+export default TrainingModal;

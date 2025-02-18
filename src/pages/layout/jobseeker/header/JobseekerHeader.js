@@ -22,10 +22,10 @@ const JobseekerHeader = () => {
       <div className="flex items-center justify-between px-1 py-2 md:px-6 md:py-3">
         
         {/* Left - Logo */}
-        <div className="flex items-center gap-4 cursor-pointer">
+        <Link className="flex items-center gap-4 cursor-pointer" to={'dashboard'}>
           <img src={breifcaseLogo} height={40} width={40} alt="JobVerse Logo" />
           <h1 className="text-xl font-bold px-2">JobVerse</h1>
-        </div>
+        </Link>
 
         
 
