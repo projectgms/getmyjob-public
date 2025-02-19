@@ -29,6 +29,11 @@ import CertificationForm from './routes/jobseeker/completeProfileForms/Certifica
 import OtherDetailsForm from './routes/jobseeker/completeProfileForms/OtherDetailsForm';
 import JobDetailsPage from './pages/jobseekerpages/JobDetailsPage';
 
+import RecruiterDashboard from './pages/dashboard/recruiter/RecruiterDashboard'
+import RecruiterLayout from './pages/layout/recruiter/RecruiterLayout'
+import JobManagement from './pages/dashboard/recruiter/Jobmanagement/JobManagement'
+import CreateJob from './pages/dashboard/recruiter/Jobmanagement/CreateJob'
+import EditJob from './pages/dashboard/recruiter/Jobmanagement/EditJob'
 
 const App = () => {
   return (
@@ -60,11 +65,17 @@ const App = () => {
              </Route>
          </Route>
 
-         <Route path='/recruiter/login' element={<RecruitmentLogin/>}/>
-         <Route path='/recruiter/signup' element={<RecruitmentSignup/>}/>
-         <Route path='/recruiter/reset-password' element={<RecruitmentResetPassword/>}/>
-         <Route path='/recruiter/forgot-password' element={<RecruitmentForgotpassword/>}/>
-      <Route path='/recruiter' element="">
+           {/* Recruiter Routes */}
+      <Route path="/recruiter/login" element={<RecruitmentLogin />} />
+      <Route path="/recruiter/signup" element={<RecruitmentSignup />} />
+      <Route path="/recruiter/reset-password" element={<RecruitmentResetPassword />} />
+      <Route path="/recruiter/forgot-password" element={<RecruitmentForgotpassword />} />
+      
+      <Route path="/recruiter/dashboard" element={<RecruiterLayout />}>
+        <Route index element={<RecruiterDashboard />} />
+        <Route path="jobs" element={<JobManagement />} />
+        <Route path="jobs/create" element={<CreateJob />} />
+        <Route path="jobs/edit/:id" element={<EditJob />} />
       
       </Route>
 

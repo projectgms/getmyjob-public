@@ -1,0 +1,54 @@
+{
+    "cards": [
+      {
+        "id": 1,
+        "title": "Job Posting",
+        "description": "Receive applications and quickly connect with high-quality, relevant candidates",
+        "linkText": "View plans",
+        "link": "#",
+       "image": "job.png",
+      "hoverImage": "job1.png"
+      },
+      {
+        "id": 2,
+        "title": "Resume Database (Resdex)",
+        "description": "Access & attract from a pool of 10 crore+ jobseekers - all in real-time!",
+        "linkText": "View plans",
+        "link": "#",
+        "image": "https://jobsquare.co.in/wp-content/uploads/2023/04/Resume-Database-Access.png"
+      },
+      {
+        "id": 3,
+        "title": "Assisted Hiring",
+        "description": "Leave sourcing & shortlisting to our hiring experts, you focus on interviewing the best.",
+        "linkText": "View plans",
+        "link": "#",
+        "image": "https://149357281.v2.pressablecdn.com/wp-content/uploads/2023/04/Coursera-Hiring-Solutions_Blog.png"
+      },
+      {
+        "id": 4,
+        "title": "Employer Branding",
+        "description": "Showcase your employer brand story to millions of relevant job seekers",
+        "linkText": "Request callback",
+        "link": "#",
+        "image": "https://www.reviewtrackers.com/wp-content/uploads/employee-branding.jpg"
+      },
+      {
+        "id": 5,
+        "title": "Talent Pulse",
+        "description": "Future-proof your hiring strategy with a data-driven talent planning tool",
+        "linkText": "Request callback",
+        "link": "#",
+        "image": "https://www.naukri.com/naukrihiringsuite/wp-content/uploads/sites/32498/2023/02/planning-3.webp"
+      },
+      {
+        "id": 6,
+        "title": "Need help?",
+        "description": "Let us help you find the right solution.",
+        "linkText": "Connect with our expert",
+        "link": "#",
+        "image": "/assets/icons/help.png"
+      }
+    ]
+  }
+  
