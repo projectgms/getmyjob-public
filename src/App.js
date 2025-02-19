@@ -15,7 +15,25 @@ import RecruitmentSignup from './pages/authentication/Recruiter/RecruitmentSignu
 import JobseekerForgetPass from './pages/authentication/jobseeker/JobseekerForgetPass'
 import JobseekerResetPass from './pages/authentication/jobseeker/JobseekerResetPass'
 import JobSeekerHomePage from './pages/authentication/jobseeker/JobSeekerHomePage'
+import CompleteProfileFormSection from './routes/jobseeker/CompleteProfileFormSection';
+import PersonalInfoForm from './routes/jobseeker/completeProfileForms/PersonalInfoForm';
+import ContactDetailsForm from './routes/jobseeker/completeProfileForms/ContactDetailsForm';
+import EducationalDetailsFrom from './routes/jobseeker/completeProfileForms/EducationalDetailsFrom';
+import AttachementsFrom from './routes/jobseeker/completeProfileForms/AttachementsFrom';
+import ProfessionalDetailForm from './routes/jobseeker/completeProfileForms/ProfessionalDetailForm';
+import InternshipForm from './routes/jobseeker/completeProfileForms/InternshipForm';
+import ProjectsForm from './routes/jobseeker/completeProfileForms/ProjectsForm';
+import ResearchPaperForm from './routes/jobseeker/completeProfileForms/ResearchPaperForm';
+import TraningForm from './routes/jobseeker/completeProfileForms/TraningForm';
+import CertificationForm from './routes/jobseeker/completeProfileForms/CertificationForm';
+import OtherDetailsForm from './routes/jobseeker/completeProfileForms/OtherDetailsForm';
+import JobDetailsPage from './pages/jobseekerpages/JobDetailsPage';
 
+import RecruiterDashboard from './pages/dashboard/recruiter/RecruiterDashboard'
+import RecruiterLayout from './pages/layout/recruiter/RecruiterLayout'
+import JobManagement from './pages/dashboard/recruiter/Jobmanagement/JobManagement'
+import CreateJob from './pages/dashboard/recruiter/Jobmanagement/CreateJob'
+import EditJob from './pages/dashboard/recruiter/Jobmanagement/EditJob'
 
 const App = () => {
   return (
@@ -30,13 +48,34 @@ const App = () => {
       
          <Route path='/jobseeker' element={<JobseekerLayout/>}>
              <Route path='dashboard' element={<JobseekerDashboard/>}/>
+             <Route path='job-detail' element={<JobDetailsPage/>}/>
+             <Route path='complete-profile-form' element={<CompleteProfileFormSection/>}>
+                <Route path='personal-info' element={<PersonalInfoForm/>}/>
+                <Route path='contact-info' element={<ContactDetailsForm/>}/>
+                <Route path='education' element={<EducationalDetailsFrom/>}/>
+                <Route path='attachments' element={<AttachementsFrom/>}/>
+                <Route path='professional' element={<ProfessionalDetailForm/>}/>
+                <Route path='internship' element={<InternshipForm/>}/>
+                <Route path='projects' element={<ProjectsForm/>}/>
+                <Route path='publications' element={<ResearchPaperForm/>}/>
+                <Route path='trainings' element={<TraningForm/>}/>
+                <Route path='certifications' element={<CertificationForm/>}/> 
+                <Route path='other-details' element={<OtherDetailsForm/>}/> 
+
+             </Route>
          </Route>
 
-         <Route path='/recruiter/login' element={<RecruitmentLogin/>}/>
-         <Route path='/recruiter/signup' element={<RecruitmentSignup/>}/>
-         <Route path='/recruiter/reset-password' element={<RecruitmentResetPassword/>}/>
-         <Route path='/recruiter/forgot-password' element={<RecruitmentForgotpassword/>}/>
-      <Route path='/recruiter' element="">
+           {/* Recruiter Routes */}
+      <Route path="/recruiter/login" element={<RecruitmentLogin />} />
+      <Route path="/recruiter/signup" element={<RecruitmentSignup />} />
+      <Route path="/recruiter/reset-password" element={<RecruitmentResetPassword />} />
+      <Route path="/recruiter/forgot-password" element={<RecruitmentForgotpassword />} />
+      
+      <Route path="/recruiter/dashboard" element={<RecruiterLayout />}>
+        <Route index element={<RecruiterDashboard />} />
+        <Route path="jobs" element={<JobManagement />} />
+        <Route path="jobs/create" element={<CreateJob />} />
+        <Route path="jobs/edit/:id" element={<EditJob />} />
       
       </Route>
 

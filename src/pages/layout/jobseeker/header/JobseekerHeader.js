@@ -1,73 +1,92 @@
 import React, { useState } from "react";
-import { FiSearch, FiBell } from "react-icons/fi";
-import avtar from './../../../../assets/images/userImages/avtar2.jpg'
-import { LuMessageSquareText } from "react-icons/lu";
+import { FiSearch, FiBell, FiMenu, FiX } from "react-icons/fi";
+import { LuMessageSquareText, LuUser, LuLogOut } from "react-icons/lu";
+import { MdOutlinePassword } from "react-icons/md";
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+import avtar from "./../../../../assets/images/userImages/avtar2.jpg";
+import breifcaseLogo from "./../../../../assets/images/brief-case.png";
+import { Link } from "react-router-dom";
+import ProfileDropdown from '../../../../components/JobSeekerComponents/ProfileDropdown';
+import { CiSquareChevDown } from "react-icons/ci";
+import { CiSquareChevUp } from "react-icons/ci";
+import { LuPanelTopOpen } from "react-icons/lu";
+import { LuPanelBottomOpen } from "react-icons/lu";
+import { FaAnglesDown, FaAnglesUp, FaAngleUp } from "react-icons/fa6";
 
-const JobseekerHeader = ({ toggleSidebar, isSidebarOpen }) => {
-  const [searchQuery, setSearchQuery] = useState("");
+
+const JobseekerHeader = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // Controls mobile menu visibility
 
   return (
-    <header className="bg-white shadow-sm">
-      <div className="flex items-center justify-between px-8 py-4">
-        {/* Left Section: Toggle Button & Logo (Only when Sidebar is Closed) */}
+    <header className="bg-white shadow-sm fixed top-0 w-full z-50 h-16 md:h-20 ">
+      <div className="flex items-center justify-between px-1 py-2 md:px-6 md:py-3">
+        
+        {/* Left - Logo */}
+        <Link className="flex items-center gap-4 cursor-pointer" to={'dashboard'}>
+          <img src={breifcaseLogo} height={40} width={40} alt="JobVerse Logo" />
+          <h1 className="text-xl font-bold px-2">JobVerse</h1>
+        </Link>
+
+        
+
+        {/* Middle - Desktop Navigation (Hidden in Mobile) */}
+        <div className="hidden lg:flex flex-1 justify-center">
+          <div className="flex gap-x-10 items-center">
+            <Link className="font-semibold text-blue-500 border-blue-500 border-b-2 transition-all duration-200">
+              Find Jobs
+            </Link>
+            <Link className="font-semibold text-gray-500 hover:text-blue-500 hover:border-blue-500 hover:border-b-2 transition-all duration-200">
+              Companies
+            </Link>
+            <Link className="font-semibold text-gray-500 hover:text-blue-500 hover:border-blue-500 hover:border-b-2 transition-all duration-200">
+              Career Tips
+            </Link>
+          </div>
+        </div>
+
+        {/* Right - Notifications & Profile (Always Visible) */}
         <div className="flex items-center gap-4">
-          {/* Sidebar Toggle Button */}
-          <button
-            className="p-2 hover:bg-gray-100 rounded-lg"
-            onClick={toggleSidebar}
-          >
-            <span className="sr-only">Menu</span>
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
-          </button>
-
-        </div>
-
-        {/* Right Section: Search, Notifications, and Profile */}
-        <div className="flex items-center gap-6">
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search something here..."
-              className="w-80 px-4 py-2 rounded-full bg-gray-100"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <FiSearch className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400" />
-          </div>
-
           <button className="relative p-2 hover:bg-gray-100 rounded-full">
-            <LuMessageSquareText className="w-6 h-6" />
-            <span className="absolute top-0 right-0 w-2 h-2 p-2 bg-purple-600 rounded-full flex justify-center items-center text-white text-xs  font-medium">2</span>
+            <LuMessageSquareText className="w-5 h-5" />
+            <span className="absolute top-0 right-0 w-2 h-2 p-2 bg-purple-600 rounded-full flex justify-center items-center text-white text-xs font-medium">
+              2
+            </span>
           </button>
           <button className="relative p-2 hover:bg-gray-100 rounded-full">
-            <FiBell className="w-6 h-6" />
-            <span className="absolute top-0 right-0 w-2 h-2 p-2 bg-red-600 rounded-full flex justify-center items-center text-white text-xs  font-medium">5</span>
+            <FiBell className="w-5 h-5" />
+            <span className="absolute top-0 right-0 w-2 h-2 p-2 bg-red-600 rounded-full flex justify-center items-center text-white text-xs font-medium">
+              5
+            </span>
           </button>
-          <div className="flex items-center gap-2">
-            <img
-              src={avtar}
-              alt="Profile"
-              className="w-10 h-10 rounded-full"
-            />
-            <div className="text-sm">
-              <p className="font-medium">Emma Carter</p>
-              <p className="text-gray-500">Software Engineer</p>
-            </div>
-          </div>
+
+          {/* Profile Section (Dropdown in Desktop & Mobile, but hide text on mobile) */}
+          <ProfileDropdown/>
         </div>
+
+        {/* Mobile - Hamburger Menu */}
+        <button
+          className="block lg:hidden p-2 rounded-lg focus:outline-none"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+        >
+          {isMenuOpen ? <FaAnglesUp  className="text-gray-500" size={20} /> : <FaAnglesDown className="text-gray-500" size={20} />}
+        </button>
       </div>
+
+      {/* Mobile Menu (Shows only when Hamburger Clicked) */}
+      {isMenuOpen && (
+        <div className="lg:hidden absolute top-16 left-0 w-full bg-white shadow-md p-4 flex flex-col space-y-4 z-0">
+          <ul className="space-y-2">
+            {["Find Jobs", "Companies", "Career Tips"].map((section) => (
+              <li
+                key={section}
+                className="cursor-pointer font-semibold px-3 py-2 transition-all duration-200 hover:text-blue-500 border-b border-gray-200"
+              >
+                {section}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </header>
   );
 };
