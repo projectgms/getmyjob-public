@@ -46,9 +46,9 @@ function JobseekerLogin() {
 
           <p className='font-inter text-sky-50 font-normal text-sm'>Millions of professionals and top companies around the world connect on JobVerse the home to the best career opportunities and hiring solutions for job seekers and employers alike.</p>
 
-          <div className='flex items-center mt-12 justify-stretch'>
+          <div className='flex items-center mt-12 justify-start'>
             <img src={avtarGroupImg} height={150} width={150} />
-            <p className='text-sky-50 text-2xl px-2 pb-1'>|</p>
+            <p className='text-sky-50 text-2xl px-2 pb-1'>|</p> 
             <p className='text-sky-50 font-normal text-sm pt-1'>Over <span className='text-sky-50 font-bold text-sm'>15.5k</span> Happy users</p>
           </div>
         </div>
@@ -114,12 +114,13 @@ function JobseekerLogin() {
                 </div>
               </div>
               <div>
-                <button
+                <Link 
+                  to={"/jobseeker/dashboard"}
                   type="submit"
                   className="flex w-full justify-center rounded-md bg-blue-600 py-3 text-sm font-semibold text-white shadow-md hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
                   Login to your account
-                </button>
+                </Link>
               </div>
             </form>
             <p className="my-4 text-sm text-gray-500 text-center">

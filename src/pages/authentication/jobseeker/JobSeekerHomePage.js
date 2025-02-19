@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import JobSeekerNavbar from "../../../components/navbar/JobSeekerNavbar";
 import { FiSearch } from "react-icons/fi";
 import line9 from "./../../../assets/images/Line 9.svg";
@@ -12,15 +12,18 @@ import avatar1 from "./../../../assets/images/avtar1.png";
 import avtar2 from "./../../../assets/images/avtar2.jpg";
 import adobeLogo from "./../../../assets/images/Adobe_Creative_Cloud_rainbow_icon.png";
 import { motion } from "framer-motion";
-import InfoBoxThree from "../../../components/JobComponents/InfoBoxThree";
-import InfoTitle from "../../../components/JobComponents/InfoTitle";
-import JobSearchInput from "../../../components/JobComponents/JobSearchInput";
-import SelectionChips from "../../../components/JobComponents/SelectionChips";
-import JobInfoCard from "../../../components/JobComponents/JobInfoCard";
+import InfoBoxThree from "../../../components/JobSeekerComponents/InfoBoxThree";
+import InfoTitle from "../../../components/JobSeekerComponents/InfoTitle";
+import JobSearchInput from "../../../components/JobSeekerComponents/JobSearchInput";
+import SelectionChips from "../../../components/JobSeekerComponents/SelectionChips";
+import JobInfoCard from "../../../components/JobSeekerComponents/JobInfoCard";
 import ShowMoreBtnDark from "../../../components/buttons/ShowMoreBtnDark";
-import CompanyCard from "../../../components/JobComponents/CompanyCard";
-import InterViewProcess from "../../../components/JobComponents/InterViewProcess";
-
+import CompanyCard from "../../../components/JobSeekerComponents/CompanyCard";
+import InterViewProcess from "../../../components/JobSeekerComponents/InterViewProcess";
+import UserReviewCard from "../../../components/JobSeekerComponents/UserReviewCard";
+import ArticleComponent from "../../../components/JobSeekerComponents/ArticleComponent";
+import SubscribeMail from "../../../components/JobSeekerComponents/SubscribeMail";
+import JobSeekerFooter from "../../../components/JobSeekerComponents/JobSeekerFooter";
 
 const typingVariants = {
   hidden: { opacity: 1 },
@@ -44,9 +47,62 @@ const subText =
   );
 
 function JobSeekerHomePage() {
+  const jobRef = useRef(null);
+  const companiesRef = useRef(null);
+  const ProcessRef = useRef(null);
+  const newsRef = useRef(null);
+  const pricingRef = useRef(null);
+
+  const [activeSection, setActiveSection] = useState("home");
+
+  const scrollToSection = (section) => {
+    const refs = {
+      job: jobRef,
+      companies: companiesRef,
+      process: ProcessRef,
+      news: newsRef,
+      pricing: pricingRef,
+    };
+
+    // setActiveSection(section);
+
+    refs[section]?.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = [
+        { id: "job", ref: jobRef },
+        { id: "companies", ref: companiesRef },
+        { id: "process", ref: ProcessRef },
+        { id: "news", ref: newsRef },
+        { id: "pricing", ref: pricingRef },
+      ];
+
+      let currentSection = "";
+
+      sections.forEach(({ id, ref }) => {
+        if (ref.current) {
+          const rect = ref.current.getBoundingClientRect();
+          if (rect.top >= 0 && rect.top < window.innerHeight / 3) {
+            currentSection = id;
+          }
+        }
+      });
+
+      setActiveSection(currentSection);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <div className="min-h-screen relative ">
-      <JobSeekerNavbar />
+      <JobSeekerNavbar
+        scrollToSection={scrollToSection}
+        activeSection={activeSection}
+      />
 
       <div
         className="flex flex-col lg:flex-row justify-center mx-6 md:mx-4 my-4 min-h-[500px] md:min-h-[650px] rounded-2xl relative items-center"
@@ -309,53 +365,125 @@ function JobSeekerHomePage() {
 
       {/* More content here */}
 
-        
-        {/* Three Info Cards Here */}
+      {/* Three Info Cards Here */}
 
-        <InfoBoxThree />
+      <InfoBoxThree />
+
+
+        {/* ------------- PROCESS SECTION HERE --------------------- */}
+
+        <section ref={ProcessRef} className="py-12">
+        <InfoTitle
+          subheading="Simple Process"
+          heading="Effortless Process,"
+          nextLine="Optimal Results"
+        />
+
+        {/* Interview Process Component Here  */}
+
+        <InterViewProcess />
 
         {/* Small Heading and Big SubHeading */}
 
-        <InfoTitle subheading="Realize your Career Dreams" heading="Search and Discover" nextLine="your Jobs Here"/>
+        <InfoTitle
+          subheading="Success Experience"
+          heading="Insights from Connect"
+          nextLine="Users"
+        />
+
+        {/* Users Reviews Here */}
+
+        <div className="my-3 px-2">
+          <UserReviewCard />
+        </div>
+
+      
+      </section>
+
+
+      {/* ------------- JOB SECTION HERE --------------------- */}
+
+      <section ref={jobRef} className="py-6">
+        {/* Small Heading and Big SubHeading */}
+
+        <InfoTitle
+          subheading="Realize your Career Dreams"
+          heading="Search and Discover"
+          nextLine="your Jobs Here"
+        />
 
         {/*Job Search Input here with Job Title and Location  */}
 
-        <JobSearchInput/>
+        <JobSearchInput />
+
+        {/* Job Type Selection Chips here */}
 
         <div className="flex w-full justify-center">
-          <SelectionChips/>
+          <SelectionChips />
         </div>
-        
-        {/* All Job Cards Here */}
-       
-        <JobInfoCard/>
 
+        {/* All Job Cards Here */}
+
+        <JobInfoCard />
+
+        {/* Showmore Btn here */}
 
         <div className="flex w-full items-center justify-center">
-              <ShowMoreBtnDark/>   
+          <ShowMoreBtnDark />
         </div>
+      </section>
 
+      {/* ------------- COMPANIES SECTION HERE --------------------- */}
 
+      <section ref={companiesRef} className="py-6">
         {/* Small Heading and Big SubHeading */}
 
-        <InfoTitle  subheading="Top Companies" heading="Best Companies for" nextLine="Employees 2025"/>
-        
+        <InfoTitle
+          subheading="Top Companies"
+          heading="Best Companies for"
+          nextLine="Employees 2025"
+        />
+
         {/* Campany Cards Here */}
 
         <div className="my-3 px-2">
-          <CompanyCard/>
+          <CompanyCard />
         </div>
+
+        {/* Showmore Btn here */}
 
         <div className="flex w-full items-center justify-center">
-              <ShowMoreBtnDark/>   
+          <ShowMoreBtnDark />
         </div>
         
-        <InfoTitle  subheading="Simple Process" heading="Effortless Process," nextLine="Optimal Results"/>
-        
-        <InterViewProcess/>
-        
+      </section>
 
+     
 
+    
+      {/* ------------- ARTICLE SECTION HERE --------------------- */}
+
+      <section ref={newsRef} className="py-6">
+        {/* Small Heading and Big SubHeading */}
+
+        <InfoTitle
+          subheading="Insight and Tips"
+          heading="Find Expert Tips and Growth"
+          nextLine="Insights on Our Blog"
+        />
+
+        {/* Article component */}
+
+        <ArticleComponent />
+      </section>
+
+      {/*Subscibe Mail Here   */}
+
+      <SubscribeMail />
+
+      {/* Footer */}
+
+      <JobSeekerFooter />
     </div>
   );
 }
