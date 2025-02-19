@@ -1,0 +1,16 @@
+{
+    "companyManagement": [
+      {
+        "id": 1,
+        "name": "Tech Solutions Inc.",
+        "locations": ["San Francisco", "New York"],
+        "industries": ["Software", "Technology"],
+        "website": "https://www.techsolutions.com",
+        "about": "A leading software development company specializing in AI and cloud computing.",
+        "size": "500",
+        "logo": "https://via.placeholder.com/100"
+      }
+     
+    ]
+  }
+  

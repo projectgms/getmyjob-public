@@ -22,6 +22,10 @@ import JobManagement from './pages/dashboard/recruiter/Jobmanagement/JobManageme
 import CreateJob from './pages/dashboard/recruiter/Jobmanagement/CreateJob'
 import EditJob from './pages/dashboard/recruiter/Jobmanagement/EditJob'
 
+import RecruitmentAuthRoutes from './routes/RecruitmentAuthRoutes'
+import CompanyManagement from './pages/dashboard/recruiter/Companymanagement/CompanyManagement'
+import CreateCompany from './pages/dashboard/recruiter/Companymanagement/CreateCompany'
+
 const App = () => {
   return (
     <>
@@ -43,12 +47,14 @@ const App = () => {
       <Route path="/recruiter/reset-password" element={<RecruitmentResetPassword />} />
       <Route path="/recruiter/forgot-password" element={<RecruitmentForgotpassword />} />
       
-      <Route path="/recruiter/dashboard" element={<RecruiterLayout />}>
+      {/* <Route path="/recruiter/dashboard" element={<RecruitmentAuthRoutes element={<RecruiterLayout />} allowedRoles={["recruiter"]} />}></Route> */}
+      <Route path="/recruiter/dashboard" element={<RecruiterLayout /> }>
         <Route index element={<RecruiterDashboard />} />
+        <Route path='companies' element={<CompanyManagement/>}/>
+        <Route path="companies/create" element={<CreateCompany />} />
         <Route path="jobs" element={<JobManagement />} />
         <Route path="jobs/create" element={<CreateJob />} />
         <Route path="jobs/edit/:id" element={<EditJob />} />
-      
       </Route>
 
 
