@@ -32,7 +32,7 @@ function EducationDetailsDisplay({ title, data }) {
         
         {data.college && (
           <p className="font-semibold text-gray-700 break-words">
-            College: {data.college}
+            College / School: {data.college}
           </p>
         )}
 
@@ -68,14 +68,13 @@ function EducationDetailsDisplay({ title, data }) {
           <p>
             Marks:{" "}
             <span className="font-semibold text-blue-600">
-              {data.aggregate} / {data.max}
+              {data.aggregate} {data.aggregateType === 'percentage' && '%'} { data.aggregateType != 'percentage' && `/ ${data.max}`} 
             </span>
           </p>
         )}
 
-        {data.activeBacklogs && (
+        {data.activeBacklogs >  0 && (
           <p>
-            Active Backlogs:{" "}
             <span className="text-blue-600 font-semibold">
               {data.activeBacklogs}
             </span>

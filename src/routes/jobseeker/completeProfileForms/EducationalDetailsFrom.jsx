@@ -2,11 +2,33 @@ import React, { useState } from "react";
 import EducationAddBox from "./../../../components/JobSeekerComponents/EducationAddBox";
 import EducationDetailsDisplay from "./../../../components/JobSeekerComponents/EducationDetailsDisplay";
 import { FaSave } from "react-icons/fa";
+import { useDispatch, useSelector } from 'react-redux';
+import {saveEducationalDetails} from './../../../store/slices/profileFormsSlice';
 
 function EducationalDetailsFrom() {
+
   const [tenthData, setTenthData] = useState(null);
   const [twelfthData, setTwelfthData] = useState(null);
   const [graduationData, setGraduationData] = useState(null);
+
+  const dispatch = useDispatch();
+
+  const degreeDetails = useSelector(state => state.profileForms.degreeGraduation);
+  const twelthDetails = useSelector(state => state.profileForms.twelfthDetails);
+  const tenthDetails = useSelector(state => state.profileForms.tenthDetails);
+
+
+  const handleSaveDetails = () =>{
+    const combinedEducationalDetails = {
+      degreeDetails,
+      twelthDetails,
+      tenthDetails,
+    };
+
+
+    dispatch(saveEducationalDetails(combinedEducationalDetails));
+  }
+
 
   const demodata = {
     degree: "10th SSC",
@@ -29,7 +51,7 @@ function EducationalDetailsFrom() {
 
       <div className="flex justify-end">
           <button
-            type="submit"
+            onClick={handleSaveDetails()}
             className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-6 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 mb-4"
           >
             <FaSave />
@@ -38,10 +60,10 @@ function EducationalDetailsFrom() {
         </div>
 
 
-        <EducationDetailsDisplay
+        {/* <EducationDetailsDisplay
           title={"Masters in Bussiness Intelligence"}
           data={demodata}
-        />
+        /> */}
 
         {/* For Degree / Graduation */}
         {graduationData ? (

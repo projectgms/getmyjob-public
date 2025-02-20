@@ -7,12 +7,15 @@ import DropDown from './../../../components/JobSeekerComponents/DropDown';
 import FileUploadField from './../../../components/JobSeekerComponents/FileUploadField';
 import TextAreaField from './../../../components/JobSeekerComponents/TextAreaField';
 import MultiSelectField from './../../../components/JobSeekerComponents/MultiSelectField';
+import { useDispatch } from 'react-redux';
 
+import {savePersonalInformation} from './../../../store/slices/profileFormsSlice';
 
 // Validation Schema using Yup
 const validationSchema = Yup.object({
+  profilePicture: Yup.string().required("Profile picture is required"),
   firstName: Yup.string().required("First name is required"),
-  middleName: Yup.string(),
+  middleName: Yup.string().required("Middle name is required"),
   lastName: Yup.string().required("Last name is required"),
   email: Yup.string().email("Invalid email address").required("Email is required"),
   phoneNumber: Yup.string()
@@ -22,9 +25,9 @@ const validationSchema = Yup.object({
     .required("Phone number is required"),
   dateOfBirth: Yup.date().required("Date of birth is required"),
   gender: Yup.string().required("Gender is required"),
-  maritalStatus: Yup.string(),
+  maritalStatus: Yup.string().required("Marital status is required"),
   addressLine1: Yup.string().required("Address is required"),
-  addressLine2: Yup.string(),
+  addressLine2: Yup.string().required("Address Line 2 is required"),
   city: Yup.string().required("City is required"),
   state: Yup.string().required("State is required"),
   country: Yup.string().required("Country is required"),
@@ -35,12 +38,13 @@ const validationSchema = Yup.object({
     .required("ZIP code is required"),
   course: Yup.string().required("Course is required"),
   specialization: Yup.string().required("Primary specialization is required"),
-  bloodGroup: Yup.string(),
-  medicalHistory: Yup.string(),
-  disability: Yup.string(),
-  knownLanguages: Yup.array().min(1, "Select at least one language"),
-  dreamCompany: Yup.string(),
+  bloodGroup: Yup.string().required("Blood group is required"),
+  medicalHistory: Yup.string().required("Medical history is required"),
+  disability: Yup.string().required("Disability status is required"),
+  knownLanguages: Yup.array().min(1, "Select at least one language").required("Known languages are required"),
+  dreamCompany: Yup.string().required("Dream company is required"),
 });
+
 
 // Initial Values
 const initialValues = {
@@ -69,8 +73,15 @@ const initialValues = {
 };
 
 function PersonalInfoForm() {
+
+
+  const dispatch = useDispatch();
+
+
   const handleSubmit = (values, { setSubmitting }) => {
-    console.log(values);
+    console.log("Form submitted with values:", values); // Debugging line
+
+    dispatch(savePersonalInformation(values));
     setSubmitting(false);
   };
 
@@ -83,9 +94,11 @@ function PersonalInfoForm() {
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
+          validateOnChange={true} // Ensures validation runs on change
+          validateOnBlur={true} // Ensures validation runs on blur
           onSubmit={handleSubmit}
         >
-          {({ setFieldValue, isSubmitting }) => (
+          {({ setFieldValue, isSubmitting, isValid }) => (
             <Form className="space-y-8 rounded-lg bg-white p-6 shadow-sm">
               
               {/* Profile Picture Upload */}
@@ -194,7 +207,7 @@ function PersonalInfoForm() {
               <div className="flex justify-end">
               <button
                   type="submit"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || !isValid }
                   className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-6 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
                 >
                   <FaSave />
