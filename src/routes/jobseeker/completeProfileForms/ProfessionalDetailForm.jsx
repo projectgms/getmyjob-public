@@ -3,15 +3,21 @@ import ModalOpenerForms from "./../../../components/JobSeekerComponents/ModalOpe
 import ExperienceDetailsDisplay from "./../../../components/JobSeekerComponents/ExperienceDetailsDisplay";
 import ProfessionalExperienceModal from "./../../../components/JobSeekerComponents/ProfessionalExperienceModal";
 import { FaSave } from 'react-icons/fa';
+import {saveProfessionalDetails} from './../../../store/slices/profileFormsSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 function ProfessionalDetailForm() {
   const [experienceList, setExperienceList] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const dispatch = useDispatch();
+
   const handleExperienceSubmit = (data) => {
     setExperienceList([...experienceList, data]);
     setIsModalOpen(false); // Close modal after submission
   };
+
+  const storedExpList = useSelector((state) => state.profileForms.professionalDetails); 
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-8 w-full">
@@ -20,8 +26,8 @@ function ProfessionalDetailForm() {
         {experienceList.length > 0 &&
           <div className="flex justify-end">
           <button
-            type="submit"
-            className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-6 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 mb-4"
+             className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-6 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 mb-4"
+             onClick={()=> dispatch(saveProfessionalDetails(experienceList))}
           >
             <FaSave />
             Save

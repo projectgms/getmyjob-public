@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import InputField from "./../../../components/JobSeekerComponents/InputField";
 import { FaSave } from "react-icons/fa";
 import {saveContactDetails} from './../../../store/slices/profileFormsSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 const validationSchema = Yup.object({
@@ -20,17 +20,22 @@ const validationSchema = Yup.object({
   githubUrl: Yup.string().url("Invalid URL"), // Optional
 });
 
-const initialValues = {
-  secondaryPhone: "",
-  otherEmail: "",
-  linkedInUrl: "", // Optional field
-  githubUrl: "", // Optional field
-};
 
 function ContactDetailsForm() {
 
+  const savedContactDetails = useSelector((state) => state.profileForms.contactDetails);
+  
+const initialValues = {
+  secondaryPhone: savedContactDetails.secondaryPhone|| "",
+  otherEmail: savedContactDetails.otherEmail  || "",
+  linkedInUrl: savedContactDetails.linkedInUrl  ||"", // Optional field
+  githubUrl: savedContactDetails.githubUrl || "", // Optional field
+};
+
 
   const dispatch = useDispatch();
+
+
 
   const handleSubmit = (values, { setSubmitting }) => {
     console.log("Form submitted with values:", values);

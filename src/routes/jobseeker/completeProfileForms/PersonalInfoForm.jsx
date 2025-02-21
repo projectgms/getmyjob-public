@@ -7,9 +7,10 @@ import DropDown from './../../../components/JobSeekerComponents/DropDown';
 import FileUploadField from './../../../components/JobSeekerComponents/FileUploadField';
 import TextAreaField from './../../../components/JobSeekerComponents/TextAreaField';
 import MultiSelectField from './../../../components/JobSeekerComponents/MultiSelectField';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import {savePersonalInformation} from './../../../store/slices/profileFormsSlice';
+import { useMemo } from 'react';
 
 // Validation Schema using Yup
 const validationSchema = Yup.object({
@@ -46,36 +47,42 @@ const validationSchema = Yup.object({
 });
 
 
-// Initial Values
-const initialValues = {
-  profilePicture: null,
-  firstName: "",
-  middleName: "",
-  lastName: "",
-  email: "",
-  phoneNumber: "",
-  dateOfBirth: "",
-  gender: "",
-  maritalStatus: "",
-  addressLine1: "",
-  addressLine2: "",
-  city: "",
-  state: "",
-  country: "",
-  zipCode: "",
-  course: "",
-  specialization: "",
-  bloodGroup: "",
-  medicalHistory: "",
-  disability: "",
-  knownLanguages: [],
-  dreamCompany: "",
-};
 
 function PersonalInfoForm() {
 
 
   const dispatch = useDispatch();
+
+  const personalInformation = useSelector(
+    (state) => state.profileForms.personalInformation
+  );
+
+  // Initial Values
+
+ const initialValues = {
+  profilePicture: personalInformation.profilePicture || null,
+  firstName: personalInformation.firstName || "",
+  middleName: personalInformation.middleName || "",
+  lastName: personalInformation.lastName || "",
+  email: personalInformation.email || "",
+  phoneNumber: personalInformation.phoneNumber || "",
+  dateOfBirth: personalInformation.dateOfBirth || "",
+  gender: personalInformation.gender || "",
+  maritalStatus: personalInformation.maritalStatus || "",
+  addressLine1: personalInformation.addressLine1 || "",
+  addressLine2: personalInformation.addressLine2 || "",
+  city: personalInformation.city || "",
+  state: personalInformation.state || "",
+  country: personalInformation.country || "",
+  zipCode: personalInformation.zipCode || "",
+  course: personalInformation.course || "",
+  specialization: personalInformation.specialization || "",
+  bloodGroup: personalInformation.bloodGroup || "",
+  medicalHistory: personalInformation.medicalHistory || "",
+  disability: personalInformation.disability || "",
+  knownLanguages: personalInformation.knownLanguages || [],
+  dreamCompany: personalInformation.dreamCompany || "",
+};
 
 
   const handleSubmit = (values, { setSubmitting }) => {
@@ -207,7 +214,7 @@ function PersonalInfoForm() {
               <div className="flex justify-end">
               <button
                   type="submit"
-                  disabled={isSubmitting || !isValid }
+                  disabled={isSubmitting || !isValid}
                   className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-6 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
                 >
                   <FaSave />
