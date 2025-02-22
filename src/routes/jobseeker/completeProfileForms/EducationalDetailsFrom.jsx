@@ -3,7 +3,7 @@ import EducationAddBox from "./../../../components/JobSeekerComponents/Education
 import EducationDetailsDisplay from "./../../../components/JobSeekerComponents/EducationDetailsDisplay";
 import { FaSave } from "react-icons/fa";
 import { useDispatch, useSelector } from 'react-redux';
-import {saveEducationalDetails} from './../../../store/slices/profileFormsSlice';
+import {saveEducationalDetails,saveTenthDetails} from './../../../store/slices/profileFormsSlice';
 
 function EducationalDetailsFrom() {
 
@@ -113,7 +113,7 @@ function EducationalDetailsFrom() {
             title={"10th Standard (Secondary)"}
             onSubmit={(data) => {
               setTenthData(data);
-              dispatch(saveEducationalDetails({ tenthDetails: data }));
+              dispatch(saveTenthDetails(data));
             }}
           />
         )}

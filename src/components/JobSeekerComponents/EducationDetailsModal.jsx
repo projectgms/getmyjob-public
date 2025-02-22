@@ -48,7 +48,7 @@ function EducationDetailsModal({ onClose, title, onSubmit, initialData }) {
                 const updatedEducation = {
                   [title === "Degree / Graduation"
                     ? "degreeGraduation"
-                    : title === "12th Details"
+                    : title === "12th Standard (Higher / Senior Secondary)"
                     ? "twelfthDetails"
                     : "tenthDetails"]: values,
                 };
