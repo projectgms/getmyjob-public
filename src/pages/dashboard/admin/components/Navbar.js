@@ -4,9 +4,16 @@ import { LuMessageSquareText } from "react-icons/lu";
 import { FiBell } from "react-icons/fi";
 import ThemeButton from "./ThemeButton";
 
+import { Link } from "react-router-dom";
+import { Dropdown } from "flowbite-react"; // Import Flowbite Dropdown
+
 export default function Navbar() {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+
+   useEffect(() => {
+    import("flowbite").then((flowbite) => flowbite.initFlowbite());
+  }, []);
 
   // State to manage pulse effect
   const [showPulseMessage, setShowPulseMessage] = useState(true);
@@ -28,7 +35,7 @@ export default function Navbar() {
         <div className=" flex items-center justify-between mx-auto p-4 relative">
 
           {/* Admin Logo */}
-          <a href="#" className="flex items-center space-x-3">
+          <Link to="/admin/dashboard" className="flex items-center space-x-3">
             <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
 
               <svg width="90" viewBox="0 0 208 70" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -37,13 +44,13 @@ export default function Navbar() {
 
 
             </span>
-          </a>
+          </Link>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex md:w-auto" id="navbar-dropdown">
             <ul className="flex basis-128 flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
               <li>
-                <a href="#" className="block py-2 px-3 text-white bg-blue-700 rounded-sm md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500 dark:bg-blue-600 md:dark:bg-transparent">Dashboard</a>
+                <Link to="/admin/dashboard" className="block py-2 px-3 text-white bg-blue-700 rounded-sm md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500 dark:bg-blue-600 md:dark:bg-transparent">Dashboard</Link>
               </li>
               <li>
                 <button id="dropdownNavbarLink" data-dropdown-toggle="dropdownNavbar" className="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto dark:text-white md:dark:hover:text-blue-500 dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent">
@@ -53,18 +60,29 @@ export default function Navbar() {
                   </svg>
                 </button>
 
-                {/* Dropdown Menu */}
                 <div id="dropdownNavbar" className="hidden z-40 absolute mt-2 bg-white border border-gray-200 rounded-lg shadow-sm w-44 dark:bg-gray-700 dark:border-gray-600">
                   <ul className="py-2 text-sm text-gray-700 dark:text-gray-400">
                     <li>
-                      <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Job Seekers Management</a>
+                      <Link to="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Job Seekers Management</Link>
                     </li>
                     <li>
-                      <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Recruiters Management</a>
+                      <Link to="/usermanagment/recruiters" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Recruiters Management</Link>
                     </li>
                   </ul>
                 </div>
               </li>
+
+                {/* ✅ Working Flowbite Dropdown */}
+            {/* <li>
+              <Dropdown label="User Management" inline>
+                <Dropdown.Item>
+                  <Link to="#">Job Seekers Management</Link>
+                </Dropdown.Item>
+                <Dropdown.Item>
+                  <Link to="/usermanagment/recruiters">Recruiters Management</Link>
+                </Dropdown.Item>
+              </Dropdown>
+            </li> */}
               <li>
                 <a href="#" className="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Subscription & Payment</a>
               </li>
@@ -129,14 +147,14 @@ export default function Navbar() {
             </button>
 
             {/* dropdown profile*/}
-            <div id="dropdownprofileLink" data-dropdown-toggle="dropdownprofile" class="relative inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+            <div id="dropdownprofileLink" data-dropdown-toggle="dropdownprofile" class="relative inline-flex hover:cursor-pointer items-center justify-center w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
               <span class="font-medium text-gray-600 dark:text-gray-300">JM</span>
             </div>
 
 
 
             <div id="dropdownprofile" class="z-10 hidden font-normal bg-white divide-y divide-gray-100 rounded-lg border-gray-300 border-2 dark:border-slate-600 shadow-lg w-44 dark:bg-gray-700 dark:divide-gray-600">
-              <ul class="py-2 text-sm text-gray-700 dark:text-gray-400" aria-labelledby="dropdownLargeButton">
+              <ul class="py-1 text-sm text-gray-700 dark:text-gray-400" aria-labelledby="dropdownLargeButton">
                 <li>
                   <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</a>
                 </li>

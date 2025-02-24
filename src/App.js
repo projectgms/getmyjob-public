@@ -4,9 +4,7 @@ import JobseekerLayout from './pages/layout/jobseeker/JobseekerLayout'
 import JobseekerLogin from './pages/authentication/jobseeker/JobseekerLogin'
 import JobseekerDashboard from './pages/dashboard/jobseeker/JobseekerDashboard'
 import JobSeekerSignUp from './pages/authentication/jobseeker/JobseekerSignUp'
-import AdminSignIn from './pages/authentication/admin/admin-signin'
-import AdminSignUp from './pages/authentication/admin/admin-signup'
-import ForgotPassword from './pages/authentication/admin/admin-forgot-password'
+
 import RecruitmentLogin from './pages/authentication/Recruiter/RecruitmentLogin'
 import RecruitmentResetPassword from './pages/authentication/Recruiter/RecruitmentResetPassword'
 import RecruitmentForgotpassword from './pages/authentication/Recruiter/RecruitmentForgotpassword'
@@ -33,11 +31,17 @@ import RecruiterLayout from './pages/layout/recruiter/RecruiterLayout'
 import JobManagement from './pages/dashboard/recruiter/Jobmanagement/JobManagement'
 import CreateJob from './pages/dashboard/recruiter/Jobmanagement/CreateJob'
 import EditJob from './pages/dashboard/recruiter/Jobmanagement/EditJob'
+
+
+// admin rahul imports 
+import AdminSignIn from './pages/authentication/admin/admin-signin'
+import AdminSignUp from './pages/authentication/admin/admin-signup'
+import ForgotPassword from './pages/authentication/admin/admin-forgot-password'
 import Dashboard from './pages/dashboard/admin/Dashboard'
-
-
+import Recruiters  from './pages/dashboard/admin/modules/usermanagment/recruiters'
+// added by admin rahul to use flowbit 
 import "flowbite";
-import "./index.css"; // Ensure Tailwind styles are loaded
+import "./index.css";
 
 
 const App = () => {
@@ -89,6 +93,12 @@ const App = () => {
       <Route path='/admin' element="">
        <Route path='dashboard' element={<Dashboard/>}/>
       </Route>
+
+      <Route path='/usermanagment' element="">
+       <Route path='recruiters' element={<Recruiters/>}/>
+      </Route>
+
+
       <Route path='/admin/signin' element={<AdminSignIn/>}/>
       <Route path='/admin/signup' element={<AdminSignUp/>}/>
       <Route path='/admin/forgot-password' element={<ForgotPassword/>}/>
