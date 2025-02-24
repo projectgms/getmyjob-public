@@ -38,6 +38,8 @@ import EditJob from './pages/dashboard/recruiter/Jobmanagement/EditJob'
 import RecruitmentAuthRoutes from './routes/RecruitmentAuthRoutes'
 import CompanyManagement from './pages/dashboard/recruiter/Companymanagement/CompanyManagement'
 import CreateCompany from './pages/dashboard/recruiter/Companymanagement/CreateCompany'
+import IndexUser from './pages/dashboard/recruiter/userManagement/IndexUser'
+import JobDetail from './pages/dashboard/recruiter/Jobmanagement/JobDetail'
 
 const App = () => {
   return (
@@ -82,7 +84,9 @@ const App = () => {
         <Route path="companies/create" element={<CreateCompany />} />
         <Route path="jobs" element={<JobManagement />} />
         <Route path="jobs/create" element={<CreateJob />} />
+        <Route path="jobs/detail/:id" element={<JobDetail />} />
         <Route path="jobs/edit/:id" element={<EditJob />} />
+        <Route path="users" element={<IndexUser />} />
       </Route>
 
 

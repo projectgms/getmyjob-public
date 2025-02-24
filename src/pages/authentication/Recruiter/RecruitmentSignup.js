@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import group from '../../../assets/images/group.jpg';
@@ -7,22 +7,26 @@ import { useDispatch, useSelector } from "react-redux";
 import { authRequest } from "../../../store/slices/authSlice";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { toast, ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
+
 
 const RecruitmentSignup = () => {
 
+
   const dispatch = useDispatch();
-  const { loading, error } = useSelector((state) => state.auth);
+  const { loading, error,message } = useSelector((state) => state.auth);
   const formik = useFormik({
     initialValues: {
-      fullName: "",
+      name: "",
         email: "",
         password: "",
-        // company:"",
-        //phone:"",
-        role: "recruiter" // ✅ Make sure the role is set correctly
+        company:"",
+        mobile:"",
+        // role: "recruiter" // ✅ Make sure the role is set correctly
     },
     validationSchema: Yup.object().shape({
-      fullName: Yup.string()
+      name: Yup.string()
         .min(3, 'Full Name must be at least 3 characters long')
         .required('Required'),
       email: Yup.string()
@@ -31,6 +35,11 @@ const RecruitmentSignup = () => {
       password: Yup.string()
         .min(6, 'Password must be at least 6 characters long')
         .required('Required'),
+      company: Yup.string()
+        .required('Required'),
+      mobile: Yup.number()
+       
+        .required('Required')
     }),
     onSubmit: values => {
       console.log(values);
@@ -52,6 +61,15 @@ const RecruitmentSignup = () => {
   //   e.preventDefault();
   //   dispatch(authRequest({ userData: formData, type: "signup" })); // ✅ Correct action dispatch
   // };
+   // ✅ Show alert when signup is successful
+   useEffect(() => {
+    if (message) {
+      toast.success(message, { position: "top-right" });
+    }
+    if (error) {
+      toast.error(error, { position: "top-right" });
+    }
+  }, [message, error]);
   return (
     <motion.div
       className="flex min-h-screen bg-gradient-to-br from-blue-500 via-gray-100 to-white text-white p-10 items-center justify-between"
@@ -96,14 +114,14 @@ const RecruitmentSignup = () => {
             {/* Full Name Input */}
             <input
               type="text"
-              name="fullName"
+              name="name"
               placeholder="Full Name"
               onChange={formik.handleChange}
-              value={formik.values.fullName}
+              value={formik.values.name}
               className="w-full p-3 mb-2 border text-black border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            {formik.touched.fullName && formik.errors.fullName ? (
-              <p className="text-red-500 text-xs">{formik.errors.fullName}</p>
+            {formik.touched.name && formik.errors.name ? (
+              <p className="text-red-500 text-xs">{formik.errors.name}</p>
             ) : null}
 
             {/* Email Input */}
@@ -132,6 +150,31 @@ const RecruitmentSignup = () => {
               <p className="text-red-500 text-xs">{formik.errors.password}</p>
             ) : null}
 
+<input
+              type="number"
+              name="mobile"
+              placeholder="Enter phone number"
+              onChange={formik.handleChange}
+              value={formik.values.mobile}
+           
+              className="w-full p-3 mb-3 border text-black border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            {formik.touched.mobile && formik.errors.mobile ? (
+              <p className="text-red-500 text-xs">{formik.errors.mobile}</p>
+            ) : null}
+
+<input
+              type="text"
+              name="company"
+              placeholder="Enter company name"
+              onChange={formik.handleChange}
+              value={formik.values.company}
+              className="w-full p-3 mb-3 border text-black border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            {formik.touched.company && formik.errors.company ? (
+              <p className="text-red-500 text-xs">{formik.errors.company}</p>
+            ) : null}
+
             {/* Submit Button */}
             <motion.button
               type="submit"
@@ -145,7 +188,7 @@ const RecruitmentSignup = () => {
 
           {/* Display Errors */}
           {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
-
+          <ToastContainer />
           {/* Google Sign Up Button */}
           <div className="flex justify-center mt-4">
             <motion.button whileHover={{ scale: 1.1 }} className="flex items-center shadow-md py-3 gap-2 px-4 text-black border border-gray-400 rounded-md bg-white">

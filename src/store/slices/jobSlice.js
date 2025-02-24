@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    jobs: {
-        activeJobs: [],
-        draftJobs: [],
-        expiredJobs: [],
-      },
+  jobs: {
+    activeJobs: [],
+    draftJobs: [],
+    expiredJobs: [],
+  },
   loading: false,
   error: null,
 };
@@ -17,35 +17,33 @@ const jobSlice = createSlice({
     fetchJobsRequest: (state) => {
       console.log("🟡 Fetching jobs...");
       state.loading = true;
-    //   state.error = null;
     },
     fetchJobsSuccess: (state, action) => {
       console.log("🔥 Reducer: Updating jobs state", action.payload);
       state.loading = false;
-        state.jobs = action.payload || { activeJobs: [], draftJobs: [], expiredJobs: [] }; // Ensure default structure
-       
-      },
+      state.jobs = action.payload || {
+        activeJobs: [],
+        draftJobs: [],
+        expiredJobs: [],
+      };
+    },
     fetchJobsFailure: (state, action) => {
       state.loading = false;
-        state.error = action.payload;
-      
+      state.error = action.payload;
     },
-     // Create Job Actions
-     createJobRequest: (state, action) => {
+    // Create Job Actions
+    createJobRequest: (state, action) => {
       console.log("🚀 Creating job...", action.payload);
       state.loading = true;
     },
     createJobSuccess: (state, action) => {
-      console.log("✅ Job Created:", action.payload);
       state.loading = false;
-      
-      // Categorizing job based on its status
       const newJob = action.payload;
       if (newJob.status === "Active") {
         state.jobs.activeJobs.push(newJob);
       } else if (newJob.status === "Draft") {
         state.jobs.draftJobs.push(newJob);
-      } else {
+      } else if (newJob.status === "Expired") {
         state.jobs.expiredJobs.push(newJob);
       }
     },
@@ -53,15 +51,64 @@ const jobSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    // Delete Job Action (removes the job from all arrays)
     deleteJobRequest: (state, action) => {
-        const jobId = action.payload;
-        state.jobs.activeJobs = state.jobs.activeJobs.filter((job) => job.id !== jobId);
-        state.jobs.draftJobs = state.jobs.draftJobs.filter((job) => job.id !== jobId);
-        state.jobs.expiredJobs = state.jobs.expiredJobs.filter((job) => job.id !== jobId);
-      },
+      const jobId = action.payload;
+      state.jobs.activeJobs = state.jobs.activeJobs.filter(
+        (job) => job.id !== jobId
+      );
+      state.jobs.draftJobs = state.jobs.draftJobs.filter(
+        (job) => job.id !== jobId
+      );
+      state.jobs.expiredJobs = state.jobs.expiredJobs.filter(
+        (job) => job.id !== jobId
+      );
+    },
+    // Update Job Actions
+    updateJobRequest: (state, action) => {
+      console.log("🚀 Updating job...", action.payload);
+      state.loading = true;
+    },
+    updateJobSuccess: (state, action) => {
+      state.loading = false;
+      const updatedJob = action.payload;
+      // Remove the job from all arrays (it might have changed status)
+      state.jobs.activeJobs = state.jobs.activeJobs.filter(
+        (job) => job.id !== updatedJob.id
+      );
+      state.jobs.draftJobs = state.jobs.draftJobs.filter(
+        (job) => job.id !== updatedJob.id
+      );
+      state.jobs.expiredJobs = state.jobs.expiredJobs.filter(
+        (job) => job.id !== updatedJob.id
+      );
+      // Add the updated job to the correct array
+      if (updatedJob.status === "Active") {
+        state.jobs.activeJobs.push(updatedJob);
+      } else if (updatedJob.status === "Draft") {
+        state.jobs.draftJobs.push(updatedJob);
+      } else if (updatedJob.status === "Expired") {
+        state.jobs.expiredJobs.push(updatedJob);
+      }
+    },
+    updateJobFailure: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
   },
 });
 
-export const { fetchJobsRequest, fetchJobsSuccess, fetchJobsFailure,
-  createJobRequest, createJobSuccess, createJobFailure,deleteJobRequest } = jobSlice.actions;
+export const {
+  fetchJobsRequest,
+  fetchJobsSuccess,
+  fetchJobsFailure,
+  createJobRequest,
+  createJobSuccess,
+  createJobFailure,
+  deleteJobRequest,
+  updateJobRequest,
+  updateJobSuccess,
+  updateJobFailure,
+} = jobSlice.actions;
+
 export default jobSlice.reducer;
