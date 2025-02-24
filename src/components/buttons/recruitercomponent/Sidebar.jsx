@@ -13,6 +13,7 @@ const Sidebar = () => {
         <SidebarLink to="/recruiter/dashboard" icon={<Home size={20} />} label="Dashboard" currentPath={location.pathname} />
         <SidebarLink to="/recruiter/dashboard/companies" icon={<Briefcase size={20} />} label="companies Management" currentPath={location.pathname} />
         <SidebarLink to="/recruiter/dashboard/jobs" icon={<Briefcase size={20} />} label="Job Management" currentPath={location.pathname} />
+        <SidebarLink to="/recruiter/dashboard/users" icon={<Users size={20} />} label="users" currentPath={location.pathname} />
         <SidebarLink to="/recruiter/dashboard/candidates" icon={<Users size={20} />} label="Candidates" currentPath={location.pathname} />
         <SidebarLink to="/recruiter/dashboard/messages" icon={<MessageSquare size={20} />} label="Messages" currentPath={location.pathname} />
         <SidebarLink to="/recruiter/dashboard/reports" icon={<BarChart size={20} />} label="Reports" currentPath={location.pathname} />

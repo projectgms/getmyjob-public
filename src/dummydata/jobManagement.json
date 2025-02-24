@@ -1,47 +1,51 @@
 {
-    "jobManagement": {
-      "activeJobs": [
-        {
-          "id": 1,
-          "title": "Software Engineer",
-          "type": "Full-Time",
-          "location": "Remote",
-          "salary": "$80,000 - $100,000",
-          "experience": "Mid-Level",
-          "status": "Active"
-        },
-        {
-          "id": 2,
-          "title": "UX Designer",
-          "type": "Contract",
-          "location": "New York",
-          "salary": "$60,000 - $75,000",
-          "experience": "Senior",
-          "status": "Active"
-        }
-      ],
-      "draftJobs": [
-        {
-          "id": 3,
-          "title": "Product Manager",
-          "type": "Full-Time",
-          "location": "San Francisco",
-          "salary": "$90,000 - $120,000",
-          "experience": "Senior",
-          "status": "Draft"
-        }
-      ],
-      "expiredJobs": [
-        {
-          "id": 4,
-          "title": "Marketing Specialist",
-          "type": "Part-Time",
-          "location": "London",
-          "salary": "$40,000 - $50,000",
-          "experience": "Entry-Level",
-          "status": "Expired"
-        }
-      ]
-    }
+  "jobManagement": {
+    "activeJobs": [
+      {
+        "title": "react Developer",
+        "company": "gms",
+        "locations": [
+          "Mumbai",
+          "Pune"
+        ],
+        "description": "<p>sdfdsfgfdhgfgnfgnvbnbvbvnvbnnv</p>",
+        "skills": [
+          "React Js",
+          "Node Js"
+        ],
+        "status": "Active",
+        "salary": "10000",
+        "industries": [
+          "software development"
+        ],
+        "employmentType": "Full-time",
+        "email": "vineet.shrivastava@getmysolutions.in",
+        "responsibilities": "<p>sdgdfgfhfghghjkhjkjlkjl.mk.,m,mbnbvnbbn</p>",
+        "id": 4
+      },
+      {
+        "title": "CATIA Designer",
+        "company": "gms",
+        "locations": [
+          "Mumbai",
+          "Pune"
+        ],
+        "description": "<p>sdfdsfgsgsgs</p>",
+        "responsibilities": "<p>dfdsfdsfsdfsdfsdfsdfsdfsdfsdvvsvdcxvrgv</p>",
+        "skills": [
+          "React Js"
+        ],
+        "status": "Active",
+        "salary": "10000",
+        "industries": [
+          "software development"
+        ],
+        "employmentType": "Full-time",
+        "email": "vineet.shrivastava@getmysolutions.in",
+        "id": 5
+      }
+    ],
+    "draftJobs": [],
+    "expiredJobs": []
   }
-  
+}
