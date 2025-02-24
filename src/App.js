@@ -4,7 +4,6 @@ import JobseekerLayout from './pages/layout/jobseeker/JobseekerLayout'
 import JobseekerLogin from './pages/authentication/jobseeker/JobseekerLogin'
 import JobseekerDashboard from './pages/dashboard/jobseeker/JobseekerDashboard'
 import JobSeekerSignUp from './pages/authentication/jobseeker/JobseekerSignUp'
-import AdminDashboard from './pages/dashboard/admin/admin-dashboard'
 import AdminSignIn from './pages/authentication/admin/admin-signin'
 import AdminSignUp from './pages/authentication/admin/admin-signup'
 import ForgotPassword from './pages/authentication/admin/admin-forgot-password'
@@ -34,6 +33,12 @@ import RecruiterLayout from './pages/layout/recruiter/RecruiterLayout'
 import JobManagement from './pages/dashboard/recruiter/Jobmanagement/JobManagement'
 import CreateJob from './pages/dashboard/recruiter/Jobmanagement/CreateJob'
 import EditJob from './pages/dashboard/recruiter/Jobmanagement/EditJob'
+import Dashboard from './pages/dashboard/admin/Dashboard'
+
+
+import "flowbite";
+import "./index.css"; // Ensure Tailwind styles are loaded
+
 
 const App = () => {
   return (
@@ -82,7 +87,7 @@ const App = () => {
 
       {/* admin  */}
       <Route path='/admin' element="">
-       <Route path='dashboard' element={<AdminDashboard/>}/>
+       <Route path='dashboard' element={<Dashboard/>}/>
       </Route>
       <Route path='/admin/signin' element={<AdminSignIn/>}/>
       <Route path='/admin/signup' element={<AdminSignUp/>}/>

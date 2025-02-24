@@ -1,6 +1,12 @@
+
+import flowbite from "flowbite/plugin";
+
 module.exports = {
+  darkMode: "class", // Enables class-based dark mode
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
+    "node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}", 
+     "node_modules/flowbite/**/*.js", 
   ],
  theme: {
     extend: {
@@ -15,5 +21,13 @@ module.exports = {
       },
     },
   },
-  plugins: [], // Keep this empty unless adding official Tailwind plugins
+  plugins: [flowbite],
+
 };
+
+
+
+
+
+
+
