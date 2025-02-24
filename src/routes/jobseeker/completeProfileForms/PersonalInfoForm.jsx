@@ -1,16 +1,15 @@
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { FaSave } from "react-icons/fa";
-
-import InputField from './../../../components/JobSeekerComponents/InputField';
-import DropDown from './../../../components/JobSeekerComponents/DropDown';
-import FileUploadField from './../../../components/JobSeekerComponents/FileUploadField';
-import TextAreaField from './../../../components/JobSeekerComponents/TextAreaField';
-import MultiSelectField from './../../../components/JobSeekerComponents/MultiSelectField';
+ 
+import InputField from '../../../components/JobSeekerComponents/ReusableComponents/InputField';
+import DropDown from './../../../components/JobSeekerComponents/ReusableComponents/DropDown';
+import FileUploadField from '../../../components/JobSeekerComponents/ReusableComponents/FileUploadField';
+import TextAreaField from '../../../components/JobSeekerComponents/ReusableComponents/TextAreaField';
+import MultiSelectField from './../../../components/JobSeekerComponents/ReusableComponents/MultiSelectField';
 import { useDispatch, useSelector } from 'react-redux';
-
 import {savePersonalInformation} from './../../../store/slices/profileFormsSlice';
-import { useMemo } from 'react';
+ 
 
 // Validation Schema using Yup
 const validationSchema = Yup.object({

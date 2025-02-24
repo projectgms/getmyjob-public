@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import ModalOpenerForms from "./../../../components/JobSeekerComponents/ModalOpenerForms";
+import ModalOpenerForms from "../../../components/JobSeekerComponents/Modal_Opener_Forms/ModalOpenerForms";
 import { FaSave } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
-import FileCard from "./../../../components/JobSeekerComponents/FileCard";
+import FileCard from "../../../components/JobSeekerComponents/ReusableComponents/FileCard";
 import { saveAttachmentDocuments } from "../../../store/slices/profileFormsSlice";
-
+  
 function AttachmentsForm() {
   const dispatch = useDispatch();
   const availFiles = useSelector((state) => state.profileForms.attachmentDocuments);

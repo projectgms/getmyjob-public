@@ -1,6 +1,6 @@
 import React from "react";
 
-import AIButton from "./../../components/JobSeekerComponents/AIButton";
+import AIButton from "./../../components/JobSeekerComponents/Buttons/AIButton";
 
 import {
   Briefcase,

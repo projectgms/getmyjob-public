@@ -1,7 +1,7 @@
 import React from "react";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
-import { removeAttachment } from "../../store/slices/profileFormsSlice"; // Import Redux action
+import { removeAttachment } from "../../../store/slices/profileFormsSlice"; // Import Redux action
 
 function FileCard() {
   const dispatch = useDispatch();

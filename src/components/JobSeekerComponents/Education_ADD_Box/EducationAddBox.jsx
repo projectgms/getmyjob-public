@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
-import emptyBox from './../../assets/images/empty-box.png'
+import emptyBox from './../../../assets/images/empty-box.png';
 import { IoIosAddCircleOutline } from 'react-icons/io';
-import EducationDetailsModal from './EducationDetailsModal';
+import EducationDetailsModal from './../ModalForms/EducationDetailsModal';
+
 
 
 function EducationAddBox({title, onSubmit}) {

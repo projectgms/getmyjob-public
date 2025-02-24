@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { MdOutlineEdit } from "react-icons/md";
-import { deleteEducationalDetail } from "./../../store/slices/profileFormsSlice";
+import { deleteEducationalDetail } from "../../../store/slices/profileFormsSlice";
 import { useDispatch } from "react-redux";
-import EducationDetailsModal from "./EducationDetailsModal";
+import EducationDetailsModal from '../ModalForms/EducationDetailsModal';
 
+ 
 
 
 function EducationDetailsDisplay({ title, data }) {

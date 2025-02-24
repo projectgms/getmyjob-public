@@ -1,11 +1,11 @@
 import React from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import InputField from "./../../../components/JobSeekerComponents/InputField";
+import InputField from "./../../../components/JobSeekerComponents/ReusableComponents/InputField";
 import { FaSave } from "react-icons/fa";
 import {saveContactDetails} from './../../../store/slices/profileFormsSlice';
 import { useDispatch, useSelector } from 'react-redux';
-
+ 
 
 const validationSchema = Yup.object({
   secondaryPhone: Yup.string()

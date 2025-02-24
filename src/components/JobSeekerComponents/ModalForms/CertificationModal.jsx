@@ -1,18 +1,57 @@
 import React from "react";
 import { IoMdClose } from "react-icons/io";
-import InputField from "./InputField";
+import InputField from "./../ReusableComponents/InputField";
 import { Form, Formik, Field } from "formik";
-import ChipsComponent from "./ChipsComponent";
-import DropDown from "./DropDown";
+import ChipsComponent from './../ReusableComponents/ChipsComponent';
+import DropDown from "./../ReusableComponents/DropDown";
+import * as Yup from "yup";
+import { useDispatch } from "react-redux";
+import {
+  saveTempCertification,
+  editTempCertification,
+  editFinalCertification,
+} from "./../../../store/slices/profileFormsSlice";
 
-function CertificationModal({ onClose, onSubmit }) {
+// ✅ Validation Schema using Yup
+const validationSchema = Yup.object().shape({
+  name: Yup.string().required("Certification Name is required"),
+  provider: Yup.string().required("Provider is required"),
+  enrollmentNumber: Yup.string().required("Enrollment Number is required"),
+  validUpto: Yup.date().required("Valid Upto date is required"),
+  marksType: Yup.string().required("Marks Type is required"),
+  aggregate: Yup.number()
+    .typeError("Aggregate must be a number")
+    .positive("Must be a positive number")
+    .nullable()
+    .required("Aggregate is required"),
+  max: Yup.number()
+    .typeError("Max value must be a number")
+    .positive("Must be a positive number")
+    .nullable()
+    .required("Max value is required"),
+  skills: Yup.array().min(1, "At least one skill is required"),
+  description: Yup.string()
+    .required("Description is required")
+    .max(500, "Description must be at most 500 characters"),
+});
+
+function CertificationModal({
+  onClose,
+  onSubmit,
+  initialValues,
+  isEditing,
+  isEditingTemp,
+  editIndex,
+}) {
+  const dispatch = useDispatch();
+
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
       <div className="relative p-4 w-full max-w-4xl max-h-full">
         <div className="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
           <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
             <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-              Add Certification Details
+              {isEditing ? "Edit Certification Details" : "Add Certification Details"}
             </h3>
             <button
               type="button"
@@ -24,7 +63,8 @@ function CertificationModal({ onClose, onSubmit }) {
           </div>
           <div className="p-4 md:p-5 space-y-4">
             <Formik
-              initialValues={{
+              enableReinitialize
+              initialValues={initialValues || {
                 name: "",
                 provider: "",
                 enrollmentNumber: "",
@@ -35,42 +75,56 @@ function CertificationModal({ onClose, onSubmit }) {
                 skills: [],
                 description: "",
               }}
-              onSubmit={(values) => {
-                console.log("Form Submitted: ", values);
-                onSubmit(values);
-                onClose();
+              validationSchema={validationSchema}
+              onSubmit={(values, { setSubmitting }) => {
+                try {
+                  if (isEditing) {
+                    if (isEditingTemp) {
+                      dispatch(
+                        editTempCertification({
+                          index: editIndex,
+                          updatedData: values,
+                        })
+                      );
+                    } else {
+                      dispatch(
+                        editFinalCertification({
+                          index: editIndex,
+                          updatedData: values,
+                        })
+                      );
+                    }
+                  } else {
+                    dispatch(saveTempCertification(values));
+                  }
+                  setSubmitting(false);
+                  onSubmit(values);
+                  onClose();
+                } catch (error) {
+                  console.error("Error submitting form:", error);
+                }
               }}
             >
               {({ handleSubmit }) => (
-                <Form
-                  className="grid grid-cols-2 gap-4"
-                  onSubmit={handleSubmit}
-                >
+                <Form className="grid grid-cols-2 gap-4" onSubmit={handleSubmit}>
                   <Field name="name">
-                    {({ field }) => (
-                      <InputField label="Certification Name" {...field} />
-                    )}
+                    {({ field }) => <InputField label="Certification Name" {...field} />}
                   </Field>
                   <Field name="provider">
                     {({ field }) => <InputField label="Provider" {...field} />}
                   </Field>
                   <Field name="enrollmentNumber">
-                    {({ field }) => (
-                      <InputField label="Enrollment Number" {...field} />
-                    )}
+                    {({ field }) => <InputField label="Enrollment Number" {...field} />}
                   </Field>
                   <Field name="validUpto">
-                    {({ field }) => (
-                      <InputField label="Valid Upto" type="date" {...field} />
-                    )}
+                    {({ field }) => <InputField label="Valid Upto" type="date" {...field} />}
                   </Field>
-
                   <div className="col-span-2 grid grid-cols-1 gap-4 items-center">
                     <Field name="marksType">
                       {({ field }) => (
                         <DropDown
                           label="Marks Type"
-                          name="type"
+                          name="marksType"
                           options={[
                             { label: "Percentage", value: "percentage" },
                             { label: "Percentile", value: "percentile" },
@@ -99,9 +153,7 @@ function CertificationModal({ onClose, onSubmit }) {
                       )}
                     </Field>
                     <Field name="description">
-                      {({ field }) => (
-                        <InputField label="Description" {...field} />
-                      )}
+                      {({ field }) => <InputField label="Description" {...field} />}
                     </Field>
                   </div>
                   <div className="col-span-2 flex justify-end">
@@ -116,7 +168,7 @@ function CertificationModal({ onClose, onSubmit }) {
                       type="submit"
                       className="ms-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     >
-                      Save
+                      {isEditing ? "Update" : "Save"}
                     </button>
                   </div>
                 </Form>

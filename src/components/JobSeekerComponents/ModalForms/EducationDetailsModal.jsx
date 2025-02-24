@@ -1,9 +1,9 @@
 import React from "react";
-import InputField from "./InputField";
-import DropDown from "./DropDown";
+import InputField from "../ReusableComponents/InputField";
+import DropDown from "./../ReusableComponents/DropDown";
 import { Form, Formik, Field } from "formik";
 import { useDispatch } from "react-redux";
-import { saveEducationalDetails } from "./../../store/slices/profileFormsSlice";
+import { saveEducationalDetails } from "../../../store/slices/profileFormsSlice";
 import { IoMdClose } from "react-icons/io";
   
 function EducationDetailsModal({ onClose, title, onSubmit, initialData }) {

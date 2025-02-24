@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import emptyBox from "./../../assets/images/empty-box.png";
+import emptyBox from "./../../../assets/images/empty-box.png";
 import { IoIosAddCircleOutline } from "react-icons/io";
-import AcadamicAttachModal from "./AcadamicAttachModal";
-import ProfessionalExperienceModal from "./ProfessionalExperienceModal";
-import InternshipExperienceModal from "./InternshipExperienceModal";
-import ProjectDetailsModal from "./ProjectDetailsModal";
-import ResearchPaperModal from "./ResearchPaperModal";
-import TrainingModal from "./TrainingModal";
-import CertificationModal from "./CertificationModal";
+import AcadamicAttachModal from "../ModalForms/AcadamicAttachModal";
+import ProfessionalExperienceModal from "../ModalForms/ProfessionalExperienceModal";
+import InternshipExperienceModal from "../ModalForms/InternshipExperienceModal";
+import ProjectDetailsModal from "../ModalForms/ProjectDetailsModal";
+import ResearchPaperModal from "../ModalForms/ResearchPaperModal";
+import TrainingModal from "../ModalForms/TrainingModal";
+import CertificationModal from "../ModalForms/CertificationModal";
 
 function ModalOpenerForms({ title, modalType, onSubmit }) {
   const [isModalOpen, setIsModalOpen] = useState(false);

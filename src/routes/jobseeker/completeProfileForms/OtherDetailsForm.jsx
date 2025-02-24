@@ -1,9 +1,9 @@
 import React from "react";
 import { Formik, Form } from "formik";
-import ReusableInputList from "./../../../components/JobSeekerComponents/ReusableInputList";
-import ChipsComponent from "./../../../components/JobSeekerComponents/ChipsComponent";
+import ReusableInputList from "./../../../components/JobSeekerComponents/ReusableComponents/ReusableInputList";
+import ChipsComponent from "./../../../components/JobSeekerComponents/ReusableComponents/ChipsComponent";
 import { FaSave } from "react-icons/fa";
-
+ 
 function OtherDetailsForm() {
   return (
 

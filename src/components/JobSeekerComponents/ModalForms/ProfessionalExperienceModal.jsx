@@ -1,10 +1,10 @@
 import React from "react";
 import { IoMdClose } from "react-icons/io";
-import InputField from "./InputField";
+import InputField from "./../ReusableComponents/InputField";
 import { Form, Formik, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import ChipsComponent from "./ChipsComponent";
-import { saveTempProfessionalDetails } from "./../../store/slices/profileFormsSlice";
+import ChipsComponent from './../ReusableComponents/ChipsComponent';
+import { saveTempProfessionalDetails } from "../../../store/slices/profileFormsSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const validationSchema = Yup.object().shape({
@@ -33,7 +33,7 @@ const validationSchema = Yup.object().shape({
   description: Yup.string().required("Description is required"),
 });
 
-function ProfessionalExperienceModal({ onClose, onSubmit, initialValues }) {
+function ProfessionalExperienceModal({ onClose, onSubmit, initialValues, isEditing }) {
   const dispatch = useDispatch();
 
   return (
@@ -48,7 +48,7 @@ function ProfessionalExperienceModal({ onClose, onSubmit, initialValues }) {
               type="button"
               className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
               onClick={onClose}
-            >
+            > 
               <IoMdClose className="w-5 h-5" />
             </button>
           </div>
@@ -60,8 +60,15 @@ function ProfessionalExperienceModal({ onClose, onSubmit, initialValues }) {
               onSubmit={(values) => {
                 console.log("Form Submitted: ", values);
 
-                onSubmit(values);
-                dispatch(saveTempProfessionalDetails(values));
+                //onSubmit(values);
+               
+                if (isEditing) { // ✅ Use `isEditing` instead of `editIndex`
+                  onSubmit(values); // ✅ Call `handleSaveEdit`
+                } else {
+                  dispatch(saveTempProfessionalDetails(values)); // ✅ Add only if new
+                }
+            
+
                 onClose();
               }}
             >
@@ -112,7 +119,7 @@ function ProfessionalExperienceModal({ onClose, onSubmit, initialValues }) {
                       {({ field }) => (
                         <InputField label="CTC (in INR)" {...field} />
                       )}
-                    </Field>
+                    </Field> 
                   </div>
 
                   {/* Dates */}

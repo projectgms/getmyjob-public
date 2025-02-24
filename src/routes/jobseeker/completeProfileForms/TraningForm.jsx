@@ -1,71 +1,164 @@
-import React, { useState } from "react";
-import ModalOpenerForms from "./../../../components/JobSeekerComponents/ModalOpenerForms";
-import ExperienceDetailsDisplay from "./../../../components/JobSeekerComponents/ExperienceDetailsDisplay";
-import TrainingModal from "./../../../components/JobSeekerComponents/TrainingModal";
+import React, { useEffect, useState } from "react";
+import ModalOpenerForms from "../../../components/JobSeekerComponents/Modal_Opener_Forms/ModalOpenerForms";
+import ExperienceDetailsDisplay from "../../../components/JobSeekerComponents/DataDisplayBox/ExperienceDetailsDisplay";
+import TrainingModal from "../../../components/JobSeekerComponents/ModalForms/TrainingModal";
 import { FaSave } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  saveTempTraining,
+  finalizeTrainingDetails,
+  deleteTempTraining,
+  deleteFinalTraining,
+  editTempTraining,
+  editFinalTraining,
+} from "./../../../store/slices/profileFormsSlice";
 
 function TrainingForm() {
-  const [trainingList, setTrainingList] = useState([]);
-  const [isTrainingModalOpen, setIsTrainingModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [hasFilledForm, setHasFilledForm] = useState(false);
+  const [editIndex, setEditIndex] = useState(null);
+  const [isEditingTemp, setIsEditingTemp] = useState(false);
+  const [initialFormValues, setInitialFormValues] = useState(null);
 
-  const handleTrainingSubmit = (data) => {
-    setTrainingList((prevTrainings) => [...prevTrainings, data]);
-    setIsTrainingModalOpen(false);
+  const tempTrainingList = useSelector(
+    (state) => state.profileForms.tempTrainingDetails || []
+  );
+  const finalTrainingList = useSelector(
+    (state) => state.profileForms.trainingDetails || []
+  );
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (tempTrainingList.length > 0 || finalTrainingList.length > 0) {
+      setHasFilledForm(true);
+    }
+  }, [tempTrainingList, finalTrainingList]);
+
+  const handleTraningSubmit = (data) => {
+    setIsModalOpen(false);
+    setHasFilledForm(true);
+  };
+
+  const handleTempDelete = (index) => {
+    dispatch(deleteTempTraining(index));
+  };
+
+  const handleFinalDelete = (index) => {
+    dispatch(deleteFinalTraining(index));
+  };
+
+  const handleEdit = (index, isTemp) => {
+    setIsEditingTemp(isTemp);
+    setEditIndex(index);
+    const selectedPaper = isTemp
+      ? tempTrainingList[index]
+      : finalTrainingList[index];
+    setInitialFormValues({ ...selectedPaper });
+    setIsModalOpen(true);
+  };
+
+  const handleSaveEdit = (updatedData) => {
+    if (isEditingTemp) {
+      dispatch(editTempTraining({ index: editIndex, updatedData }));
+    } else {
+      dispatch(editFinalTraining({ index: editIndex, updatedData }));
+    }
+    setIsModalOpen(false);
+    setEditIndex(null);
+    setIsEditingTemp(false);
   };
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-8 w-full">
       <div className="mx-auto w-full">
-        
-       {trainingList.length > 0 && <div className="flex justify-end">
-          <button
-            type="submit"
-            className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-6 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 mb-4"
-          >
-            <FaSave />
-            Save
-          </button>
-        </div>}
-
-        {trainingList.length === 0 && (
+      {
+        !hasFilledForm && (
           <ModalOpenerForms
-            title={"Add Training / Workshop"}
-            modalType={"training"}
-            onSubmit={handleTrainingSubmit}
-          />
-        )}
+          title={"Add Training"}
+          modalType={"training"}
+          onSubmit={() => setIsModalOpen(true)}
+        />
+        )
+      }
 
-        {trainingList.length > 0 && (
+      {tempTrainingList.length > 0 && (
+                <div className="flex justify-end">
+                  <button
+                    className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-6 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 mb-4"
+                    onClick={() => {
+                      dispatch(finalizeTrainingDetails());
+                      setHasFilledForm(true);
+                    }}
+                  >
+                    <FaSave />
+                    Save
+                  </button>
+                </div>
+              )}
+
+        {hasFilledForm && (
           <div className="flex justify-end my-2">
             <button
-              onClick={() => setIsTrainingModalOpen(true)}
               className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+              onClick={() => {
+                setInitialFormValues(null);
+                setIsModalOpen(true);
+              }}
             >
               Add Another Training
             </button>
           </div>
         )}
 
-        {trainingList.map((training, index) => (
-          <ExperienceDetailsDisplay
-            key={index}
-            title={training.name}
-            data={training}
-          />
-        ))}
+        {tempTrainingList.length > 0 && 
+          tempTrainingList.map((training, index) => (
+            <ExperienceDetailsDisplay
+              key={index}
+              title={training.name}
+              data={training}
+              onDelete={() =>
+                handleTempDelete(index, tempTrainingList.includes(training))
+              }
+              onEdit={() =>
+                handleEdit(index, tempTrainingList.includes(training))
+              }
+            />
+          ))
+        }
 
-        {isTrainingModalOpen && (
+        {finalTrainingList.length > 0 && 
+           finalTrainingList.map((training, index) => (
+            <ExperienceDetailsDisplay
+              key={index}
+              title={training.name}
+              data={training}
+              onDelete={() =>
+                handleFinalDelete(index, tempTrainingList.includes(training))
+              }
+              onEdit={() =>
+                handleEdit(index, tempTrainingList.includes(training))
+              }
+            />
+          ))
+        }
+
+        {isModalOpen && (
           <TrainingModal
-            onClose={() => setIsTrainingModalOpen(false)}
-            onSubmit={handleTrainingSubmit}
-            initialValues={{
-              name: "",
-              instituteName: "",
-              from: "",
-              to: "",
-              skills: [],
-              description: "",
-            }}
+            onClose={() => setIsModalOpen(false)}
+            onSubmit={editIndex !== null ? handleSaveEdit : handleTraningSubmit}
+            initialValues={
+              initialFormValues || {
+                name: "",
+                instituteName: "",
+                from: "",
+                to: "",
+                skills: [],
+                description: "",
+              }
+            }
+            isEditing={editIndex !== null}
+            isEditingTemp={isEditingTemp}
+            editIndex={editIndex}
           />
         )}
       </div>

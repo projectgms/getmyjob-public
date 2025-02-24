@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import ModalOpenerForms from "./../../../components/JobSeekerComponents/ModalOpenerForms";
-import ExperienceDetailsDisplay from "./../../../components/JobSeekerComponents/ExperienceDetailsDisplay";
-import ProfessionalExperienceModal from "./../../../components/JobSeekerComponents/ProfessionalExperienceModal";
+import ModalOpenerForms from "../../../components/JobSeekerComponents/Modal_Opener_Forms/ModalOpenerForms";
+import ExperienceDetailsDisplay from "./../../../components/JobSeekerComponents/DataDisplayBox/ExperienceDetailsDisplay";
+import ProfessionalExperienceModal from "./../../../components/JobSeekerComponents/ModalForms/ProfessionalExperienceModal";
 import { FaSave } from "react-icons/fa";
 import {
   finalizeProfessionalDetails,
@@ -11,7 +11,7 @@ import {
   editFinalProfessionalExperience,
 } from "./../../../store/slices/profileFormsSlice";
 import { useDispatch, useSelector } from "react-redux";
-
+ 
 function ProfessionalDetailForm() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [hasFilledForm, setHasFilledForm] = useState(false); // Track first-time form filling
@@ -53,13 +53,15 @@ function ProfessionalDetailForm() {
   const handleEdit = (index, isTemp) => {
     setIsEditingTemp(isTemp);
     setEditIndex(index);
-    const selectedExperience = isTemp ? tempSavedList[index] : finalSavedList[index];
-  
+    const selectedExperience = isTemp
+      ? tempSavedList[index]
+      : finalSavedList[index];
+
     console.log("Editing Experience:", selectedExperience); // Debugging Log
-  
+
     setInitialFormValues({ ...selectedExperience }); // Ensure values are copied
     setIsModalOpen(true);
-  }
+  };
 
   const handleSaveEdit = (updatedData) => {
     if (isEditingTemp) {
@@ -71,7 +73,11 @@ function ProfessionalDetailForm() {
         editFinalProfessionalExperience({ index: editIndex, updatedData })
       );
     }
+
+    // Reset Editing State
     setIsModalOpen(false);
+    setEditIndex(null);
+    setIsEditingTemp(false);
   };
 
   return (
@@ -108,7 +114,11 @@ function ProfessionalDetailForm() {
         {hasFilledForm && (
           <div className="flex justify-end my-2">
             <button
-              onClick={() => setIsModalOpen(true)}
+              onClick={() => {
+                setInitialFormValues(null); // ✅ Clear previous form values
+                setEditIndex(null); // ✅ Ensure we're not editing
+                setIsModalOpen(true);
+              }}
               className="text-white bg-gradient-to-r from-green-500 via-green-600 to-green-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
             >
               Add Another Experience
@@ -142,27 +152,33 @@ function ProfessionalDetailForm() {
 
         {/* Show Modal When Triggered */}
         {isModalOpen && (
-  <ProfessionalExperienceModal
-    onClose={() => setIsModalOpen(false)}
-    onSubmit={editIndex !== null ? handleSaveEdit : handleExperienceSubmit}
-    initialValues={initialFormValues || { // Ensure fallback values
-      designation: "",
-      organisation: "",
-      industrySector: "",
-      department: "",
-      ctc: "",
-      from: "",
-      to: "",
-      currentlyWorking: false,
-      country: "",
-      state: "",
-      city: "",
-      skills: [],
-      description: "",
-    }}
-  />
-)}
-
+          <ProfessionalExperienceModal
+            onClose={() => setIsModalOpen(false)}
+            onSubmit={
+              editIndex !== null ? handleSaveEdit : handleExperienceSubmit
+            }
+            initialValues={
+              initialFormValues || {
+                // Ensure fallback values
+                designation: "",
+                organisation: "",
+                industrySector: "",
+                department: "",
+                ctc: "",
+                from: "",
+                to: "",
+                currentlyWorking: false,
+                country: "",
+                state: "",
+                city: "",
+                skills: [],
+                description: "",
+              }
+            }
+            editIndex={editIndex} // ✅ Pass editIndex
+            isEditing={editIndex !== null} // ✅ Pass if editing
+          />
+        )}
       </div>
     </div>
   );

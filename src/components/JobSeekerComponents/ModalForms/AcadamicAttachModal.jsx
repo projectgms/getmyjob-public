@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import DropDown from "./DropDown";
-import submitFileLogo from "./../../assets/images/submit-file.png";
+import DropDown from "./../ReusableComponents/DropDown";
+import submitFileLogo from "./../../../assets/images/submit-file.png";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { RxCross2 } from "react-icons/rx";
 import { useDispatch, useSelector } from "react-redux";
-import { saveAttachmentDocuments } from "../../store/slices/profileFormsSlice";
+import { saveAttachmentDocuments } from "../../../store/slices/profileFormsSlice";
 import { FaSave } from "react-icons/fa";
 import * as Yup from "yup";
 

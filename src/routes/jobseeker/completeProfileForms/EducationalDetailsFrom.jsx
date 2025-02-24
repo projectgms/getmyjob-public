@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import EducationAddBox from "./../../../components/JobSeekerComponents/EducationAddBox";
-import EducationDetailsDisplay from "./../../../components/JobSeekerComponents/EducationDetailsDisplay";
+import EducationAddBox from "./../../../components/JobSeekerComponents/Education_ADD_Box/EducationAddBox";
+import EducationDetailsDisplay from "./../../../components/JobSeekerComponents/DataDisplayBox/EducationDetailsDisplay";
 import { FaSave } from "react-icons/fa";
 import { useDispatch, useSelector } from 'react-redux';
 import {saveEducationalDetails,saveTenthDetails} from './../../../store/slices/profileFormsSlice';
-
+  
 function EducationalDetailsFrom() {
 
   const [tenthData, setTenthData] = useState(null);
