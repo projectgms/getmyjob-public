@@ -5,6 +5,12 @@ const initialState = {
     activeJobs: [],
     draftJobs: [],
     expiredJobs: [],
+    filters: {
+      title: "",
+      status: "",
+      hotJob: "",
+      date: "",
+    },
   },
   loading: false,
   error: null,
@@ -26,6 +32,9 @@ const jobSlice = createSlice({
         draftJobs: [],
         expiredJobs: [],
       };
+    },
+    setJobFilters: (state, action) => {
+      state.jobs.filters = { ...state.jobs.filters, ...action.payload };
     },
     fetchJobsFailure: (state, action) => {
       state.loading = false;
@@ -102,6 +111,7 @@ export const {
   fetchJobsRequest,
   fetchJobsSuccess,
   fetchJobsFailure,
+  setJobFilters,
   createJobRequest,
   createJobSuccess,
   createJobFailure,

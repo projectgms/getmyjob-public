@@ -1,0 +1,130 @@
+{
+  "jobManagement": {
+    "activeJobs": [],
+    "draftJobs": [],
+    "expiredJobs": []
+  },
+  "candidates": [
+    {
+      "id": "1",
+      "name": "Alice Johnson",
+      "email": "alice@example.com",
+      "openToWork": true,
+      "appliedJobs": [
+        1,
+        2
+      ],
+      "skills": [
+        "React",
+        "Node",
+        "JavaScript"
+      ]
+    },
+    {
+      "id": "2",
+      "name": "Bob Smith",
+      "email": "bob@example.com",
+      "openToWork": false,
+      "appliedJobs": [
+        1
+      ],
+      "skills": [
+        "Angular",
+        "TypeScript"
+      ]
+    },
+    {
+      "id": "3",
+      "name": "Carolyn Davis",
+      "email": "carolyn@example.com",
+      "openToWork": true,
+      "appliedJobs": [],
+      "skills": [
+        "Vue",
+        "JavaScript",
+        "HTML",
+        "CSS"
+      ]
+    },
+    {
+      "id": "4",
+      "name": "David Miller",
+      "email": "david@example.com",
+      "openToWork": true,
+      "appliedJobs": [
+        1
+      ],
+      "skills": [
+        "React",
+        "Node",
+        "Express",
+        "MongoDB"
+      ]
+    },
+    {
+      "id": "5",
+      "name": "Emma Wilson",
+      "email": "emma@example.com",
+      "openToWork": false,
+      "skills": [
+        "Python",
+        "Django",
+        "React"
+      ],
+      "appliedJobs": [
+        1
+      ]
+    },
+    {
+      "id": "6",
+      "name": "Frank Thompson",
+      "email": "frank@example.com",
+      "openToWork": true,
+      "skills": [
+        "Java",
+        "Spring Boot"
+      ],
+      "appliedJobs": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "7",
+      "name": "KIRAN PRAKASH CHIM",
+      "title": "Design Engineer (Mechanical) at Deshmukh industries",
+      "location": "Chinchwad, Pune, Maharashtra",
+      "email": "kiranprakashchim93hn.nmi@indeedemail.com",
+      "about": "Information is what gets you started habit is what keeps you going.",
+      "experience": [
+        {
+          "role": "Design Engineer (Mechanical) - Deshmukh industries",
+          "from": "Dec 2024",
+          "to": "Present",
+          "location": "Pune, Maharashtra",
+          "description": "I am working as a design engineer."
+        }
+      ],
+      "education": [
+        {
+          "institution": "Pune University",
+          "degree": "Bachelor of Mechanical Engineering",
+          "year": "2024"
+        }
+      ],
+      "certifications": [
+        {
+          "title": "Certified SolidWorks Professional",
+          "issuer": "Dassault Systèmes",
+          "year": "2023"
+        }
+      ],
+      "skills": [
+        "Node",
+        "AutoCAD",
+        "SolidWorks"
+      ],
+      "openToWork": true
+    }
+  ]
+}

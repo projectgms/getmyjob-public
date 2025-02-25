@@ -40,6 +40,8 @@ import CompanyManagement from './pages/dashboard/recruiter/Companymanagement/Com
 import CreateCompany from './pages/dashboard/recruiter/Companymanagement/CreateCompany'
 import IndexUser from './pages/dashboard/recruiter/userManagement/IndexUser'
 import JobDetail from './pages/dashboard/recruiter/Jobmanagement/JobDetail'
+import CandidateManagement from './pages/dashboard/recruiter/candidateManagement/CandidateManagement'
+import CandidateDetail from './pages/dashboard/recruiter/candidateManagement/CandidateDetail'
 
 const App = () => {
   return (
@@ -77,7 +79,7 @@ const App = () => {
       <Route path="/recruiter/reset-password" element={<RecruitmentResetPassword />} />
       <Route path="/recruiter/forgot-password" element={<RecruitmentForgotpassword />} />
       
-      {/* <Route path="/recruiter/dashboard" element={<RecruitmentAuthRoutes element={<RecruiterLayout />} allowedRoles={["recruiter"]} />}></Route> */}
+      {/* <Route path="/recruiter/dashboard" element={<RecruitmentAuthRoutes element={<RecruiterLayout />} allowedRoles={["recruiter"]} />}> */}
       <Route path="/recruiter/dashboard" element={<RecruiterLayout /> }>
         <Route index element={<RecruiterDashboard />} />
         <Route path='companies' element={<CompanyManagement/>}/>
@@ -87,6 +89,11 @@ const App = () => {
         <Route path="jobs/detail/:id" element={<JobDetail />} />
         <Route path="jobs/edit/:id" element={<EditJob />} />
         <Route path="users" element={<IndexUser />} />
+        <Route path='candidates' element={<CandidateManagement/>}/>
+        <Route path='candidates/detail/:id' element={<CandidateDetail/>}/>
+          {/* NEW: Open-to-Work route */}
+  <Route path="candidates/open-to-work" element={<CandidateManagement />} />
+
       </Route>
 
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { PlusCircle, Edit, Trash2, X } from "lucide-react";
+import { PlusCircle, Edit, Trash2, X, Copy } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Skeleton from "react-loading-skeleton";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,6 +9,7 @@ import {
   deleteJobRequest,
   createJobRequest,
   updateJobRequest, // Newly added
+  setJobFilters,
 } from "../../../../store/slices/jobSlice";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
@@ -51,42 +52,132 @@ const Stepper = ({ currentStep, steps }) => {
   );
 };
 
+const getDisplayStatus = (job) => {
+  const { status, expirationDate, expirationTime } = job;
+  // If no expiration date is set or it's not a hot job, return the stored status.
+  if (!expirationDate || job.hotJob !== "yes") {
+    return status || "Closed";
+  }
+  const timePart = expirationTime || "23:59";
+  const expiration = new Date(`${expirationDate}T${timePart}`);
+  const now = new Date();
+  if (expiration <= now) {
+    return "Expired";
+  }
+  return status || "Closed";
+};
+
 const JobManagement = () => {
   const dispatch = useDispatch();
+
+  // Extract jobs and loading from Redux
   const { jobs, loading } =
     useSelector((state) => state.jobs) ||
-    { jobs: { activeJobs: [], draftJobs: [], expiredJobs: [] } };
-  console.log("==========>", jobs);
+    { jobs: { activeJobs: [], draftJobs: [], expiredJobs: [], filters: { title: "", status: "", hotJob: "", date: "" } } };
+
+  // Destructure job arrays and filters from the Redux jobs state
+  const { activeJobs = [], draftJobs = [], expiredJobs = [], filters = {} } = jobs;
+
   const ChipInput = withChipInput();
+    // New states for form mode and duplication values
+    const [formMode, setFormMode] = useState("create"); // "create", "edit", or "duplicate"
+    const [prepopulatedValues, setPrepopulatedValues] = useState(null);
+
+  // Handler for search inputs: update Redux filters on change.
+  const handleSearchChange = (field, value) => {
+    dispatch(setJobFilters({ [field]: value }));
+  };
+
+  // Combine all job arrays and filter based on Redux filters.
+  const allJobs = [...activeJobs, ...draftJobs, ...expiredJobs];
+  const filteredJobs = allJobs.filter((job) => {
+    // Filter by job title (case-insensitive)
+    if (filters.title && !job.title.toLowerCase().includes(filters.title.toLowerCase())) {
+      return false;
+    }
+    // Filter by job status
+    if (filters.status && job.status !== filters.status) {
+      return false;
+    }
+    // Filter by hot job flag
+    if (filters.hotJob && job.hotJob !== filters.hotJob) {
+      return false;
+    }
+    // Filter by date posted (comparing ISO date strings)
+    if (filters.date) {
+      const jobDate = job.postedDate
+        ? new Date(job.postedDate).toISOString().split("T")[0]
+        : "";
+      if (jobDate !== filters.date) {
+        return false;
+      }
+    }
+    return true;
+  });
 
   // Modal and multi‑step state
   const [isModalOpen, setModalOpen] = useState(false);
   const [step, setStep] = useState(1);
-  // Additional state for editing
   const [editingJob, setEditingJob] = useState(null);
 
   useEffect(() => {
     dispatch(fetchJobsRequest());
   }, [dispatch]);
 
-  // Delete: Pass both id and status
+  // Check for expired jobs every 20 seconds.
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      const now = new Date();
+      const jobsToExpire = (activeJobs || []).filter((job) => {
+        if (job.hotJob === "yes" && job.expirationDate) {
+          const timePart = job.expirationTime || "23:59";
+          const expiration = new Date(`${job.expirationDate}T${timePart}`);
+          return expiration <= now;
+        }
+        return false;
+      });
+      jobsToExpire.forEach((job) => {
+        if (job.status !== "Expired") {
+          dispatch(updateJobRequest({ ...job, status: "Expired" }));
+        }
+      });
+    }, 20000);
+    return () => clearInterval(intervalId);
+  }, [activeJobs, dispatch]);
+
+  // Delete job handler.
   const handleDelete = (job) => {
     dispatch(deleteJobRequest({ id: job.id, status: job.status }));
   };
 
-  // Edit: Set job to edit and open modal
+  // Edit job handler.
   const handleEdit = (job) => {
     setEditingJob(job);
+    setPrepopulatedValues(null);
+    setFormMode("edit");
     setModalOpen(true);
     setStep(1);
   };
 
-  // Job counts
-  const activeCount = jobs?.activeJobs?.length || 0;
-  const draftCount = jobs?.draftJobs?.length || 0;
-  const expiredCount = jobs?.expiredJobs?.length || 0;
+   // **New Duplicate Job Handler**
+   const handleDuplicate = (job) => {
+    // Create a copy of the job; remove unique fields so it becomes a new job
+    const duplicateJob = { ...job };
+    delete duplicateJob.id; // Remove the id
+    duplicateJob.postedDate = ""; // Reset posted date (or set to new Date() when submitting)
+    duplicateJob.status = "Draft"; // You might want duplicated jobs to start as Draft
+    setPrepopulatedValues(duplicateJob);
+    setEditingJob(null);
+    setFormMode("duplicate");
+    setModalOpen(true);
+    setStep(1);
+  };
 
-  // Validation schemas
+  const activeCount = activeJobs.length;
+  const draftCount = draftJobs.length;
+  const expiredCount = expiredJobs.length;
+
+  // Validation schemas for Formik.
   const StepOneSchema = Yup.object({
     title: Yup.string().required("Job Title is required"),
     company: Yup.string().required("Company Name is required"),
@@ -100,26 +191,44 @@ const JobManagement = () => {
     salary: Yup.string().required("Salary is required"),
     industries: Yup.array().min(1, "At least one industry is required"),
     employmentType: Yup.string().required("Employment Type is required"),
- 
+    experience: Yup.string().required("Experience is required"),
     responsibilities: Yup.string().required("Job Responsibilities is required"),
+    expirationDate: Yup.string().when("hotJob", (hotJob, schema) =>
+      hotJob === "yes"
+        ? schema.required("Expiration date is required for hot jobs")
+        : schema
+    ),
+    expirationTime: Yup.string().when("hotJob", (hotJob, schema) =>
+      hotJob === "yes"
+        ? schema.required("Expiration time is required for hot jobs")
+        : schema
+    ),
   });
 
   const CombinedSchema = StepOneSchema.concat(StepTwoSchema);
 
-  // Default initial values for a new job
+  // Default initial values for a new job.
   const defaultInitialValues = {
     title: "",
     company: "",
     locations: [],
     description: "",
-    responsibilities:"",
+    responsibilities: "",
     skills: [],
     status: "",
     salary: "",
     industries: [],
     employmentType: "",
     email: "",
+    experience: "",
+    hotJob: "no",
+    expirationDate: "",
+    expirationTime: "",
   };
+  const initialFormValues =
+  formMode === "duplicate"
+    ? prepopulatedValues || defaultInitialValues
+    : editingJob || defaultInitialValues;
 
   return (
     <div className="p-6 max-w-full mx-auto">
@@ -154,6 +263,38 @@ const JobManagement = () => {
         </div>
       </div>
 
+      {/* Search Section */}
+      <div className="flex flex-wrap gap-4 my-6">
+        <input
+          type="text"
+          placeholder="Search by Title"
+          onChange={(e) => handleSearchChange("title", e.target.value)}
+          className="border p-2 rounded"
+        />
+        <select
+          onChange={(e) => handleSearchChange("status", e.target.value)}
+          className="border p-2 rounded"
+        >
+          <option value="">All Statuses</option>
+          <option value="Active">Active</option>
+          <option value="Draft">Draft</option>
+          <option value="Expired">Expired</option>
+        </select>
+        <select
+          onChange={(e) => handleSearchChange("hotJob", e.target.value)}
+          className="border p-2 rounded"
+        >
+          <option value="">Hot Job? (Both)</option>
+          <option value="yes">Yes</option>
+          <option value="no">No</option>
+        </select>
+        <input
+          type="date"
+          onChange={(e) => handleSearchChange("date", e.target.value)}
+          className="border p-2 rounded"
+        />
+      </div>
+
       {/* Job Listings Table */}
       <div className="mt-6 bg-white p-6 rounded-lg shadow-md">
         <h2 className="text-lg font-semibold text-gray-800 mb-4">Job Listings</h2>
@@ -170,87 +311,111 @@ const JobManagement = () => {
                   <th className="p-4 text-left">Date posted</th>
                   <th className="p-4 text-left">Email</th>
                   <th className="p-4 text-left">Job status</th>
+                  <th className="p-4 text-left">Hot Job</th>
                   <th className="p-4 text-left">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {[
-                  ...(jobs?.activeJobs || []),
-                  ...(jobs?.draftJobs || []),
-                  ...(jobs?.expiredJobs || []),
-                ].map((job, index) => (
-                  <tr
-                    key={job.id}
-                    className={`border-b ${
-                      index % 2 === 0 ? "bg-gray-50" : "bg-white"
-                    } hover:bg-gray-100 transition`}
-                  >
-                    <td className="p-4">
-                      <div className="font-medium"><Link to={`/recruiter/dashboard/jobs/detail/${job.id}`} className="font-medium text-blue-600 hover:underline">
-    {job.title}
-  </Link></div>
-                      <div className="text-sm text-gray-600">{job.location}</div>
-                      <div className="text-xs text-gray-400">
-                        Posted {job.postedDate || "N/A"}
-                      </div>
-                    </td>
-                    <td className="p-4">
-                      <div className="flex items-center gap-2">
-                        <button className="text-blue-600 hover:underline text-sm">
-                          Applicants
-                        </button>
-                        <button className="text-blue-600 hover:underline text-sm">
-                          New
-                        </button>
-                        <button className="text-blue-600 hover:underline text-sm">
-                          Invite
-                        </button>
-                      </div>
-                    </td>
-                    <td className="p-4 text-sm">
-                      {job.isSponsored ? (
-                        <span className="text-blue-600 cursor-pointer hover:underline">
-                          Sponsor job
+                {filteredJobs.map((job, index) => {
+                  const displayStatus = getDisplayStatus(job);
+                  return (
+                    <tr
+                      key={job.id}
+                      className={`border-b ${
+                        index % 2 === 0 ? "bg-gray-50" : "bg-white"
+                      } hover:bg-gray-100 transition`}
+                    >
+                      <td className="p-4">
+                        <div className="font-medium">
+                          <Link
+                            to={`/recruiter/dashboard/jobs/detail/${job.id}`}
+                            className="font-medium text-blue-600 hover:underline"
+                          >
+                            {job.title}
+                          </Link>
+                        </div>
+                        <div className="text-sm text-gray-600">{job.location}</div>
+                        <div className="text-xs text-gray-400">
+                          Posted{" "}
+                          {job.postedDate
+                            ? new Date(job.postedDate).toLocaleDateString()
+                            : "N/A"}
+                        </div>
+                      </td>
+                      <td className="p-4">
+                        <div className="flex items-center gap-2">
+                          <Link to="/recruiter/dashboard/candidates">
+                            <button className="text-blue-600 hover:underline text-sm">
+                              Applicants
+                            </button>
+                          </Link>
+                          <Link
+   to={`/recruiter/dashboard/candidates/open-to-work?openToWork=true&jobId=${job.id}`}
+>
+  <button className="text-blue-600 hover:underline text-sm">
+    Open to Work
+  </button>
+</Link>
+                          {/* <button className="text-blue-600 hover:underline text-sm">
+                            Invite
+                          </button> */}
+                        </div>
+                      </td>
+                      <td className="p-4 text-sm">
+                        {job.isSponsored ? (
+                          <span className="text-blue-600 cursor-pointer hover:underline">
+                            Sponsor job
+                          </span>
+                        ) : (
+                          <span className="text-gray-500">Free post</span>
+                        )}
+                      </td>
+                      <td className="p-4 text-sm text-gray-600">
+                        Posted{" "}
+                        {job.postedDate
+                          ? new Date(job.postedDate).toLocaleDateString()
+                          : "N/A"}
+                      </td>
+                      <td className="p-4 text-sm text-gray-700">
+                        {job.email || "N/A"}
+                      </td>
+                      <td className="p-4 text-sm">
+                        <span
+                          className={`px-2 py-1 rounded ${
+                            displayStatus === "Expired"
+                              ? "bg-red-100 text-red-700"
+                              : "bg-green-100 text-green-700"
+                          }`}
+                        >
+                          {displayStatus}
                         </span>
-                      ) : (
-                        <span className="text-gray-500">Free post</span>
-                      )}
-                    </td>
-                    <td className="p-4 text-sm text-gray-600">
-                      {job.postedAgo || "N/A"}
-                    </td>
-                    <td className="p-4 text-sm text-gray-700">
-                      {job.email || "N/A"}
-                    </td>
-                    <td className="p-4 text-sm">
-                      <span
-                        className={`px-2 py-1 rounded ${
-                          job.status === "Closed"
-                            ? "bg-red-100 text-red-700"
-                            : "bg-green-100 text-green-700"
-                        }`}
-                      >
-                        {job.status || "Closed"}
-                      </span>
-                    </td>
-                    <td className="p-4 text-sm">
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => handleEdit(job)}
-                          className="text-blue-600 hover:text-blue-800"
-                        >
-                          <Edit size={16} />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(job)}
-                          className="text-red-600 hover:text-red-800"
-                        >
-                          <Trash2 size={16} />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                      </td>
+                      <td className="p-4 text-sm">
+                        {job.hotJob === "yes" ? "Yes" : "No"}
+                      </td>
+                      <td className="p-4 text-sm">
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => handleEdit(job)}
+                            className="text-blue-600 hover:text-blue-800"
+                          >
+                            <Edit size={16} />
+                          </button>
+                             {/* New Duplicate Button */}
+                             <button onClick={() => handleDuplicate(job)} className="text-green-600 hover:text-green-800">
+                            <Copy size={16} />
+                          </button>
+                          <button
+                            onClick={() => handleDelete(job)}
+                            className="text-red-600 hover:text-red-800"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -270,6 +435,8 @@ const JobManagement = () => {
                 setModalOpen(false);
                 setStep(1);
                 setEditingJob(null);
+                setPrepopulatedValues(null);
+                setFormMode("create");
               }}
             />
             <motion.div
@@ -281,7 +448,7 @@ const JobManagement = () => {
             >
               <div className="flex justify-between items-center border-b pb-4">
                 <h2 className="text-xl font-semibold">
-                  {editingJob ? "Edit Job" : "Create Job"}
+                {formMode === "edit" ? "Edit Job" : formMode === "duplicate" ? "Duplicate Job" : "Create Job"}
                 </h2>
                 <button
                   onClick={() => {
@@ -294,19 +461,10 @@ const JobManagement = () => {
                   <X size={20} />
                 </button>
               </div>
-              <Stepper
-                currentStep={step}
-                steps={["Basic Info", "Additional Details", "Preview"]}
-              />
+              <Stepper currentStep={step} steps={["Basic Info", "Additional Details", "Preview"]} />
               <Formik
-                initialValues={editingJob || defaultInitialValues}
-                validationSchema={
-                  step === 1
-                    ? StepOneSchema
-                    : step === 2
-                    ? StepTwoSchema
-                    : CombinedSchema
-                }
+                initialValues={initialFormValues}
+                validationSchema={step === 1 ? StepOneSchema : step === 2 ? StepTwoSchema : CombinedSchema}
                 onSubmit={(values, actions) => {
                   if (step === 1) {
                     setStep(2);
@@ -317,15 +475,18 @@ const JobManagement = () => {
                     actions.setTouched({});
                     actions.setSubmitting(false);
                   } else {
-                    if (editingJob) {
-                      // Dispatch update action when editing
+                    // For edit mode, dispatch update; for create/duplicate, dispatch create.
+                    if (formMode === "edit") {
                       dispatch(updateJobRequest(values));
                     } else {
+                      values.postedDate = new Date().toISOString();
                       dispatch(createJobRequest(values));
                     }
                     setModalOpen(false);
                     setStep(1);
                     setEditingJob(null);
+                    setPrepopulatedValues(null);
+                    setFormMode("create");
                   }
                 }}
               >
@@ -410,7 +571,6 @@ const JobManagement = () => {
                         </div>
                       </div>
                     )}
-
                     {step === 2 && (
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
@@ -424,6 +584,19 @@ const JobManagement = () => {
                           />
                           {touched.skills && errors.skills && (
                             <p className="text-red-500 text-sm">{errors.skills}</p>
+                          )}
+                        </div>
+                        <div>
+                          <ChipInput
+                            values={values}
+                            setFieldValue={setFieldValue}
+                            fieldName="industries"
+                            label="Industries"
+                            placeholder="Enter an industry and press Enter"
+                            type="industry"
+                          />
+                          {touched.industries && errors.industries && (
+                            <p className="text-red-500 text-sm">{errors.industries}</p>
                           )}
                         </div>
                         <div>
@@ -461,16 +634,45 @@ const JobManagement = () => {
                           )}
                         </div>
                         <div>
-                          <ChipInput
-                            values={values}
-                            setFieldValue={setFieldValue}
-                            fieldName="industries"
-                            label="Industries"
-                            placeholder="Enter an industry and press Enter"
-                            type="industry"
+                          <label className="block text-gray-700 font-medium">Hot Job</label>
+                          <select
+                            name="hotJob"
+                            value={values.hotJob}
+                            onChange={handleChange}
+                            className="w-full border rounded-md p-2 mt-1 focus:ring focus:ring-blue-300"
+                          >
+                            <option value="no">No</option>
+                            <option value="yes">Yes</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-gray-700 font-medium">
+                            Expiration Date
+                          </label>
+                          <input
+                            type="date"
+                            name="expirationDate"
+                            value={values.expirationDate}
+                            onChange={handleChange}
+                            className="w-full border rounded-md p-2 mt-1 focus:ring focus:ring-blue-300"
                           />
-                          {touched.industries && errors.industries && (
-                            <p className="text-red-500 text-sm">{errors.industries}</p>
+                          {touched.expirationDate && errors.expirationDate && (
+                            <p className="text-red-500 text-sm">{errors.expirationDate}</p>
+                          )}
+                        </div>
+                        <div>
+                          <label className="block text-gray-700 font-medium">
+                            Expiration Time
+                          </label>
+                          <input
+                            type="time"
+                            name="expirationTime"
+                            value={values.expirationTime}
+                            onChange={handleChange}
+                            className="w-full border rounded-md p-2 mt-1 focus:ring focus:ring-blue-300"
+                          />
+                          {touched.expirationTime && errors.expirationTime && (
+                            <p className="text-red-500 text-sm">{errors.expirationTime}</p>
                           )}
                         </div>
                         <div>
@@ -493,6 +695,26 @@ const JobManagement = () => {
                             <p className="text-red-500 text-sm">{errors.employmentType}</p>
                           )}
                         </div>
+                        <div>
+                          <label className="block text-gray-700 font-medium">
+                           Total Job Experience
+                          </label>
+                          <select
+                            name="experience"
+                            value={values.experience}
+                            onChange={handleChange}
+                            className="w-full border rounded-md p-2 mt-1 focus:ring focus:ring-blue-300"
+                          >
+                            <option value="">Select Job Experience</option>
+                            <option value="0-1">0-1 years</option>
+                            <option value="1-3">1-3 years</option>
+                            <option value="5-8">5-8 years</option>
+                            <option value="10-above">10-above years</option>
+                          </select>
+                          {touched.experience && errors.experience && (
+                            <p className="text-red-500 text-sm">{errors.experience}</p>
+                          )}
+                        </div>
                         <div className="md:col-span-2">
                           <label className="block text-gray-700 font-medium">
                             Job Responsibilities
@@ -509,11 +731,10 @@ const JobManagement = () => {
                         </div>
                       </div>
                     )}
-
                     {step === 3 && (
                       <div className="flex flex-col items-center">
                         <h3 className="text-xl font-bold mb-2">
-                          {editingJob ? "Edit Job Preview" : "Job Post Preview"}
+                        {formMode === "edit" ? "Edit Job Preview" : "Job Post Preview"}
                         </h3>
                         <p className="text-gray-500 text-sm mb-4">
                           Your job may appear slightly differently to candidates.
@@ -572,7 +793,6 @@ const JobManagement = () => {
                         </div>
                       </div>
                     )}
-
                     <div className="flex justify-end gap-4 mt-6">
                       {step > 1 && (
                         <button
@@ -588,7 +808,7 @@ const JobManagement = () => {
                         disabled={isSubmitting}
                         className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
                       >
-                        {step === 3 ? "Post Job" : "Next"}
+                       {step === 3 ? (formMode === "edit" ? "Update Job" : "Post Job") : "Next"}
                       </button>
                     </div>
                   </Form>
