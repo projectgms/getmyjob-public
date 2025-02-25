@@ -9,11 +9,8 @@ const loadFormsFromLocalStorage = () => {
       : {
           personalInformation: {},
           contactDetails: {},
-          educationalDetails: {
-            degreeGraduation: {},
-            twelfthDetails: {},
-            tenthDetails: {},
-          },
+          educationalDetails: [],
+          tempEducationalDetails: [],
           attachmentDocuments: [],
           professionalDetails: [],
           tempProfessionalDetails: [], // New temporary storage
@@ -28,17 +25,20 @@ const loadFormsFromLocalStorage = () => {
           trainingDetails: [],
           tempCertification: [],
           certificationDetails: [],
+          otherDetails: {
+            summary: "",
+            expertise: [],
+            achievements: [],
+            awards: [],
+            extraCurricular: [],
+          },
         };
   } catch (error) {
     console.error("Failed to load forms from local storage", error);
     return {
       personalInformation: {},
       contactDetails: {},
-      educationalDetails: {
-        degreeGraduation: {},
-        twelfthDetails: {},
-        tenthDetails: {},
-      },
+      educationalDetails: [],
       attachmentDocuments: [],
       professionalDetails: [],
       tempProfessionalDetails: [], // New temporary storage
@@ -52,6 +52,13 @@ const loadFormsFromLocalStorage = () => {
       trainingDetails: [],
       tempCertification: [],
       certificationDetails: [],
+      otherDetails: {
+        summary: "",
+        expertise: [],
+        achievements: [],
+        awards: [],
+        extraCurricular: [],
+      },
     };
   }
 };
@@ -73,52 +80,82 @@ const profileFormsSlice = createSlice({
 
     // ---------------------- For Educational Details --------------------------------------------
 
-    saveEducationalDetails: (state, action) => {
-      state.educationalDetails = {
-        ...state.educationalDetails,
-        ...action.payload,
-      };
-      localStorage.setItem("forms", JSON.stringify(state));
-    },
-    deleteEducationalDetail: (state, action) => {
-      const { title } = action.payload; // Receive title instead of educationType
+ // Save Temporary Educational Details
+saveTempEducationalDetails: (state, action) => {
+  if (!state.tempEducationalDetails) {
+    state.tempEducationalDetails = []; // Ensure array exists before pushing
+  }
+  state.tempEducationalDetails.push(action.payload);
+  localStorage.setItem("forms", JSON.stringify(state));
+},
 
-      // Map title to the correct state key
-      let educationType;
-      if (title === "Degree / Graduation") {
-        educationType = "degreeGraduation";
-      } else if (title === "12th Standard (Higher / Senior Secondary)") {
-        educationType = "twelfthDetails";
-      } else if (title === "10th Standard (Secondary)") {
-        educationType = "tenthDetails";
-      }
+// Finalize Educational Details
+finalizeEducationalDetails: (state) => {
+  state.educationalDetails = [
+    ...state.educationalDetails,
+    ...state.tempEducationalDetails,
+  ];
+  state.tempEducationalDetails = []; // Clear temp array after saving
+  localStorage.setItem("forms", JSON.stringify(state));
+},
 
-      // If educationType is valid, reset it in the state
-      if (educationType && state.educationalDetails[educationType]) {
-        state.educationalDetails[educationType] = {}; // Reset to an empty object
-        localStorage.setItem("forms", JSON.stringify(state));
-      }
-    },
-    saveDegreeGraduation: (state, action) => {
-      state.educationalDetails.degreeGraduation = action.payload;
-      localStorage.setItem("forms", JSON.stringify(state));
-    },
-    saveTwelfthDetails: (state, action) => {
-      state.educationalDetails.twelfthDetails = action.payload;
-      localStorage.setItem("forms", JSON.stringify(state));
-    },
-    saveTenthDetails: (state, action) => {
-      state.educationalDetails.tenthDetails = action.payload;
-      localStorage.setItem("forms", JSON.stringify(state));
-    },
+// Delete Temporary Educational Detail
+deleteTempEducationalDetails: (state, action) => {
+  const index = action.payload;
+  state.tempEducationalDetails = state.tempEducationalDetails.filter(
+    (_, i) => i !== index
+  );
+  localStorage.setItem("forms", JSON.stringify(state));
+},
+
+// Delete Finalized Educational Detail
+deleteFinalEducationalDetails: (state, action) => {
+  const index = action.payload;
+  state.educationalDetails = state.educationalDetails.filter(
+    (_, i) => i !== index
+  );
+  localStorage.setItem("forms", JSON.stringify(state));
+},
+
+// Edit Temporary Educational Detail
+editTempEducationalDetails: (state, action) => {
+  const { index, updatedData } = action.payload;
+  if (state.tempEducationalDetails[index]) {
+    state.tempEducationalDetails[index] = { ...updatedData };
+  }
+  localStorage.setItem("forms", JSON.stringify(state));
+},
+
+// Edit Finalized Educational Detail
+editFinalEducationalDetails: (state, action) => {
+  const { index, updatedData } = action.payload;
+  if (state.educationalDetails[index]) {
+    state.educationalDetails[index] = { ...updatedData };
+  }
+  localStorage.setItem("forms", JSON.stringify(state));
+},
+    // saveDegreeGraduation: (state, action) => {
+    //   state.educationalDetails.degreeGraduation = action.payload;
+    //   localStorage.setItem("forms", JSON.stringify(state));
+    // },
+    // saveTwelfthDetails: (state, action) => {
+    //   state.educationalDetails.twelfthDetails = action.payload;
+    //   localStorage.setItem("forms", JSON.stringify(state));
+    // },
+    // saveTenthDetails: (state, action) => {
+    //   state.educationalDetails.tenthDetails = action.payload;
+    //   localStorage.setItem("forms", JSON.stringify(state));
+    // },
 
     //------------------------ For Save Attachment Documents ------------------------
 
     saveAttachmentDocuments: (state, action) => {
-      state.attachmentDocuments = action.payload;
+      if (!Array.isArray(state.attachmentDocuments)) {
+        state.attachmentDocuments = [];
+      }
+      state.attachmentDocuments.push(action.payload[0]); // Only add one file at a time
       localStorage.setItem("forms", JSON.stringify(state));
     },
-
     // ---------------------------- For Professional Experience Form --------------------------------------------
 
     saveTempProfessionalDetails: (state, action) => {
@@ -289,6 +326,7 @@ const profileFormsSlice = createSlice({
       }
       localStorage.setItem("forms", JSON.stringify(state));
     },
+
     //------------------------ For Job Publication Details ---------------------------
 
     // Save Temporary Research Paper
@@ -352,15 +390,17 @@ const profileFormsSlice = createSlice({
       localStorage.setItem("forms", JSON.stringify(state));
     },
 
-
     //------------------------- For Traning Details ----------------------------
-
+    // Save Temporary Training Details
     saveTempTraining: (state, action) => {
       if (!Array.isArray(state.tempTrainingDetails)) {
-        state.tempTrainingDetails = []; // ✅ Ensure it's always an array
+        state.tempTrainingDetails = []; // Ensure array exists before pushing
       }
       state.tempTrainingDetails.push(action.payload);
+      localStorage.setItem("forms", JSON.stringify(state));
     },
+
+    // Finalize Training Details
     finalizeTrainingDetails: (state) => {
       if (!Array.isArray(state.trainingDetails)) {
         state.trainingDetails = []; // Ensure array exists before merging
@@ -370,97 +410,127 @@ const profileFormsSlice = createSlice({
         ...state.tempTrainingDetails,
       ];
       state.tempTrainingDetails = []; // Clear temp array after saving
-      localStorage.setItem("forms", JSON.stringify(state)); // Save to localStorage
-    },
-    
-    deleteTempTraining: (state, action) => {
-      state.tempTrainingDetails = state.tempTrainingDetails.filter((_, i) => i !== action.payload);
-    },
-    deleteFinalTraining: (state, action) => {
-      state.trainingDetails = state.trainingDetails.filter((_, i) => i !== action.payload);
-    },
-    editTempTraining: (state, action) => {
-      const { index, updatedData } = action.payload;
-      if (state.tempTrainingDetails[index]) {
-        state.tempTrainingDetails[index] = updatedData;
-      }
-    },
-    editFinalTraining: (state, action) => {
-      const { index, updatedData } = action.payload;
-      if (state.trainingDetails[index]) {
-        state.trainingDetails[index] = updatedData;
-      }
+      localStorage.setItem("forms", JSON.stringify(state));
     },
 
+    // Delete Temporary Training Detail
+    deleteTempTraining: (state, action) => {
+      if (!Array.isArray(state.tempTrainingDetails)) return; // Prevent error if undefined
+      state.tempTrainingDetails = state.tempTrainingDetails.filter(
+        (_, i) => i !== action.payload
+      );
+      localStorage.setItem("forms", JSON.stringify(state));
+    },
+
+    // Delete Finalized Training Detail
+    deleteFinalTraining: (state, action) => {
+      if (!Array.isArray(state.trainingDetails)) return; // Prevent error if undefined
+      state.trainingDetails = state.trainingDetails.filter(
+        (_, i) => i !== action.payload
+      );
+      localStorage.setItem("forms", JSON.stringify(state));
+    },
+
+    // Edit Temporary Training Detail
+    editTempTraining: (state, action) => {
+      const { index, updatedData } = action.payload;
+      if (
+        !Array.isArray(state.tempTrainingDetails) ||
+        !state.tempTrainingDetails[index]
+      )
+        return;
+      state.tempTrainingDetails[index] = { ...updatedData }; // Ensures update happens correctly
+      localStorage.setItem("forms", JSON.stringify(state));
+    },
+
+    // Edit Finalized Training Detail
+    editFinalTraining: (state, action) => {
+      const { index, updatedData } = action.payload;
+      if (
+        !Array.isArray(state.trainingDetails) ||
+        !state.trainingDetails[index]
+      )
+        return;
+      state.trainingDetails[index] = { ...updatedData }; // Ensures update happens correctly
+      localStorage.setItem("forms", JSON.stringify(state));
+    },
 
     //------------------------ For Job Certificaion Details ---------------------------
 
- // Save Temporary Certification
-saveTempCertification: (state, action) => {
-  if (!state.tempCertification) {
-    state.tempCertification = []; // Ensure array exists before pushing
-  }
-  state.tempCertification.push(action.payload);
-  localStorage.setItem("forms", JSON.stringify(state));
-},
+    // Save Temporary Certification
+    saveTempCertification: (state, action) => {
+      if (!state.tempCertification) {
+        state.tempCertification = []; // Ensure array exists before pushing
+      }
+      state.tempCertification.push(action.payload);
+      localStorage.setItem("forms", JSON.stringify(state));
+    },
 
-// Finalize Certifications
-finalizeCertificationDetails: (state) => {
-  state.certificationDetails = [
-    ...state.certificationDetails,
-    ...state.tempCertification,
-  ];
-  state.tempCertification = []; // Clear temp array after saving
-  localStorage.setItem("forms", JSON.stringify(state));
-},
+    // Finalize Certifications
+    finalizeCertificationDetails: (state) => {
+      state.certificationDetails = [
+        ...state.certificationDetails,
+        ...state.tempCertification,
+      ];
+      state.tempCertification = []; // Clear temp array after saving
+      localStorage.setItem("forms", JSON.stringify(state));
+    },
 
-// Delete Temporary Certification
-deleteTempCertification: (state, action) => {
-  const index = action.payload;
-  state.tempCertification = state.tempCertification.filter(
-    (_, i) => i !== index
-  );
-  localStorage.setItem("forms", JSON.stringify(state));
-},
+    // Delete Temporary Certification
+    deleteTempCertification: (state, action) => {
+      const index = action.payload;
+      state.tempCertification = state.tempCertification.filter(
+        (_, i) => i !== index
+      );
+      localStorage.setItem("forms", JSON.stringify(state));
+    },
 
-// Delete Finalized Certification
-deleteFinalCertification: (state, action) => {
-  const index = action.payload;
-  state.certificationDetails = state.certificationDetails.filter(
-    (_, i) => i !== index
-  );
-  localStorage.setItem("forms", JSON.stringify(state));
-},
+    // Delete Finalized Certification
+    deleteFinalCertification: (state, action) => {
+      const index = action.payload;
+      state.certificationDetails = state.certificationDetails.filter(
+        (_, i) => i !== index
+      );
+      localStorage.setItem("forms", JSON.stringify(state));
+    },
 
-// Edit Temporary Certification
-editTempCertification: (state, action) => {
-  const { index, updatedData } = action.payload;
-  if (state.tempCertification[index]) {
-    state.tempCertification[index] = { ...updatedData };
-  }
-  localStorage.setItem("forms", JSON.stringify(state));
-},
+    // Edit Temporary Certification
+    editTempCertification: (state, action) => {
+      const { index, updatedData } = action.payload;
+      if (state.tempCertification[index]) {
+        state.tempCertification[index] = { ...updatedData };
+      }
+      localStorage.setItem("forms", JSON.stringify(state));
+    },
 
-// Edit Finalized Certification
-editFinalCertification: (state, action) => {
-  const { index, updatedData } = action.payload;
-  if (state.certificationDetails[index]) {
-    state.certificationDetails[index] = { ...updatedData };
-  }
-  localStorage.setItem("forms", JSON.stringify(state));
-},
+    // Edit Finalized Certification
+    editFinalCertification: (state, action) => {
+      const { index, updatedData } = action.payload;
+      if (state.certificationDetails[index]) {
+        state.certificationDetails[index] = { ...updatedData };
+      }
+      localStorage.setItem("forms", JSON.stringify(state));
+    },
 
+    // --------------------------------- Other Details Form ---------------------------------
+
+    saveOtherDetails: (state, action) => {
+      state.otherDetails = { ...action.payload }; // Save all fields
+      localStorage.setItem("forms", JSON.stringify(state)); // Save to local storage
+    },
+
+    // Edit existing form data
+    editOtherDetails: (state, action) => {
+      state.otherDetails = { ...action.payload }; // Edit all fields
+      localStorage.setItem("forms", JSON.stringify(state)); // Save to local storage
+    },
 
     clearAllForms: () => {
       localStorage.removeItem("forms");
       return {
         personalInformation: {},
         contactDetails: {},
-        educationalDetails: {
-          degreeGraduation: {},
-          twelfthDetails: {},
-          tenthDetails: {},
-        },
+        educationalDetails: [],
         attachmentDocuments: [],
         professionalDetails: [],
         tempProfessionalDetails: [], // New temporary storage
@@ -472,7 +542,14 @@ editFinalCertification: (state, action) => {
         tempResearchPapers: [],
         tempTrainingDetails: [],
         trainingDetails: [],
-        certificationDetails: {},
+        certificationDetails: [],
+        otherDetails: {
+          summary: "",
+          expertise: [],
+          achievements: [],
+          awards: [],
+          extraCurricular: [],
+        },
       };
     },
     removeAttachment: (state, action) => {
@@ -486,11 +563,16 @@ editFinalCertification: (state, action) => {
 
 export const {
   savePersonalInformation,
+
   saveContactDetails,
-  saveEducationalDetails,
-  saveDegreeGraduation,
-  saveTwelfthDetails,
-  saveTenthDetails,
+
+  saveTempEducationalDetails,
+  finalizeEducationalDetails,
+  deleteTempEducationalDetails,
+  deleteFinalEducationalDetails,
+  editTempEducationalDetails,
+  editFinalEducationalDetails,
+
   saveAttachmentDocuments,
 
   saveTempProfessionalDetails,
@@ -539,6 +621,9 @@ export const {
   deleteFinalCertification,
   editTempCertification,
   editFinalCertification,
+
+  saveOtherDetails,
+  editOtherDetails,
 
   clearAllForms,
 

@@ -1,23 +1,15 @@
 import React, { useState } from "react";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { MdOutlineEdit } from "react-icons/md";
-import { deleteEducationalDetail } from "../../../store/slices/profileFormsSlice";
-import { useDispatch } from "react-redux";
-import EducationDetailsModal from '../ModalForms/EducationDetailsModal';
 
  
 
 
-function EducationDetailsDisplay({ title, data }) {
-  const dispatch = useDispatch();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedEducation, setSelectedEducation] = useState(null);
+function EducationDetailsDisplay({ title, data, onDelete, onEdit }) {
 
-  // Open modal with pre-filled data
-  const handleEdit = () => {
-    setSelectedEducation(data);
-    setIsModalOpen(true);
-  };
+
+
+
 
   if (!data) return <p className="text-gray-500">No data submitted yet.</p>;
 
@@ -30,14 +22,14 @@ function EducationDetailsDisplay({ title, data }) {
           <button
             type="button"
             className="text-blue-700 border border-blue-700 hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-xs md:text-sm p-2 text-center inline-flex items-center"
-            onClick={handleEdit}
+            onClick={onEdit}
           >
             <MdOutlineEdit size={16} />
           </button>
           <button
             type="button"
             className="text-red-700 border border-red-700 hover:bg-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-xs md:text-sm p-2 text-center inline-flex items-center"
-            onClick={() => dispatch(deleteEducationalDetail({ title }))}
+            onClick={() => onDelete()}
           >
             <RiDeleteBinLine size={16} />
           </button>
@@ -98,16 +90,7 @@ function EducationDetailsDisplay({ title, data }) {
           </p>
         )}
 
-        {isModalOpen && (
-          <EducationDetailsModal
-            onClose={() => setIsModalOpen(false)}
-            title={title}
-            initialData={selectedEducation}
-            onSubmit={(updatedData) => {
-              //console.log("Updated Data: ", updatedData);
-            }}
-          />
-        )}
+        
       </div>
     </div>
   );

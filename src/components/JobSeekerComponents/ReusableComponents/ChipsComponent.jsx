@@ -9,7 +9,10 @@ function ChipsComponent({ label, name, placeholder }) {
   const [inputValue, setInputValue] = useState("");
 
   const handleKeyDown = (event) => {
-    if ((event.key === "Enter" || event.key === " ") && inputValue.trim() !== "") {
+    if (
+      (event.key === "Enter" || event.key === " ") &&
+      inputValue.trim() !== ""
+    ) {
       event.preventDefault(); // Prevent form submission and unwanted spaces
 
       const newSkill = inputValue.trim();
@@ -21,7 +24,10 @@ function ChipsComponent({ label, name, placeholder }) {
   };
 
   const removeSkill = (skillToRemove) => {
-    setFieldValue(name, skills.filter((skill) => skill !== skillToRemove)); // Update Formik state
+    setFieldValue(
+      name,
+      skills.filter((skill) => skill !== skillToRemove)
+    ); // Update Formik state
   };
 
   return (
@@ -52,6 +58,10 @@ function ChipsComponent({ label, name, placeholder }) {
           onKeyDown={handleKeyDown}
         />
       </div>
+      <p className="text-sm py-2">
+        <span className="text-red-600 font-semibold pe-1">*Note:</span>
+        Just type something and Press Space OR Enter
+      </p>
     </div>
   );
 }

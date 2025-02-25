@@ -35,8 +35,9 @@ function TrainingForm() {
   }, [tempTrainingList, finalTrainingList]);
 
   const handleTraningSubmit = (data) => {
-    setIsModalOpen(false);
-    setHasFilledForm(true);
+    // Close the modal after submitting
+    setIsModalOpen(false); // Close the modal
+    setHasFilledForm(true); // Flag that form has been filled
   };
 
   const handleTempDelete = (index) => {
@@ -76,7 +77,7 @@ function TrainingForm() {
           <ModalOpenerForms
           title={"Add Training"}
           modalType={"training"}
-          onSubmit={() => setIsModalOpen(true)}
+          onSubmit={handleTraningSubmit}
         />
         )
       }

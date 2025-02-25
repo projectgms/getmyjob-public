@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import DropDown from "./../ReusableComponents/DropDown";
 import submitFileLogo from "./../../../assets/images/submit-file.png";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { RxCross2 } from "react-icons/rx";
@@ -11,63 +10,60 @@ import * as Yup from "yup";
 
 // ✅ Validation Schema
 const validationSchema = Yup.object().shape({
-  fileTypes: Yup.array()
-    .of(Yup.string().required("File type is required"))
-    .min(3, "You must select a type for each file before saving"), // 🔥 Requires all types
+  fileNames: Yup.array()
+    .of(Yup.string().required("File name is required"))
+    .min(1, "You must give a name to the file before saving"), // Requires a name for the file
 });
 
 function AcadamicAttachModal({ onClose }) {
   const dispatch = useDispatch();
   const storedFiles = useSelector((state) => state.profileForms.attachmentDocuments);
+  
+  // Reset the file state on opening the modal to ensure no old files persist
   const [files, setFiles] = useState([]);
-  const maxFiles = 3;
+  const maxFiles = 1; // Allow only one file at a time
 
   useEffect(() => {
-    if (Array.isArray(storedFiles) && storedFiles.length > 0) {
-      setFiles(storedFiles);
-    }
-  }, [storedFiles]);
+    // Reset the files state when the modal is opened
+    setFiles([]);
+  }, [onClose]); // Trigger the reset when the modal closes
 
   // ✅ Handle File Upload
   const handleFileChange = (event) => {
-    if (event.target.files.length + files.length > maxFiles) {
-      alert(`You can upload a maximum of ${maxFiles} files.`);
-      return;
+    const file = event.target.files[0]; // Only pick one file
+    if (file) {
+      const newFile = {
+        name: file.name,
+        size: (file.size / 1024).toFixed(2) + " KB",
+        type: "", // Initially no type, will be set by user
+      };
+      setFiles([newFile]); // Replace the existing file with the new one
     }
-
-    const newFiles = Array.from(event.target.files).map((file) => ({
-      name: file.name,
-      size: (file.size / 1024).toFixed(2) + " KB",
-      type: "",
-    }));
-
-    setFiles([...files, ...newFiles]); // ✅ Only update local state, NOT Redux
   };
 
-  // ✅ Handle Type Selection
-  const handleTypeChange = (index, value, setFieldValue) => {
+  // ✅ Handle Name Change
+  const handleNameChange = (index, value, setFieldValue) => {
     const updatedFiles = files.map((file, i) =>
-      i === index ? { ...file, type: value } : file
+      i === index ? { ...file, name: value } : file
     );
 
     setFiles(updatedFiles);
-    setFieldValue(`fileTypes[${index}]`, value); // ✅ Update Formik field only
+    setFieldValue(`fileNames[${index}]`, value); // Update Formik field
   };
 
   // ✅ Remove File
-  const removeFile = (index) => {
-    const updatedFiles = files.filter((_, i) => i !== index);
-    setFiles(updatedFiles);
+  const removeFile = () => {
+    setFiles([]); // Clear the file list when removed
   };
 
   // ✅ Save Data to Redux
   const handleSave = (values) => {
-    if (files.length !== maxFiles) {
-      alert(`Please upload exactly ${maxFiles} files before saving.`);
+    if (files.length === 0 || !files[0].name) {
+      alert("Please upload a file and provide a name before saving.");
       return;
     }
-    dispatch(saveAttachmentDocuments(files)); // ✅ Save to Redux
-    onClose(); // ✅ Close modal
+    dispatch(saveAttachmentDocuments(files)); // Save to Redux
+    onClose(); // Close modal after saving
   };
 
   return (
@@ -81,25 +77,22 @@ function AcadamicAttachModal({ onClose }) {
         </div>
 
         <Formik
-          initialValues={{ fileTypes: files.map((file) => file.type || "") }}
+          initialValues={{ fileNames: files.map((file) => file.name || "") }}
           validationSchema={validationSchema}
           onSubmit={handleSave}
-          enableReinitialize // ✅ Keeps Formik in sync with state updates
+          enableReinitialize // Keeps Formik in sync with state updates
         >
           {({ setFieldValue, errors }) => (
             <Form className="p-4 space-y-4">
               {/* ✅ File Upload Box */}
-              {files.length < maxFiles && (
+              {files.length === 0 && (
                 <div
                   className="border-dashed border-2 border-gray-300 p-6 text-center rounded-md cursor-pointer"
                   onClick={() => document.getElementById("fileUpload").click()}
                 >
-                  <p className="text-sm text-gray-500">
-                    You can add up to {maxFiles} documents/attachments.
-                  </p>
+                  <p className="text-sm text-gray-500">You can upload one document/attachment.</p>
                   <input
                     type="file"
-                    multiple
                     onChange={handleFileChange}
                     className="hidden"
                     id="fileUpload"
@@ -126,7 +119,7 @@ function AcadamicAttachModal({ onClose }) {
                           {file.name} ({file.size})
                         </span>
                         <button
-                          onClick={() => removeFile(index)}
+                          onClick={removeFile}
                           type="button"
                           className="text-red-700 border border-red-700 hover:bg-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm p-2 text-center inline-flex items-center"
                         >
@@ -134,20 +127,21 @@ function AcadamicAttachModal({ onClose }) {
                         </button>
                       </div>
 
-                      {/* ✅ Dropdown with Validation */}
-                      <Field name={`fileTypes[${index}]`}>
+                      {/* ✅ File Name Input */}
+                      <Field name={`fileNames[${index}]`}>
                         {({ field }) => (
                           <div>
-                            <DropDown
-                              label="Type"
+                            <input
+                              type="text"
+                              className="border p-2 w-full mt-2"
+                              placeholder="Enter file name"
                               {...field}
-                              options={[
-                                { label: "10th Marksheet", value: "10th_marksheet" },
-                                { label: "12th Marksheet", value: "12th_marksheet" },
-                                { label: "Graduation Marksheet", value: "graduation_marksheet" },
-                              ]}
-                              onChange={(e) => handleTypeChange(index, e.target.value, setFieldValue)}
+                              value={file.name}
+                              onChange={(e) => handleNameChange(index, e.target.value, setFieldValue)}
                             />
+                            {errors.fileNames && errors.fileNames[index] && (
+                              <div className="text-red-600 text-sm">{errors.fileNames[index]}</div>
+                            )}
                           </div>
                         )}
                       </Field>
@@ -160,9 +154,9 @@ function AcadamicAttachModal({ onClose }) {
               <div className="flex justify-end p-4 border-t">
                 <button
                   type="submit"
-                  disabled={Object.keys(errors).length > 0 || files.length !== maxFiles} // ✅ Prevent invalid save
+                  disabled={Object.keys(errors).length > 0 || files.length === 0 || !files[0].name}
                   className={`px-4 py-2 rounded-lg ${
-                    files.length !== maxFiles
+                    files.length === 0 || !files[0].name
                       ? "bg-gray-400 cursor-not-allowed inline-flex items-center gap-2 px-6 py-2 text-white disabled:opacity-50"
                       : "inline-flex items-center gap-2 rounded-md bg-blue-600 px-6 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   }`}

@@ -8,6 +8,7 @@ import ProjectDetailsModal from "../ModalForms/ProjectDetailsModal";
 import ResearchPaperModal from "../ModalForms/ResearchPaperModal";
 import TrainingModal from "../ModalForms/TrainingModal";
 import CertificationModal from "../ModalForms/CertificationModal";
+import EducationDetailsModal from './../ModalForms/EducationDetailsModal';
 
 function ModalOpenerForms({ title, modalType, onSubmit }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -38,6 +39,30 @@ function ModalOpenerForms({ title, modalType, onSubmit }) {
             }}
           />
         );
+
+      
+      case "education":
+        return(
+          <EducationDetailsModal
+            onClose={()=> setIsModalOpen(false)}
+            onSubmit={onSubmit}
+            initialValues={{
+              degree: "",
+              stream: "",
+              college: "",
+              collegeCity: "",
+              joiningYear: "",
+              completionYear: "",
+              graduationType: "",
+              aggregateType: "",
+              aggregate: "",
+              max: "",
+              activeBacklogs: "",
+            }}            
+          />
+        );
+
+
       case "internship":
         return (
           <InternshipExperienceModal

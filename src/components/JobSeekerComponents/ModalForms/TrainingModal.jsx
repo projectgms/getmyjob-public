@@ -11,6 +11,7 @@ import {
   editFinalTraining,
 } from "./../../../store/slices/profileFormsSlice";
 
+// ✅ Validation Schema using Yup
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("Training Name is required"),
   instituteName: Yup.string().required("Institute Name is required"),
@@ -62,6 +63,7 @@ function TrainingModal({
               validationSchema={validationSchema}
               onSubmit={(values, { setSubmitting }) => {
                 try {
+                  // If editing
                   if (isEditing) {
                     if (isEditingTemp) {
                       dispatch(
@@ -79,11 +81,13 @@ function TrainingModal({
                       );
                     }
                   } else {
+                    // If adding new training
                     dispatch(saveTempTraining(values));
                   }
+
                   setSubmitting(false);
                   onSubmit(values);
-                  onClose();
+                  onClose(); // Close modal after submission
                 } catch (error) {
                   console.error("Error submitting form:", error);
                 }
@@ -94,27 +98,27 @@ function TrainingModal({
                   className="grid grid-cols-2 gap-4"
                   onSubmit={handleSubmit}
                 >
+                  {/* Training Name */}
                   <Field name="name">
-                    {({ field }) => (
-                      <InputField label="Training Name" {...field} />
-                    )}
-                  </Field>
-                  <Field name="instituteName">
-                    {({ field }) => (
-                      <InputField label="Institute Name" {...field} />
-                    )}
-                  </Field>
-                  <Field name="from">
-                    {({ field }) => (
-                      <InputField label="Start Date" type="date" {...field} />
-                    )}
-                  </Field>
-                  <Field name="to">
-                    {({ field }) => (
-                      <InputField label="End Date" type="date" {...field} />
-                    )}
+                    {({ field }) => <InputField label="Training Name" {...field} />}
                   </Field>
 
+                  {/* Institute Name */}
+                  <Field name="instituteName">
+                    {({ field }) => <InputField label="Institute Name" {...field} />}
+                  </Field>
+
+                  {/* Start Date */}
+                  <Field name="from">
+                    {({ field }) => <InputField label="Start Date" type="date" {...field} />}
+                  </Field>
+
+                  {/* End Date */}
+                  <Field name="to">
+                    {({ field }) => <InputField label="End Date" type="date" {...field} />}
+                  </Field>
+
+                  {/* Skills */}
                   <div className="col-span-2 grid grid-cols-1 gap-4 items-center">
                     <Field name="skills">
                       {({ field, form }) => (
@@ -128,14 +132,14 @@ function TrainingModal({
                     </Field>
                   </div>
 
+                  {/* Description */}
                   <div className="col-span-2 grid grid-cols-1 gap-4 items-center">
                     <Field name="description">
-                      {({ field }) => (
-                        <InputField label="Description" {...field} />
-                      )}
+                      {({ field }) => <InputField label="Description" {...field} />}
                     </Field>
                   </div>
 
+                  {/* Buttons */}
                   <div className="col-span-2 flex justify-end">
                     <button
                       type="button"
@@ -145,7 +149,7 @@ function TrainingModal({
                       Cancel
                     </button>
                     <button
-                      type="submit"
+                      type="submit" 
                       className="ms-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     >
                       {isEditing ? "Update" : "Save"}

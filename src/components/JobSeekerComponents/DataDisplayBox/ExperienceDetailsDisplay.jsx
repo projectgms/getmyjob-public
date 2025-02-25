@@ -206,7 +206,7 @@ function ExperienceDetailsDisplay({ title, data, onDelete,onEdit }) {
               {data.skills.map((skill, index) => (
                 <span
                   key={index}
-                  className="px-3 py-1 bg-gray-200 text-sm rounded-full"
+                  className="flex items-center px-4 bg-gray-200 text-sm rounded-full font-semibold"
                 >
                   {skill}
                 </span>

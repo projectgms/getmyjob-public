@@ -5,7 +5,7 @@ import { Form, Formik, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import ChipsComponent from './../ReusableComponents/ChipsComponent';
 import { saveTempProfessionalDetails } from "../../../store/slices/profileFormsSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 const validationSchema = Yup.object().shape({
   designation: Yup.string().required("Designation is required"),
@@ -17,12 +17,7 @@ const validationSchema = Yup.object().shape({
     .positive("CTC must be a positive number")
     .required("CTC is required"),
   from: Yup.date().required("Start date is required"),
-  to: Yup.date()
-    .nullable()
-    .test("is-required", "End date is required", function (value) {
-      const { currentlyWorking } = this.parent;
-      return currentlyWorking ? true : !!value;
-    }),
+  to: Yup.date().nullable(),
   currentlyWorking: Yup.boolean(),
   country: Yup.string().required("Country is required"),
   state: Yup.string().required("State is required"),
@@ -48,87 +43,67 @@ function ProfessionalExperienceModal({ onClose, onSubmit, initialValues, isEditi
               type="button"
               className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
               onClick={onClose}
-            > 
+            >
               <IoMdClose className="w-5 h-5" />
             </button>
           </div>
           <div className="p-4 md:p-5 space-y-4">
             <Formik
-              enableReinitialize // ✅ This ensures the form updates when `initialValues` change
-              initialValues={initialValues} // ✅ Pass the object directly
+              enableReinitialize
+              initialValues={initialValues}
               validationSchema={validationSchema}
               onSubmit={(values) => {
                 console.log("Form Submitted: ", values);
-
-                //onSubmit(values);
-               
-                if (isEditing) { // ✅ Use `isEditing` instead of `editIndex`
-                  onSubmit(values); // ✅ Call `handleSaveEdit`
+                if (isEditing) {
+                  onSubmit(values);
                 } else {
-                  dispatch(saveTempProfessionalDetails(values)); // ✅ Add only if new
+                  dispatch(saveTempProfessionalDetails(values));
                 }
-            
-
                 onClose();
               }}
             >
               {({ handleSubmit, values, setFieldValue }) => (
-                <Form
-                  className="grid grid-cols-2 gap-4"
-                  onSubmit={handleSubmit}
-                >
+                <Form className="grid grid-cols-2 gap-4" onSubmit={handleSubmit}>
                   {/* Designation */}
                   <div>
                     <Field name="designation">
-                      {({ field }) => (
-                        <InputField label="Designation" {...field} />
-                      )}
+                      {({ field }) => <InputField label="Designation" {...field} />}
                     </Field>
                   </div>
 
                   {/* Organisation */}
                   <div>
                     <Field name="organisation">
-                      {({ field }) => (
-                        <InputField label="Organisation" {...field} />
-                      )}
+                      {({ field }) => <InputField label="Organisation" {...field} />}
                     </Field>
                   </div>
 
                   {/* Industry Sector */}
                   <div>
                     <Field name="industrySector">
-                      {({ field }) => (
-                        <InputField label="Industry Sector" {...field} />
-                      )}
+                      {({ field }) => <InputField label="Industry Sector" {...field} />}
                     </Field>
                   </div>
 
                   {/* Department */}
                   <div>
                     <Field name="department">
-                      {({ field }) => (
-                        <InputField label="Department" {...field} />
-                      )}
+                      {({ field }) => <InputField label="Department" {...field} />}
                     </Field>
                   </div>
 
                   {/* CTC */}
                   <div>
                     <Field name="ctc">
-                      {({ field }) => (
-                        <InputField label="CTC (in INR)" {...field} />
-                      )}
-                    </Field> 
+                      {({ field }) => <InputField label="CTC (in INR)" {...field} />}
+                    </Field>
                   </div>
 
                   {/* Dates */}
                   <div className="col-span-2 grid grid-cols-3 gap-4 items-center">
                     <div>
                       <Field name="from">
-                        {({ field }) => (
-                          <InputField label="From" type="date" {...field} />
-                        )}
+                        {({ field }) => <InputField label="From" type="date" {...field} />}
                       </Field>
                     </div>
 
@@ -150,9 +125,13 @@ function ProfessionalExperienceModal({ onClose, onSubmit, initialValues, isEditi
                         type="checkbox"
                         name="currentlyWorking"
                         className="mr-2"
-                        onChange={(e) =>
-                          setFieldValue("currentlyWorking", e.target.checked)
-                        }
+                        onChange={(e) => {
+                          setFieldValue("currentlyWorking", e.target.checked);
+                          if (e.target.checked) {
+                            // Clear end date when checked
+                            setFieldValue("to", "");
+                          }
+                        }}
                       />
                       I am currently working here
                     </label>
@@ -194,9 +173,7 @@ function ProfessionalExperienceModal({ onClose, onSubmit, initialValues, isEditi
                   {/* Description */}
                   <div className="col-span-2">
                     <Field name="description">
-                      {({ field }) => (
-                        <InputField label="Description" {...field} />
-                      )}
+                      {({ field }) => <InputField label="Description" {...field} />}
                     </Field>
                   </div>
 

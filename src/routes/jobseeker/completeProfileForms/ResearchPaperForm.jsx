@@ -70,7 +70,7 @@ function ResearchPaperForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 m d:p-8 w-full">
+    <div className="min-h-screen bg-gray-50 p-4 md:p-8 w-full">
       <div className="mx-auto w-full">
         {!hasFilledForm && (
           <ModalOpenerForms

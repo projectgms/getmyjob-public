@@ -23,9 +23,9 @@ function FileCard() {
             className="flex justify-between items-center border p-4 rounded-lg shadow-sm bg-white"
           >
             <div>
-              <p className="text-lg font-semibold text-gray-800">{file.type || "N/A"}</p>
+              <p className="text-lg font-semibold text-gray-800">{file.name || "N/A"}</p>
               <p className="text-sm text-gray-500">Size: {file.size}</p>
-              <p className="text-sm text-blue-500">{file.name || "N/A"}</p>
+              <p className="text-sm text-blue-500">{file.type || "N/A"}</p>
             </div>
             <button
               onClick={() => handleDelete(index)}
