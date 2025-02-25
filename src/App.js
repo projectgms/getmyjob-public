@@ -80,12 +80,16 @@ const App = () => {
       <Route path="/recruiter/reset-password" element={<RecruitmentResetPassword />} />
       <Route path="/recruiter/forgot-password" element={<RecruitmentForgotpassword />} />
       
-      <Route path="/recruiter/dashboard" element={<RecruiterLayout />}>
+      {/* <Route path="/recruiter/dashboard" element={<RecruitmentAuthRoutes element={<RecruiterLayout />} allowedRoles={["recruiter"]} />}></Route> */}
+      <Route path="/recruiter/dashboard" element={<RecruiterLayout /> }>
         <Route index element={<RecruiterDashboard />} />
+        <Route path='companies' element={<CompanyManagement/>}/>
+        <Route path="companies/create" element={<CreateCompany />} />
         <Route path="jobs" element={<JobManagement />} />
         <Route path="jobs/create" element={<CreateJob />} />
+        <Route path="jobs/detail/:id" element={<JobDetail />} />
         <Route path="jobs/edit/:id" element={<EditJob />} />
-      
+        <Route path="users" element={<IndexUser />} />
       </Route>
 
 

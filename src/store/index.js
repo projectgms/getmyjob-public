@@ -3,6 +3,7 @@ import createSagaMiddleware from 'redux-saga';
 import rootSaga from './sagas';
 import jobReducer from './slices/jobSlice';
 import authReducer from "./slices/authSlice";
+import companyReducer from "./slices/companySlice";
 
 // Create Saga Middleware
 const sagaMiddleware = createSagaMiddleware();
@@ -11,6 +12,7 @@ const store = configureStore({
   reducer: {
     jobs: jobReducer, 
     auth: authReducer,
+    companies: companyReducer, // ✅ Add company reducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ thunk: false }).concat(sagaMiddleware),

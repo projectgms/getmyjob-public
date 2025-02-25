@@ -3,19 +3,21 @@ import axios from "axios";
 import { authRequest, authSuccess, authFailure } from "../slices/authSlice";
 
 // 🔹 API Call Function for Signup
-const authApi = (userData,type) => axios.post(`http://localhost:5000/auth/${type}`, userData);
+const authApi = (userData) => axios.post(`http://192.168.0.101/Rec-Backend/recruitment-backend/api/v1/recruiter/register`, userData);
 
 // 🔹 Worker Saga for Signup
 function* authSaga(action) {
   try {
-    const { userData, type } = action.payload; // ✅ Correctly destructure payload
-    const response = yield call(authApi, userData, type);
+    const { userData } = action.payload; // ✅ Correctly destructure payload
+
+    const response = yield call(authApi, userData);
+    console.log(response?.data?.message)
     
     // ✅ Store token and user data
-    localStorage.setItem("token", response.data.token);
-    localStorage.setItem("role", response.data.user.role);
+    localStorage.setItem("token", response.data);
+    // localStorage.setItem("role", response.data.user.role);
     
-    yield put(authSuccess(response.data)); // ✅ Dispatch success action
+    yield put(authSuccess({ message: response?.data?.message || "Signup Successful" })); // ✅ Dispatch success action
   } catch (error) {
     yield put(authFailure(error.response?.data?.message || "Authentication Failed")); // ✅ Dispatch failure action
   }
