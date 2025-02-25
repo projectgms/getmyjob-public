@@ -25,6 +25,10 @@ import TraningForm from './routes/jobseeker/completeProfileForms/TraningForm';
 import CertificationForm from './routes/jobseeker/completeProfileForms/CertificationForm';
 import OtherDetailsForm from './routes/jobseeker/completeProfileForms/OtherDetailsForm';
 import JobDetailsPage from './pages/jobseekerpages/JobDetailsPage';
+import CompanyManagement from './pages/dashboard/recruiter/Companymanagement/CompanyManagement';
+import CreateCompany from './pages/dashboard/recruiter/Companymanagement/CreateCompany';
+import JobDetail from './pages/dashboard/recruiter/Jobmanagement/JobDetail';
+import IndexUser from './pages/dashboard/recruiter/userManagement/IndexUser';
 
 import RecruiterDashboard from './pages/dashboard/recruiter/RecruiterDashboard'
 import RecruiterLayout from './pages/layout/recruiter/RecruiterLayout'
@@ -42,6 +46,8 @@ import Recruiters  from './pages/dashboard/admin/modules/usermanagment/recruiter
 // added by admin rahul to use flowbit 
 import "flowbite";
 import "./index.css";
+
+import Jobseekers from './pages/dashboard/admin/modules/usermanagment/jobseekers'
 
 
 const App = () => {
@@ -100,6 +106,8 @@ const App = () => {
 
       <Route path='/usermanagment' element="">
        <Route path='recruiters' element={<Recruiters/>}/>
+
+       <Route path='jobseekers' element={<Jobseekers/>}/>
       </Route>
 
 

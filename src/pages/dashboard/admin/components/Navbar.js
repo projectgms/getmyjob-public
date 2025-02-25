@@ -63,7 +63,7 @@ export default function Navbar() {
                 <div id="dropdownNavbar" className="hidden z-40 absolute mt-2 bg-white border border-gray-200 rounded-lg shadow-sm w-44 dark:bg-gray-700 dark:border-gray-600">
                   <ul className="py-2 text-sm text-gray-700 dark:text-gray-400">
                     <li>
-                      <Link to="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Job Seekers Management</Link>
+                      <Link to="/usermanagment/jobseekers" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Job Seekers Management</Link>
                     </li>
                     <li>
                       <Link to="/usermanagment/recruiters" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Recruiters Management</Link>

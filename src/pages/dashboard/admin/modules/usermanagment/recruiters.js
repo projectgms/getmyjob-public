@@ -4,9 +4,6 @@ import Navbar from "../../components/Navbar";
 import RecruitersTable from "../../components/recruiterstable";
 
 
-import Select from "react-select";
-
-
 export default function Recruiters() {
     const [searchTerm, setSearchTerm] = useState("");
 
@@ -31,23 +28,6 @@ const recruiters = [
     { id: 18, name: "Shweta Mehta", company: "Flipkart", email: "shweta.mehta@flipkart.com", phone: "9696543210", status: "Active", completion: 75 },
     { id: 19, name: "Rajesh Yadav", company: "Paytm", email: "rajesh.yadav@paytm.com", phone: "9686543210", status: "Inactive", completion: 35 },
     { id: 20, name: "Tanvi Desai", company: "Zomato", email: "tanvi.desai@zomato.com", phone: "9676543210", status: "Active", completion: 82 }
-];
-
-
-const statusOptions = [
-    { label: "Active", className: "bg-green-100 text-green-800 border border-green-400" },
-    { label: "Pending", className: "bg-yellow-100 text-yellow-800 border border-yellow-300" },
-    { label: "Inactive", className: "bg-red-100 text-red-800 border border-red-400" },
-    { label: "KYC Process", className: "bg-indigo-100 text-indigo-800 border border-indigo-400" },
-    { label: "Suspended", className: "bg-gray-100 text-gray-800 border border-gray-500" },
-];
-
-const companyOptions = [
-    { value: "ABC Corp", label: "ABC Corp" },
-    { value: "XYZ Ltd", label: "XYZ Ltd" },
-    { value: "Global Recruiters", label: "Global Recruiters" },
-    { value: "Recruit Pro", label: "Recruit Pro" },
-    { value: "Talent Hub", label: "Talent Hub" },
 ];
 
 
