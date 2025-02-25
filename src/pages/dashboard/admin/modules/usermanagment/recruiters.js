@@ -4,6 +4,9 @@ import Navbar from "../../components/Navbar";
 import RecruitersTable from "../../components/recruiterstable";
 
 
+import Select from "react-select";
+
+
 export default function Recruiters() {
     const [searchTerm, setSearchTerm] = useState("");
 
@@ -31,6 +34,23 @@ const recruiters = [
 ];
 
 
+const statusOptions = [
+    { label: "Active", className: "bg-green-100 text-green-800 border border-green-400" },
+    { label: "Pending", className: "bg-yellow-100 text-yellow-800 border border-yellow-300" },
+    { label: "Inactive", className: "bg-red-100 text-red-800 border border-red-400" },
+    { label: "KYC Process", className: "bg-indigo-100 text-indigo-800 border border-indigo-400" },
+    { label: "Suspended", className: "bg-gray-100 text-gray-800 border border-gray-500" },
+];
+
+const companyOptions = [
+    { value: "ABC Corp", label: "ABC Corp" },
+    { value: "XYZ Ltd", label: "XYZ Ltd" },
+    { value: "Global Recruiters", label: "Global Recruiters" },
+    { value: "Recruit Pro", label: "Recruit Pro" },
+    { value: "Talent Hub", label: "Talent Hub" },
+];
+
+
     return (
 
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white">
@@ -53,12 +73,12 @@ const recruiters = [
                             <div className="relative">
                                 <input
                                     type="text"
-                                    className="w-full p-2.5 pl-10 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg border border-gray-300 dark:border-gray-600"
+                                    className="w-full p-2.5 pr-10 pl-3 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white rounded-full border border-gray-300 dark:border-gray-600"
                                     placeholder="Search by name..."
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                 />
-                                <Search className="absolute left-3 top-3 w-5 h-5 text-gray-500 dark:text-gray-300" />
+                                <Search className="absolute right-3 top-3 w-5 h-5 text-gray-500 dark:text-gray-300" />
                             </div>
                         </div>
 

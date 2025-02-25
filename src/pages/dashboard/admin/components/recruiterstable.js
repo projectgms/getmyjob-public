@@ -55,12 +55,12 @@ const RecruitersTable = ({ recruiters }) => {
                 className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:bg-gray-700 dark:border-gray-600"
             />
         </th>
-        <th className="px-6 py-3 text-left w-56">Recruiter <br></br> Name</th>
-        <th className="px-6 py-3 text-left w-72">Company Name</th>
-        <th className="px-6 py-3 text-left w-80">Company <br></br> Email </th>
-        <th className="px-6 py-3 text-left w-44">Phone Number</th>
-        <th className="px-6 py-3 text-left w-36">Recruiter <br></br>  Status</th>
-        <th className="px-6 py-3 text-left w-64">Profile Completion</th>
+        <th className="px-6 py-3 text-left w-56">Name</th>
+        <th className="px-6 py-3 text-left w-72">Company </th>
+        <th className="px-6 py-3 text-left w-80">Email </th>
+        <th className="px-6 py-3 text-left w-44">Phone </th>
+        <th className="px-6 py-3 text-left w-36">Status</th>
+        <th className="px-6 py-3 text-left w-64">Profile </th>
         <th className="px-6 py-3 text-left w-44 rounded-tr-3xl rounded-br-3xl">Actions</th>
                     </tr>
                 </thead>
