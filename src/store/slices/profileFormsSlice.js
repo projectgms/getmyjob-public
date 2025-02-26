@@ -9,7 +9,7 @@ const loadFormsFromLocalStorage = () => {
       : {
           personalInformation: {},
           contactDetails: {},
-          educationalDetails: [],
+          educationDetails: [],
           tempEducationalDetails: [],
           attachmentDocuments: [],
           professionalDetails: [],
@@ -38,7 +38,8 @@ const loadFormsFromLocalStorage = () => {
     return {
       personalInformation: {},
       contactDetails: {},
-      educationalDetails: [],
+    
+      educationDetails: [],
       attachmentDocuments: [],
       professionalDetails: [],
       tempProfessionalDetails: [], // New temporary storage
@@ -65,6 +66,15 @@ const loadFormsFromLocalStorage = () => {
 
 const initialState = loadFormsFromLocalStorage();
 
+const saveState = (state) => {
+  try {
+    localStorage.setItem("forms", JSON.stringify(state));
+  } catch (err) {
+    console.error("Failed to save education data to local storage", err);
+  }
+};
+
+
 const profileFormsSlice = createSlice({
   name: "forms",
   initialState,
@@ -80,81 +90,44 @@ const profileFormsSlice = createSlice({
 
     // ---------------------- For Educational Details --------------------------------------------
 
- // Save Temporary Educational Details
-saveTempEducationalDetails: (state, action) => {
-  if (!state.tempEducationalDetails) {
-    state.tempEducationalDetails = []; // Ensure array exists before pushing
-  }
-  state.tempEducationalDetails.push(action.payload);
-  localStorage.setItem("forms", JSON.stringify(state));
-},
+    // Save Temporary Educational Details
+    addOrUpdateEducation: (state, action) => {
+      const { type, data } = action.payload;
+      const existingIndex = state.educationDetails.findIndex((edu) => edu.type === type);
 
-// Finalize Educational Details
-finalizeEducationalDetails: (state) => {
-  state.educationalDetails = [
-    ...state.educationalDetails,
-    ...state.tempEducationalDetails,
-  ];
-  state.tempEducationalDetails = []; // Clear temp array after saving
-  localStorage.setItem("forms", JSON.stringify(state));
-},
+      if (existingIndex !== -1) {
+        // Update existing education entry
+        state.educationDetails[existingIndex].data = data;
+      } else {
+        // Add new education entry
+        state.educationDetails.push({ type, data });
+      }
+      
+     saveState(state);
+    },
 
-// Delete Temporary Educational Detail
-deleteTempEducationalDetails: (state, action) => {
-  const index = action.payload;
-  state.tempEducationalDetails = state.tempEducationalDetails.filter(
-    (_, i) => i !== index
-  );
-  localStorage.setItem("forms", JSON.stringify(state));
-},
-
-// Delete Finalized Educational Detail
-deleteFinalEducationalDetails: (state, action) => {
-  const index = action.payload;
-  state.educationalDetails = state.educationalDetails.filter(
-    (_, i) => i !== index
-  );
-  localStorage.setItem("forms", JSON.stringify(state));
-},
-
-// Edit Temporary Educational Detail
-editTempEducationalDetails: (state, action) => {
-  const { index, updatedData } = action.payload;
-  if (state.tempEducationalDetails[index]) {
-    state.tempEducationalDetails[index] = { ...updatedData };
-  }
-  localStorage.setItem("forms", JSON.stringify(state));
-},
-
-// Edit Finalized Educational Detail
-editFinalEducationalDetails: (state, action) => {
-  const { index, updatedData } = action.payload;
-  if (state.educationalDetails[index]) {
-    state.educationalDetails[index] = { ...updatedData };
-  }
-  localStorage.setItem("forms", JSON.stringify(state));
-},
-    // saveDegreeGraduation: (state, action) => {
-    //   state.educationalDetails.degreeGraduation = action.payload;
-    //   localStorage.setItem("forms", JSON.stringify(state));
-    // },
-    // saveTwelfthDetails: (state, action) => {
-    //   state.educationalDetails.twelfthDetails = action.payload;
-    //   localStorage.setItem("forms", JSON.stringify(state));
-    // },
-    // saveTenthDetails: (state, action) => {
-    //   state.educationalDetails.tenthDetails = action.payload;
-    //   localStorage.setItem("forms", JSON.stringify(state));
-    // },
+    // Delete Education from `educationDetails`
+    deleteEducation: (state, action) => {
+      const type = action.payload;
+      state.educationDetails = state.educationDetails.filter((edu) => edu.type !== type);
+      saveState(state);
+    },
 
     //------------------------ For Save Attachment Documents ------------------------
 
     saveAttachmentDocuments: (state, action) => {
+      const { educationType, file } = action.payload;
+
+      // Ensure `attachmentDocuments` is an array
       if (!Array.isArray(state.attachmentDocuments)) {
         state.attachmentDocuments = [];
       }
-      state.attachmentDocuments.push(action.payload[0]); // Only add one file at a time
-      localStorage.setItem("forms", JSON.stringify(state));
+
+      // ✅ Only add valid files (prevent `null` values)
+      if (file && file.name) {
+        state.attachmentDocuments.push({ educationType, file });
+        saveState(state);
+      }
     },
     // ---------------------------- For Professional Experience Form --------------------------------------------
 
@@ -530,7 +503,13 @@ editFinalEducationalDetails: (state, action) => {
       return {
         personalInformation: {},
         contactDetails: {},
-        educationalDetails: [],
+        tenth: null,
+        twelfth: null,
+        diploma: null,
+        graduation: null,
+        masters: null,
+        other: null,
+        educationDetails: [],
         attachmentDocuments: [],
         professionalDetails: [],
         tempProfessionalDetails: [], // New temporary storage
@@ -566,12 +545,7 @@ export const {
 
   saveContactDetails,
 
-  saveTempEducationalDetails,
-  finalizeEducationalDetails,
-  deleteTempEducationalDetails,
-  deleteFinalEducationalDetails,
-  editTempEducationalDetails,
-  editFinalEducationalDetails,
+  addOrUpdateEducation, deleteEducation, saveEducation,
 
   saveAttachmentDocuments,
 

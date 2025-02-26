@@ -12,6 +12,7 @@ import {
   editTempTraining,
   editFinalTraining,
 } from "./../../../store/slices/profileFormsSlice";
+import { ToastContainer, toast } from "react-toastify";
 
 function TrainingForm() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -71,31 +72,35 @@ function TrainingForm() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-8 w-full">
+      <ToastContainer />
       <div className="mx-auto w-full">
-      {
-        !hasFilledForm && (
+        {!hasFilledForm && (
           <ModalOpenerForms
-          title={"Add Training"}
-          modalType={"training"}
-          onSubmit={handleTraningSubmit}
-        />
-        )
-      }
+            title={"Add Training"}
+            modalType={"training"}
+            onSubmit={handleTraningSubmit}
+          />
+        )}
 
-      {tempTrainingList.length > 0 && (
-                <div className="flex justify-end">
-                  <button
-                    className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-6 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 mb-4"
-                    onClick={() => {
-                      dispatch(finalizeTrainingDetails());
-                      setHasFilledForm(true);
-                    }}
-                  >
-                    <FaSave />
-                    Save
-                  </button>
-                </div>
-              )}
+        {tempTrainingList.length > 0 && (
+          <div className="flex justify-end">
+            <button
+              className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-6 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 mb-4"
+              onClick={() => {
+                dispatch(finalizeTrainingDetails());
+                toast.success("Details saved successfully!", {
+                  position: "top-right",
+                  autoClose: 5000,
+                  className: "bg-green-50",
+                });
+                setHasFilledForm(true);
+              }}
+            >
+              <FaSave />
+              Save
+            </button>
+          </div>
+        )}
 
         {hasFilledForm && (
           <div className="flex justify-end my-2">
@@ -111,7 +116,7 @@ function TrainingForm() {
           </div>
         )}
 
-        {tempTrainingList.length > 0 && 
+        {tempTrainingList.length > 0 &&
           tempTrainingList.map((training, index) => (
             <ExperienceDetailsDisplay
               key={index}
@@ -124,11 +129,10 @@ function TrainingForm() {
                 handleEdit(index, tempTrainingList.includes(training))
               }
             />
-          ))
-        }
+          ))}
 
-        {finalTrainingList.length > 0 && 
-           finalTrainingList.map((training, index) => (
+        {finalTrainingList.length > 0 &&
+          finalTrainingList.map((training, index) => (
             <ExperienceDetailsDisplay
               key={index}
               title={training.name}
@@ -140,8 +144,7 @@ function TrainingForm() {
                 handleEdit(index, tempTrainingList.includes(training))
               }
             />
-          ))
-        }
+          ))}
 
         {isModalOpen && (
           <TrainingModal

@@ -16,19 +16,19 @@ import {
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("Certification Name is required"),
   provider: Yup.string().required("Provider is required"),
-  enrollmentNumber: Yup.string().required("Enrollment Number is required"),
+  // enrollmentNumber: Yup.string().required("Enrollment Number is required"),
   validUpto: Yup.date().required("Valid Upto date is required"),
   marksType: Yup.string().required("Marks Type is required"),
   aggregate: Yup.number()
     .typeError("Aggregate must be a number")
     .positive("Must be a positive number")
-    .nullable()
-    .required("Aggregate is required"),
+    .nullable(),       
+    // .required("Aggregate is required"),
   max: Yup.number()
     .typeError("Max value must be a number")
     .positive("Must be a positive number")
-    .nullable()
-    .required("Max value is required"),
+    .nullable(),
+    // .required("Max value is required"),
   skills: Yup.array().min(1, "At least one skill is required"),
   description: Yup.string()
     .required("Description is required")

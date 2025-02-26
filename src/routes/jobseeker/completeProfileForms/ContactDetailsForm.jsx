@@ -5,7 +5,8 @@ import InputField from "./../../../components/JobSeekerComponents/ReusableCompon
 import { FaSave } from "react-icons/fa";
 import {saveContactDetails} from './../../../store/slices/profileFormsSlice';
 import { useDispatch, useSelector } from 'react-redux';
- 
+import { toast, ToastContainer } from 'react-toastify';
+
 
 const validationSchema = Yup.object({
   secondaryPhone: Yup.string()
@@ -40,12 +41,18 @@ const initialValues = {
   const handleSubmit = (values, { setSubmitting }) => {
     console.log("Form submitted with values:", values);
     dispatch(saveContactDetails(values));
+        toast.success("Contact Details saved successfully!", {
+          position: "top-right",
+          autoClose: 5000,
+          className:'bg-green-50'
+        });
     setSubmitting(false);
   };
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-8 w-full">
       <div className="mx-auto w-full">
+        <ToastContainer/>
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}

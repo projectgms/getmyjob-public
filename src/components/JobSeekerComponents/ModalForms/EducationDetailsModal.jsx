@@ -5,31 +5,65 @@ import { Form, Formik, Field } from "formik";
 import { useDispatch } from "react-redux";
 import { IoMdClose } from "react-icons/io";
 import * as Yup from "yup";
-import {saveTempEducationalDetails, editTempEducationalDetails, editFinalEducationalDetails} from './../../../store/slices/profileFormsSlice';
+// import {saveTempEducationalDetails, editTempEducationalDetails, editFinalEducationalDetails} from './../../../store/slices/profileFormsSlice';
 
 const validationSchema = Yup.object().shape({
-  degree: Yup.string().required("Degree is required"),
   stream: Yup.string().required("Stream is required"),
   college: Yup.string().required("College is required"),
   collegeCity: Yup.string().required("College City is required"),
-  joiningYear: Yup.number().required("Joining Year is required"),
-  completionYear: Yup.number(),
+  joiningYear: Yup.number()
+    .required("Joining Year is required")
+    .test(
+      "is-less-than-completion",
+      "Joining Year must be less than Completion Year",
+      function (value) {
+        const { completionYear } = this.parent;
+        return !completionYear || value < completionYear;
+      }
+    ),
+  completionYear: Yup.number()
+    .nullable()
+    .test(
+      "is-greater-than-joining",
+      "Completion Year must be greater than Joining Year",
+      function (value) {
+        const { joiningYear } = this.parent;
+        return !value || value > joiningYear;
+      }
+    ),
   graduationType: Yup.string().required("Graduation Type is required"),
   aggregateType: Yup.string().required("Aggregate Type is required"),
-  aggregate: Yup.number().required("Aggregate is required"),
-  max: Yup.number().required("Max marks are required"),
+  aggregate: Yup.number()
+    .required("Aggregate is required")
+    .test(
+      "is-less-than-max",
+      "Aggregate must be less than Max marks",
+      function (value) {
+        const { max } = this.parent;
+        return !max || value < max;
+      }
+    ),
+  max: Yup.number()
+    .required("Max marks are required")
+    .test(
+      "is-greater-than-aggregate",
+      "Max marks must be greater than Aggregate",
+      function (value) {
+        const { aggregate } = this.parent;
+        return !aggregate || value > aggregate;
+      }
+    ),
   activeBacklogs: Yup.number().required("Active Backlogs is required"),
   currentlyStudying: Yup.boolean(),
 });
 
-function EducationDetailsModal({ 
+function EducationDetailsModal({
   onClose,
   onSubmit,
   initialValues,
   isEditing,
-  isEditingTemp,
-  editIndex,
- }) {
+  title,
+}) {
   const dispatch = useDispatch();
 
   return (
@@ -38,7 +72,7 @@ function EducationDetailsModal({
         <div className="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
           <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
             <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-              {isEditing ? "Edit Education Details" : "Add Education Details"}
+              {isEditing ? `Edit ${title} Details` : `Add ${title} Details`}
             </h3>
             <button
               type="button"
@@ -51,7 +85,7 @@ function EducationDetailsModal({
           <div className="p-4 md:p-5 space-y-4">
             <Formik
               initialValues={{
-                degree: initialValues?.degree || "",
+                qualification: initialValues?.qualification || "",
                 stream: initialValues?.stream || "",
                 college: initialValues?.college || "",
                 collegeCity: initialValues?.collegeCity || "",
@@ -64,61 +98,63 @@ function EducationDetailsModal({
                 activeBacklogs: initialValues?.activeBacklogs || "",
               }}
               validationSchema={validationSchema}
-              onSubmit={(values) => {
-                console.log("Form Submitted: ", values);
-
-                try {
-                  if(isEditing){
-                    if(isEditingTemp){
-                      dispatch(editTempEducationalDetails({
-                        index: editIndex,
-                        updatedData: values,
-                      })
-                    );
-                    }
-                    else{
-                      dispatch(editFinalEducationalDetails({
-                        index: editIndex,
-                        updatedData: values,
-                      }))
-                    }
-                  }
-                  else{
-                    dispatch(saveTempEducationalDetails(values))
-                  }
-                  // setSubmitting(false);
-                  onSubmit(values);
-                  onClose();
-                } catch (error) {
-                  console.error("Error submitting form:", error);
-                }
-                
-              }}
+              onSubmit={onSubmit}
             >
               {({ handleSubmit }) => (
-                <Form className="grid grid-cols-2 gap-4" onSubmit={handleSubmit}>
-                  <Field name="degree">
-                    {({ field }) => <InputField label="Degree" {...field} />}
+                <Form
+                  className="grid grid-cols-2 gap-4"
+                  onSubmit={handleSubmit}
+                >
+                  <Field name="qualification">
+                    {({ field }) => (
+                      <InputField
+                        label="Qualification"
+                        {...field}
+                        value={title} // Set default value from prop
+                        disabled // Make it uneditable
+                      />
+                    )}
                   </Field>
 
                   <Field name="stream">
-                    {({ field }) => <InputField label="Stream" {...field} />}
+                    {({ field }) => (
+                      <InputField
+                        label="Stream"
+                        {...field}
+                      />
+                    )}
                   </Field>
 
                   <Field name="college">
-                    {({ field }) => <InputField label="College / School" {...field} />}
+                    {({ field }) => (
+                      <InputField label="College / School" {...field} />
+                    )}
                   </Field>
 
                   <Field name="collegeCity">
-                    {({ field }) => <InputField label="College City" {...field} />}
+                    {({ field }) => (
+                      <InputField label="College City" {...field} />
+                    )}
                   </Field>
 
                   <Field name="joiningYear">
-                    {({ field }) => <InputField label="Joining Year" type="number" {...field} />}
+                    {({ field }) => (
+                      <InputField
+                        label="Joining Year"
+                        type="number"
+                        {...field}
+                      />
+                    )}
                   </Field>
 
                   <Field name="completionYear">
-                    {({ field }) => <InputField label="Completion Year" type="number" {...field} />}
+                    {({ field }) => (
+                      <InputField
+                        label="Completion Year"
+                        type="number"
+                        {...field}
+                      />
+                    )}
                   </Field>
 
                   <Field name="graduationType">
@@ -149,18 +185,27 @@ function EducationDetailsModal({
                   </Field>
 
                   <Field name="aggregate">
-                    {({ field }) => <InputField label="Aggregate" type="number" {...field} />}
+                    {({ field }) => (
+                      <InputField label="Aggregate" type="number" {...field} />
+                    )}
                   </Field>
 
                   <Field name="max">
-                    {({ field }) => <InputField label="Max" type="number" {...field} />}
+                    {({ field }) => (
+                      <InputField label="Max" type="number" {...field} />
+                    )}
                   </Field>
 
                   <Field name="activeBacklogs">
-                    {({ field }) => <InputField label="Active Backlogs" type="number" {...field} />}
+                    {({ field }) => (
+                      <InputField
+                        label="Active Backlogs"
+                        type="number"
+                        {...field}
+                      />
+                    )}
                   </Field>
 
-                
                   <div className="col-span-2 flex justify-end">
                     <button
                       type="button"

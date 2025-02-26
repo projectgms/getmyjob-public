@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form, Field } from "formik";
 import submitFileLogo from "./../../../assets/images/submit-file.png";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { RxCross2 } from "react-icons/rx";
@@ -10,59 +10,70 @@ import * as Yup from "yup";
 
 // ✅ Validation Schema
 const validationSchema = Yup.object().shape({
-  fileNames: Yup.array()
-    .of(Yup.string().required("File name is required"))
-    .min(1, "You must give a name to the file before saving"), // Requires a name for the file
+  selectedAttachment: Yup.string().required("Please select an attachment type"),
 });
 
 function AcadamicAttachModal({ onClose }) {
   const dispatch = useDispatch();
-  const storedFiles = useSelector((state) => state.profileForms.attachmentDocuments);
   
-  // Reset the file state on opening the modal to ensure no old files persist
-  const [files, setFiles] = useState([]);
-  const maxFiles = 1; // Allow only one file at a time
+  // Get education details & stored files from Redux
+  const educationDetails = useSelector((state) => state.profileForms.educationDetails);
+  const storedFiles = useSelector((state) => state.profileForms.attachmentDocuments) || [];
 
+  // List of available attachment types based on education records
+  const attachmentOptions = {
+    tenth: "10th Marksheet",
+    twelfth: "12th Marksheet",
+    diploma: "Diploma Certificate",
+    graduation: "Graduation Degree",
+    masters: "Master’s Degree Certificate",
+    other: "Other Education Certificate",
+  };
+
+  // ✅ Track already uploaded attachments
+  const uploadedTypes = storedFiles.map((file) => file.educationType);
+
+  // ✅ Filter available options to prevent duplicate selections
+  const availableAttachments = Object.entries(attachmentOptions)
+    .filter(([type]) => educationDetails.some((edu) => edu.type === type)) // Only show existing education types
+    .filter(([type]) => !uploadedTypes.includes(type)); // Remove already uploaded attachments
+
+  // ✅ State to track the selected attachment type & uploaded file
+  const [selectedAttachment, setSelectedAttachment] = useState("");
+  const [uploadedFile, setUploadedFile] = useState(null);
+
+  // ✅ Reset the state when the modal opens
   useEffect(() => {
-    // Reset the files state when the modal is opened
-    setFiles([]);
-  }, [onClose]); // Trigger the reset when the modal closes
+    setSelectedAttachment("");
+    setUploadedFile(null);
+  }, [onClose]);
 
   // ✅ Handle File Upload
   const handleFileChange = (event) => {
-    const file = event.target.files[0]; // Only pick one file
+    const file = event.target.files[0];
     if (file) {
-      const newFile = {
+      setUploadedFile({
         name: file.name,
         size: (file.size / 1024).toFixed(2) + " KB",
-        type: "", // Initially no type, will be set by user
-      };
-      setFiles([newFile]); // Replace the existing file with the new one
+      });
     }
   };
 
-  // ✅ Handle Name Change
-  const handleNameChange = (index, value, setFieldValue) => {
-    const updatedFiles = files.map((file, i) =>
-      i === index ? { ...file, name: value } : file
-    );
-
-    setFiles(updatedFiles);
-    setFieldValue(`fileNames[${index}]`, value); // Update Formik field
-  };
-
-  // ✅ Remove File
-  const removeFile = () => {
-    setFiles([]); // Clear the file list when removed
-  };
-
-  // ✅ Save Data to Redux
+  // ✅ Handle Save
   const handleSave = (values) => {
-    if (files.length === 0 || !files[0].name) {
-      alert("Please upload a file and provide a name before saving.");
+    if (!uploadedFile || !selectedAttachment) {
+      alert("Please upload a file and select an attachment type.");
       return;
     }
-    dispatch(saveAttachmentDocuments(files)); // Save to Redux
+
+    // Dispatch to Redux
+    dispatch(
+      saveAttachmentDocuments({
+        educationType: selectedAttachment,
+        file: uploadedFile,
+      })
+    );
+
     onClose(); // Close modal after saving
   };
 
@@ -77,15 +88,42 @@ function AcadamicAttachModal({ onClose }) {
         </div>
 
         <Formik
-          initialValues={{ fileNames: files.map((file) => file.name || "") }}
+          initialValues={{ selectedAttachment: "" }}
           validationSchema={validationSchema}
           onSubmit={handleSave}
-          enableReinitialize // Keeps Formik in sync with state updates
+          enableReinitialize
         >
-          {({ setFieldValue, errors }) => (
-            <Form className="p-4 space-y-4">
-              {/* ✅ File Upload Box */}
-              {files.length === 0 && (
+          {({ handleSubmit, setFieldValue, values, errors }) => (
+            <Form className="p-4 space-y-4" onSubmit={handleSubmit}>
+              {/* ✅ Attachment Type Dropdown */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Select Attachment Type:
+                </label>
+                <Field
+                  as="select"
+                  name="selectedAttachment"
+                  value={selectedAttachment}
+                  onChange={(e) => {
+                    setSelectedAttachment(e.target.value);
+                    setFieldValue("selectedAttachment", e.target.value);
+                  }}
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200"
+                >
+                  <option value="" disabled>Select an attachment type</option>
+                  {availableAttachments.map(([type, label]) => (
+                    <option key={type} value={type}>
+                      {label}
+                    </option>
+                  ))}
+                </Field>
+                {errors.selectedAttachment && (
+                  <div className="text-red-600 text-sm">{errors.selectedAttachment}</div>
+                )}
+              </div>
+
+              {/* ✅ File Upload */}
+              {selectedAttachment && uploadedFile === null && (
                 <div
                   className="border-dashed border-2 border-gray-300 p-6 text-center rounded-md cursor-pointer"
                   onClick={() => document.getElementById("fileUpload").click()}
@@ -109,44 +147,21 @@ function AcadamicAttachModal({ onClose }) {
                 </div>
               )}
 
-              {/* ✅ Uploaded Files List */}
-              {files.length > 0 && (
-                <div>
-                  {files.map((file, index) => (
-                    <div key={index} className="border p-2 rounded mt-2">
-                      <div className="flex justify-between">
-                        <span className="text-blue-700 font-semibold text-sm">
-                          {file.name} ({file.size})
-                        </span>
-                        <button
-                          onClick={removeFile}
-                          type="button"
-                          className="text-red-700 border border-red-700 hover:bg-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm p-2 text-center inline-flex items-center"
-                        >
-                          <RiDeleteBinLine size={18} />
-                        </button>
-                      </div>
-
-                      {/* ✅ File Name Input */}
-                      <Field name={`fileNames[${index}]`}>
-                        {({ field }) => (
-                          <div>
-                            <input
-                              type="text"
-                              className="border p-2 w-full mt-2"
-                              placeholder="Enter file name"
-                              {...field}
-                              value={file.name}
-                              onChange={(e) => handleNameChange(index, e.target.value, setFieldValue)}
-                            />
-                            {errors.fileNames && errors.fileNames[index] && (
-                              <div className="text-red-600 text-sm">{errors.fileNames[index]}</div>
-                            )}
-                          </div>
-                        )}
-                      </Field>
-                    </div>
-                  ))}
+              {/* ✅ Show Uploaded File */}
+              {uploadedFile && (
+                <div className="border p-2 rounded mt-2">
+                  <div className="flex justify-between">
+                    <span className="text-blue-700 font-semibold text-sm">
+                      {uploadedFile.name} ({uploadedFile.size})
+                    </span>
+                    <button
+                      onClick={() => setUploadedFile(null)}
+                      type="button"
+                      className="text-red-700 border border-red-700 hover:bg-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm p-2 text-center inline-flex items-center"
+                    >
+                      <RiDeleteBinLine size={18} />
+                    </button>
+                  </div>
                 </div>
               )}
 
@@ -154,14 +169,14 @@ function AcadamicAttachModal({ onClose }) {
               <div className="flex justify-end p-4 border-t">
                 <button
                   type="submit"
-                  disabled={Object.keys(errors).length > 0 || files.length === 0 || !files[0].name}
-                  className={`px-4 py-2 rounded-lg ${
-                    files.length === 0 || !files[0].name
-                      ? "bg-gray-400 cursor-not-allowed inline-flex items-center gap-2 px-6 py-2 text-white disabled:opacity-50"
-                      : "inline-flex items-center gap-2 rounded-md bg-blue-600 px-6 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  disabled={!selectedAttachment || !uploadedFile}
+                  className={`px-4 py-2 rounded-lg flex justify-center items-center ${
+                    !selectedAttachment || !uploadedFile
+                      ? "bg-gray-400 cursor-not-allowed text-white disabled:opacity-50"
+                      : "bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   }`}
                 >
-                  <FaSave />
+                  <FaSave className="me-2"/>
                   Save
                 </button>
               </div>

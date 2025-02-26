@@ -1,96 +1,71 @@
-import React, { useState } from "react";
+import React from "react";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { MdOutlineEdit } from "react-icons/md";
 
- 
-
-
 function EducationDetailsDisplay({ title, data, onDelete, onEdit }) {
-
-
-
-
-
   if (!data) return <p className="text-gray-500">No data submitted yet.</p>;
 
   return (
-    <div className="flex flex-col justify-between items-center mb-4 rounded-lg bg-white p-4 md:p-6 shadow-sm w-full">
+    <div className="flex flex-col justify-between items-center mb-4 rounded-lg bg-white p-6 shadow-md w-full border border-gray-200">
       {/* Header Section */}
-      <div className="flex w-full border-b-2 border-gray-300 items-center justify-between py-2">
-        <p className="text-sm md:text-lg font-semibold py-2">{title}</p>
-        <div className="flex gap-2">
+      <div className="flex w-full border-b border-gray-300 items-center justify-between py-3">
+        <p className="text-lg font-bold text-gray-800">{title}</p>
+        <div className="flex gap-3">
           <button
             type="button"
-            className="text-blue-700 border border-blue-700 hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-xs md:text-sm p-2 text-center inline-flex items-center"
+            className="text-blue-600 border border-blue-600 hover:bg-blue-600 hover:text-white focus:ring-2 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2"
             onClick={onEdit}
           >
-            <MdOutlineEdit size={16} />
+            <MdOutlineEdit size={18} />
           </button>
           <button
             type="button"
-            className="text-red-700 border border-red-700 hover:bg-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-xs md:text-sm p-2 text-center inline-flex items-center"
+            className="text-red-600 border border-red-600 hover:bg-red-600 hover:text-white focus:ring-2 focus:outline-none focus:ring-red-300 font-medium rounded-full text-sm p-2"
             onClick={() => onDelete()}
           >
-            <RiDeleteBinLine size={16} />
+            <RiDeleteBinLine size={18} />
           </button>
         </div>
       </div>
 
       {/* Content Section */}
-      <div className="flex w-full py-2 flex-col bg-blue-50 mt-2 p-4 md:p-5 rounded-md text-sm md:text-base">
+      <div className="w-full py-4 space-y-2">
         {data.college && (
-          <p className="font-semibold text-gray-700 break-words">
-            College / School: {data.college}
+          <p className="text-gray-700 text-base break-words">
+            <span className="font-semibold text-gray-800">College / School:</span> {data.college}
           </p>
         )}
 
         {data.joiningYear && data.completionYear && (
-          <p>
-            <span className="text-blue-700 font-semibold">
-              {data.joiningYear}
-            </span>{" "}
-            -{" "}
-            <span className="text-blue-700 font-semibold">
-              {data.completionYear}
-            </span>
+          <p className="text-gray-700 text-base">
+            <span className="font-semibold text-gray-800">Duration:</span> {data.joiningYear} - {data.completionYear}
           </p>
         )}
 
         {data.stream && (
-          <p>
-            Stream:{" "}
-            <span className="text-blue-600 font-semibold">{data.stream}</span>
+          <p className="text-gray-700 text-base">
+            <span className="font-semibold text-gray-800">Stream:</span> {data.stream}
           </p>
         )}
 
         {data.aggregateType && (
-          <p>
-            Aggregate Type:{" "}
-            <span className="font-semibold text-blue-600">
-              {data.aggregateType}
-            </span>
+          <p className="text-gray-700 text-base">
+            <span className="font-semibold text-gray-800">Aggregate Type:</span> {data.aggregateType}
           </p>
         )}
 
         {data.aggregate && data.max && (
-          <p>
-            Marks:{" "}
-            <span className="font-semibold text-blue-600">
-              {data.aggregate} {data.aggregateType === "percentage" && "%"}{" "}
-              {data.aggregateType != "percentage" && `/ ${data.max}`}
-            </span>
+          <p className="text-gray-700 text-base">
+            <span className="font-semibold text-gray-800">Marks:</span> {data.aggregate} 
+            {data.aggregateType === "percentage" ? "%" : ` / ${data.max}`}
           </p>
         )}
 
         {data.activeBacklogs > 0 && (
-          <p>
-            <span className="text-blue-600 font-semibold">
-              {data.activeBacklogs}
-            </span>
+          <p className="text-gray-700 text-base">
+            <span className="font-semibold text-gray-800">Active Backlogs:</span> {data.activeBacklogs}
           </p>
         )}
-
-        
       </div>
     </div>
   );

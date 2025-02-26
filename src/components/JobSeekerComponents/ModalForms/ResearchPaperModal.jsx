@@ -21,7 +21,7 @@ const validationSchema = Yup.object().shape({
     .typeError("Authors count must be a number")
     .positive("Must be a positive number")
     .required("Number of authors is required"),
-  type: Yup.string().required("Type of publication is required"),
+  status: Yup.string().required("Status of publication is required"),
   skills: Yup.array()
     .min(1, "At least one skill is required")
     .required("Skills are required"),
@@ -65,7 +65,7 @@ function ResearchPaperModal({
                 publicationDate: "",
                 mentor: "",
                 authorsCount: "",
-                type: "",
+                statuys: "",
                 skills: [],
                 description: "",
               }}
@@ -118,8 +118,8 @@ function ResearchPaperModal({
                   <Field name="authorsCount">
                     {({ field }) => <InputField label="No. of Authors" {...field} />}
                   </Field>
-                  <Field name="type">
-                    {({ field }) => <InputField label="Type" {...field} />}
+                  <Field name="status">
+                    {({ field }) => <InputField label="Status" {...field} />}
                   </Field>
                   <div className="col-span-2 grid grid-cols-1 gap-4 items-center">
                     <Field name="skills">

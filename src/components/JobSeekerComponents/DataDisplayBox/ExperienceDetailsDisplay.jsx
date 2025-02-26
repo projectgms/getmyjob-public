@@ -2,7 +2,7 @@ import React from "react";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { MdOutlineEdit } from "react-icons/md";
 
-function ExperienceDetailsDisplay({ title, data, onDelete,onEdit }) {
+function ExperienceDetailsDisplay({ title, data, onDelete, onEdit }) {
   console.log(data);
 
   function formatDate(dateString) {
@@ -14,127 +14,76 @@ function ExperienceDetailsDisplay({ title, data, onDelete,onEdit }) {
   if (!data) return <p className="text-gray-500">No data submitted yet.</p>;
 
   return (
-    <div className="flex flex-col justify-between items-center mb-4 rounded-lg bg-white p-4 md:p-6 shadow-sm w-full">
+    <div className="flex flex-col justify-between items-center mb-4 rounded-lg bg-white p-6 shadow-md w-full border border-gray-200">
       
       {/* Header Section */}
-      <div className="flex w-full border-b-2 border-gray-300 items-center justify-between pb-2 md:pb-0">
-        <p className="text-sm md:text-lg font-semibold py-2">{title}</p>
-        <div className="flex gap-2">
+      <div className="flex w-full border-b border-gray-300 items-center justify-between py-3">
+        <p className="text-lg font-bold text-gray-800">{title}</p>
+        <div className="flex gap-3">
           <button
             type="button"
-            className="text-blue-700 border border-blue-700 hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-xs md:text-sm p-2 text-center inline-flex items-center"
+            className="text-blue-600 border border-blue-600 hover:bg-blue-600 hover:text-white focus:ring-2 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2"
             onClick={onEdit}
           >
-            <MdOutlineEdit size={16} />
+            <MdOutlineEdit size={18} />
           </button>
           <button
             type="button"
-            className="text-red-700 border border-red-700 hover:bg-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-xs md:text-sm p-2 text-center inline-flex items-center"
+            className="text-red-600 border border-red-600 hover:bg-red-600 hover:text-white focus:ring-2 focus:outline-none focus:ring-red-300 font-medium rounded-full text-sm p-2"
             onClick={() => onDelete()}
           >
-            <RiDeleteBinLine size={16} />
+            <RiDeleteBinLine size={18} />
           </button>
         </div>
       </div>
 
       {/* Content Section */}
-      <div className="flex w-full py-2 flex-col bg-blue-50 mt-2 p-4 md:p-5 rounded-md text-sm md:text-base">
-        
+      <div className="w-full py-4 space-y-2">
         {data.designation && (
-          <p className="font-semibold text-gray-700">
-            <span>Designation: </span> {data.designation}
+          <p className="text-gray-700 text-base">
+            <span className="font-semibold text-gray-800">Designation:</span> {data.designation}
           </p>
         )}
 
         {data.enrollmentNumber && (
-          <p className="font-semibold text-gray-700">
-            <span>Enrollment Number: </span> {data.enrollmentNumber}
+          <p className="text-gray-700 text-base">
+            <span className="font-semibold text-gray-800">Enrollment Number:</span> {data.enrollmentNumber}
           </p>
         )}
 
         {data.validUpto && (
-          <p>
-            <span className="text-blue-700 font-semibold">
-              <span className="pe-2 text-gray-600">Valid Upto:</span>
-              {formatDate(data.validUpto)}
-            </span>
+          <p className="text-gray-700 text-base">
+            <span className="font-semibold text-gray-800">Valid Upto:</span> {formatDate(data.validUpto)}
           </p>
         )}
 
         {data.marksType && data.aggregate && data.max && (
-          <p>
-            <span className="text-blue-700 font-semibold">
-              <span className="pe-2 text-gray-600">
-                {data.marksType.toUpperCase()}:
-              </span>
-              {data.aggregate} / {data.max}
-            </span>
+          <p className="text-gray-700 text-base">
+            <span className="font-semibold text-gray-800">{data.marksType.toUpperCase()}:</span> {data.aggregate} / {data.max}
           </p>
         )}
 
         {data.provider && (
-          <p>
-            <span className="text-blue-700 font-semibold">
-              <span className="pe-2 text-gray-600">Provider:</span>
-              {data.provider}
-            </span>
+          <p className="text-gray-700 text-base">
+            <span className="font-semibold text-gray-800">Provider:</span> {data.provider}
           </p>
         )}
 
         {data.publicationDate && (
-          <p>
-            <span className="text-blue-700 font-semibold">
-              <span className="pe-2 text-gray-600">Published On,</span>
-              {formatDate(data.publicationDate)}
-            </span>
-          </p>
-        )}
-
-        {data.mentor && (
-          <p>
-            <span className="text-blue-700 font-semibold">
-              <span className="pe-2 text-gray-600">Mentor:</span>
-              {data.mentor}
-            </span>
-          </p>
-        )}
-
-        {data.publicationName && (
-          <p>
-            <span className="text-blue-700 font-semibold">
-              <span className="pe-2 text-gray-600">Publication Name:</span>
-              {data.publicationName}
-            </span>
+          <p className="text-gray-700 text-base">
+            <span className="font-semibold text-gray-800">Published On:</span> {formatDate(data.publicationDate)}
           </p>
         )}
 
         {data.type && (
-          <p>
-            <span className="text-blue-700 font-semibold">
-              <span className="pe-2 text-gray-600">Publication Type:</span>
-              {data.type}
-            </span>
-          </p>
-        )}
-
-        {data.authorsCount && (
-          <p>
-            <span className="text-blue-700 font-semibold">
-              <span className="pe-2 text-gray-600">Authors Count:</span>
-              {data.authorsCount}
-            </span>
+          <p className="text-gray-700 text-base">
+            <span className="font-semibold text-gray-800">Publication Type:</span> {data.type}
           </p>
         )}
 
         {data.from && (
-          <p>
-            <span className="text-blue-700 font-semibold">
-              {formatDate(data.from)}
-            </span>{" "}
-            -{" "}
-            <span className="text-blue-700 font-semibold">
-              {data.to ? formatDate(data.to) : "Currently Working"}
-            </span>
+          <p className="text-gray-700 text-base">
+            <span className="font-semibold text-gray-800">Duration:</span> {formatDate(data.from)} - {data.to ? formatDate(data.to) : "Currently Working"}
           </p>
         )}
 
@@ -143,71 +92,54 @@ function ExperienceDetailsDisplay({ title, data, onDelete,onEdit }) {
             href={data.projectLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-blue-600 font-semibold break-all"
+            className="text-blue-600 font-medium underline"
           >
             {data.projectLink}
           </a>
         )}
 
         {data.industrySector && (
-          <p>
-            Industry Sector:{" "}
-            <span className="text-blue-600 font-semibold">
-              {data.industrySector}
-            </span>
+          <p className="text-gray-700 text-base">
+            <span className="font-semibold text-gray-800">Industry Sector:</span> {data.industrySector}
           </p>
         )}
 
         {data.department && (
-          <p>
-            Department:{" "}
-            <span className="text-blue-600 font-semibold">
-              {data.department}
-            </span>
+          <p className="text-gray-700 text-base">
+            <span className="font-semibold text-gray-800">Department:</span> {data.department}
           </p>
         )}
 
         {data.ctc && (
-          <p>
-            CTC (in INR):{" "}
-            <span className="font-semibold text-blue-600">{data.ctc}</span>
+          <p className="text-gray-700 text-base">
+            <span className="font-semibold text-gray-800">CTC (in INR):</span> {data.ctc}
           </p>
         )}
 
         {data.stipend && (
-          <p>
-            Stipend (in INR):{" "}
-            <span className="font-semibold text-blue-600">{data.stipend}</span>
+          <p className="text-gray-700 text-base">
+            <span className="font-semibold text-gray-800">Stipend (in INR):</span> {data.stipend}
           </p>
         )}
 
         {data.city && data.state && data.country && (
-          <p>
-            Location:{" "}
-            <span className="font-semibold text-blue-600">
-              {data.city}, {data.state}, {data.country}
-            </span>
+          <p className="text-gray-700 text-base">
+            <span className="font-semibold text-gray-800">Location:</span> {data.city}, {data.state}, {data.country}
           </p>
         )}
 
         {data.instituteName && (
-          <p>
-            Institute Name:
-            <span className="text-blue-600 ps-2 font-semibold">
-              {data.instituteName}
-            </span>
+          <p className="text-gray-700 text-base">
+            <span className="font-semibold text-gray-800">Institute Name:</span> {data.instituteName}
           </p>
         )}
 
-        {data.skills && (
-          <div className="flex flex-wrap mt-2">
-            <p className="py-2 font-semibold text-gray-700 me-2 ">Key Skills:</p>
-            <div className="flex flex-wrap gap-2">
+        {data.skills && data.skills.length > 0 && (
+          <div className="mt-3">
+            <p className="font-semibold text-gray-800">Key Skills:</p>
+            <div className="flex flex-wrap gap-2 mt-1">
               {data.skills.map((skill, index) => (
-                <span
-                  key={index}
-                  className="flex items-center px-4 bg-gray-200 text-sm rounded-full font-semibold"
-                >
+                <span key={index} className="px-4 py-1 bg-blue-100 text-sm rounded-full font-medium text-blue-700">
                   {skill}
                 </span>
               ))}
@@ -215,12 +147,27 @@ function ExperienceDetailsDisplay({ title, data, onDelete,onEdit }) {
           </div>
         )}
 
+        {data.mentor && (
+          <p className="text-gray-700 text-base">
+            <span className="font-semibold text-gray-800">Mentor:</span> {data.mentor}
+          </p>
+        )}
+
+        {data.authorsCount && (
+          <p className="text-gray-700 text-base">
+            <span className="font-semibold text-gray-800">Authors:</span> {data.authorsCount}
+          </p>
+        )}
+
+        {data.publicationName && (
+          <p className="text-gray-700 text-base">
+            <span className="font-semibold text-gray-800">Publication Name:</span> {data.publicationName}
+          </p>
+        )}
+
         {data.description && (
-          <p>
-            Description:{" "}
-            <span className="text-blue-600 font-semibold">
-              {data.description}
-            </span>
+          <p className="text-gray-700 text-base">
+            <span className="font-semibold text-gray-800">Description:</span> {data.description}
           </p>
         )}
       </div>

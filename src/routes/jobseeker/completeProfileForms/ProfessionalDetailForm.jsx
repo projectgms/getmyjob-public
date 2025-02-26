@@ -11,7 +11,8 @@ import {
   editFinalProfessionalExperience,
 } from "./../../../store/slices/profileFormsSlice";
 import { useDispatch, useSelector } from "react-redux";
- 
+import { ToastContainer, toast } from "react-toastify";
+
 function ProfessionalDetailForm() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [hasFilledForm, setHasFilledForm] = useState(false); // Track first-time form filling
@@ -68,13 +69,15 @@ function ProfessionalDetailForm() {
       dispatch(
         editTempProfessionalExperience({ index: editIndex, updatedData })
       );
+    
     } else {
       dispatch(
         editFinalProfessionalExperience({ index: editIndex, updatedData })
       );
+      
     }
 
-    // Reset Editing State
+ 
     setIsModalOpen(false);
     setEditIndex(null);
     setIsEditingTemp(false);
@@ -82,6 +85,7 @@ function ProfessionalDetailForm() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-8 w-full">
+      <ToastContainer />
       <div className="mx-auto w-full">
         {/* Show 'Add Professional Experience' Button if No Experience Exists */}
         {!hasFilledForm && (
@@ -101,6 +105,11 @@ function ProfessionalDetailForm() {
               className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-6 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 mb-4"
               onClick={() => {
                 dispatch(finalizeProfessionalDetails());
+                toast.success("Professional Details saved successfully!", {
+                  position: "top-right",
+                  autoClose: 5000,
+                  className: "bg-green-50",
+                });
                 setHasFilledForm(true); // Ensure UI remains updated
               }}
             >

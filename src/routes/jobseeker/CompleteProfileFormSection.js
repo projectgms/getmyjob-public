@@ -52,8 +52,8 @@ function CompleteProfileFormSection() {
       <MobileNavigationBar sidebarItems={sidebarItems} />
 
       <div className="flex flex-row w-full">
-        {/* Sidebar (Visible on Desktop & Tablet) */}
-        <div className="hidden md:block md:w-1/5 bg-white border-r border-gray-200">
+        {/* Sticky Sidebar (Visible on Desktop & Tablet) */}
+        <div className="hidden md:block md:w-1/6 bg-white border-r border-gray-200 h-screen sticky top-0">
           <nav className="flex flex-col py-4">
             {sidebarItems.map((item) => (
               <button
@@ -73,8 +73,8 @@ function CompleteProfileFormSection() {
           </nav>
         </div>
 
-        {/* Main Content */}
-        <div className="w-full mt-16 md:mt-0">
+        {/* Scrollable Main Content */}
+        <div className="flex-1 h-[calc(100vh-80px)] overflow-y-auto p-4 mt-10 md:mt-0">
           <Outlet />
         </div>
       </div>

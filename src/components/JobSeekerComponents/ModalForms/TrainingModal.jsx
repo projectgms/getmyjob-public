@@ -105,7 +105,7 @@ function TrainingModal({
 
                   {/* Institute Name */}
                   <Field name="instituteName">
-                    {({ field }) => <InputField label="Institute Name" {...field} />}
+                    {({ field }) => <InputField label="Institute Name / Platform Name" {...field} />}
                   </Field>
 
                   {/* Start Date */}

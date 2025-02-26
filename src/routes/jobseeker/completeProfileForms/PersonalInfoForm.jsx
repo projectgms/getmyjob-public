@@ -1,15 +1,15 @@
+import React, { useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { FaSave } from "react-icons/fa";
- 
 import InputField from '../../../components/JobSeekerComponents/ReusableComponents/InputField';
 import DropDown from './../../../components/JobSeekerComponents/ReusableComponents/DropDown';
 import FileUploadField from '../../../components/JobSeekerComponents/ReusableComponents/FileUploadField';
 import TextAreaField from '../../../components/JobSeekerComponents/ReusableComponents/TextAreaField';
 import MultiSelectField from './../../../components/JobSeekerComponents/ReusableComponents/MultiSelectField';
 import { useDispatch, useSelector } from 'react-redux';
-import {savePersonalInformation} from './../../../store/slices/profileFormsSlice';
- 
+import { savePersonalInformation } from './../../../store/slices/profileFormsSlice';
+import { ToastContainer, toast } from 'react-toastify';
 
 // Validation Schema using Yup
 const validationSchema = Yup.object({
@@ -23,7 +23,27 @@ const validationSchema = Yup.object({
     .min(10, "Must be exactly 10 digits")
     .max(10, "Must be exactly 10 digits")
     .required("Phone number is required"),
-  dateOfBirth: Yup.date().required("Date of birth is required"),
+  dateOfBirth: Yup.date()
+    .required("Date of birth is required")
+    .test(
+      "is-16-years-old",
+      "You must be at least 16 years old",
+      (value) => {
+        const today = new Date();
+        const minAgeDate = new Date(today.setFullYear(today.getFullYear() - 16)); // Subtract 16 years from today
+
+        // Ensure that the user is at least 16 years old
+        return value && value <= minAgeDate;
+      }
+    )
+    .test(
+      "is-not-in-future",
+      "Date of birth cannot be in the future",
+      (value) => {
+        const today = new Date();
+        return value && value <= today; // Ensure that the date of birth is not in the future
+      }
+    ),
   gender: Yup.string().required("Gender is required"),
   maritalStatus: Yup.string().required("Marital status is required"),
   addressLine1: Yup.string().required("Address is required"),
@@ -42,61 +62,59 @@ const validationSchema = Yup.object({
   medicalHistory: Yup.string().required("Medical history is required"),
   disability: Yup.string().required("Disability status is required"),
   knownLanguages: Yup.array().min(1, "Select at least one language").required("Known languages are required"),
-  dreamCompany: Yup.string().required("Dream company is required"),
 });
 
-
-
 function PersonalInfoForm() {
-
-
   const dispatch = useDispatch();
 
   const personalInformation = useSelector(
     (state) => state.profileForms.personalInformation
   );
-
+ 
   // Initial Values
+  const initialValues = {
+    profilePicture: personalInformation.profilePicture || null,
+    firstName: personalInformation.firstName || "",
+    middleName: personalInformation.middleName || "",
+    lastName: personalInformation.lastName || "",
+    email: personalInformation.email || "",
+    phoneNumber: personalInformation.phoneNumber || "",
+    dateOfBirth: personalInformation.dateOfBirth || "",
+    gender: personalInformation.gender || "",
+    maritalStatus: personalInformation.maritalStatus || "",
+    addressLine1: personalInformation.addressLine1 || "",
+    addressLine2: personalInformation.addressLine2 || "",
+    city: personalInformation.city || "",
+    state: personalInformation.state || "",
+    country: personalInformation.country || "",
+    zipCode: personalInformation.zipCode || "",
+    course: personalInformation.course || "",
+    specialization: personalInformation.specialization || "",
+    bloodGroup: personalInformation.bloodGroup || "",
+    medicalHistory: personalInformation.medicalHistory || "",
+    disability: personalInformation.disability || "",
+    knownLanguages: personalInformation.knownLanguages || [],
+  };
 
- const initialValues = {
-  profilePicture: personalInformation.profilePicture || null,
-  firstName: personalInformation.firstName || "",
-  middleName: personalInformation.middleName || "",
-  lastName: personalInformation.lastName || "",
-  email: personalInformation.email || "",
-  phoneNumber: personalInformation.phoneNumber || "",
-  dateOfBirth: personalInformation.dateOfBirth || "",
-  gender: personalInformation.gender || "",
-  maritalStatus: personalInformation.maritalStatus || "",
-  addressLine1: personalInformation.addressLine1 || "",
-  addressLine2: personalInformation.addressLine2 || "",
-  city: personalInformation.city || "",
-  state: personalInformation.state || "",
-  country: personalInformation.country || "",
-  zipCode: personalInformation.zipCode || "",
-  course: personalInformation.course || "",
-  specialization: personalInformation.specialization || "",
-  bloodGroup: personalInformation.bloodGroup || "",
-  medicalHistory: personalInformation.medicalHistory || "",
-  disability: personalInformation.disability || "",
-  knownLanguages: personalInformation.knownLanguages || [],
-  dreamCompany: personalInformation.dreamCompany || "",
-};
+  const handleSubmit = (values, { setSubmitting, setErrors ,validateForm  }) => {
 
 
-  const handleSubmit = (values, { setSubmitting }) => {
-    console.log("Form submitted with values:", values); // Debugging line
 
+    // Saving form data
     dispatch(savePersonalInformation(values));
+    // Show success message
+    toast.success("Personal information saved successfully!", {
+      position: "top-right",
+      autoClose: 5000,
+      className:'bg-green-50'
+    });
     setSubmitting(false);
   };
 
   return (
     <div className="min-h-screen bg-gray-50 w-full p-8">
       <div className="mx-auto w-full">
-
-        
-
+        <ToastContainer />
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
@@ -104,9 +122,8 @@ function PersonalInfoForm() {
           validateOnBlur={true} // Ensures validation runs on blur
           onSubmit={handleSubmit}
         >
-          {({ setFieldValue, isSubmitting, isValid }) => (
+          {({ setFieldValue,errors  }) => (
             <Form className="space-y-8 rounded-lg bg-white p-6 shadow-sm">
-              
               {/* Profile Picture Upload */}
               <FileUploadField
                 label="Profile Picture"
@@ -164,7 +181,6 @@ function PersonalInfoForm() {
                 <InputField label="State/Province" name="state" />
                 <InputField label="City" name="city" />
                 <InputField label="ZIP/Postal Code" name="zipCode" />
-               
               </div>
 
               {/* Education & Specialization */}
@@ -201,19 +217,19 @@ function PersonalInfoForm() {
                 options={[
                   { label: "English", value: "english" },
                   { label: "Hindi", value: "hindi" },
-                  { label: "Spanish", value: "spanish" },
+                  { label: "Marathi", value: "marathi" },
                 ]}
               />
 
               {/* Text Area */}
               <TextAreaField label="Medical History" name="medicalHistory" />
-              <InputField label="Dream Company" name="dreamCompany" />
+              {/* <InputField label="Dream Company" name="dreamCompany" /> */}
 
               {/* Submit Button */}
               <div className="flex justify-end">
-              <button
+                <button
                   type="submit"
-                  disabled={isSubmitting || !isValid}
+                  // disabled={isSubmitting || !isValid}
                   className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-6 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
                 >
                   <FaSave />

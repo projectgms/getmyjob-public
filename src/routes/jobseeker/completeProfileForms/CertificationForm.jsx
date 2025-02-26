@@ -12,6 +12,8 @@ import {
   finalizeCertificationDetails,
   saveTempCertification,
 } from "./../../../store/slices/profileFormsSlice";
+import { ToastContainer, toast } from "react-toastify";
+
 
 function CertificationForm() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -72,6 +74,7 @@ function CertificationForm() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-8 w-full">
+      <ToastContainer />
       <div className="mx-auto w-full">
         {!hasFilledForm && (
           <ModalOpenerForms
@@ -88,6 +91,11 @@ function CertificationForm() {
               className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-6 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 mb-4"
               onClick={() => {
                 dispatch(finalizeCertificationDetails());
+                 toast.success("Details saved successfully!", {
+                                  position: "top-right",
+                                  autoClose: 5000,
+                                  className: "bg-green-50",
+                                });
                 setHasFilledForm(true);
               }}
             >

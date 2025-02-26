@@ -12,6 +12,7 @@ import {
   finalizeProjectDetails,
   saveTempProject,
 } from "../../../store/slices/profileFormsSlice";
+import { ToastContainer, toast } from "react-toastify";
 
 function ProjectsForm() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -72,6 +73,7 @@ function ProjectsForm() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-8 w-full">
+       <ToastContainer />
       <div className="mx-auto w-full">
         {!hasFilledForm && (
           <ModalOpenerForms
@@ -88,6 +90,11 @@ function ProjectsForm() {
               className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-6 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 mb-4"
               onClick={() => {
                 dispatch(finalizeProjectDetails());
+                toast.success("Project Details saved successfully!", {
+                  position: "top-right",
+                  autoClose: 5000,
+                  className: "bg-green-50",
+                });
                 setHasFilledForm(true);
               }}
             >

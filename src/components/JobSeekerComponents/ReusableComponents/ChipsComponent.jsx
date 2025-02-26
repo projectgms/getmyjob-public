@@ -10,7 +10,7 @@ function ChipsComponent({ label, name, placeholder }) {
 
   const handleKeyDown = (event) => {
     if (
-      (event.key === "Enter" || event.key === " ") &&
+      (event.key === "Enter") &&
       inputValue.trim() !== ""
     ) {
       event.preventDefault(); // Prevent form submission and unwanted spaces
@@ -60,7 +60,7 @@ function ChipsComponent({ label, name, placeholder }) {
       </div>
       <p className="text-sm py-2">
         <span className="text-red-600 font-semibold pe-1">*Note:</span>
-        Just type something and Press Space OR Enter
+        Just type something and Press Enter
       </p>
     </div>
   );
