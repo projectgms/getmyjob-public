@@ -18,7 +18,7 @@ const validationSchema = Yup.object().shape({
   provider: Yup.string().required("Provider is required"),
   // enrollmentNumber: Yup.string().required("Enrollment Number is required"),
   validUpto: Yup.date().required("Valid Upto date is required"),
-  marksType: Yup.string().required("Marks Type is required"),
+  marksType: Yup.string(),
   aggregate: Yup.number()
     .typeError("Aggregate must be a number")
     .positive("Must be a positive number")

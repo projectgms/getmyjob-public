@@ -13,6 +13,7 @@ import {
   editFinalTraining,
 } from "./../../../store/slices/profileFormsSlice";
 import { ToastContainer, toast } from "react-toastify";
+import { useOutletContext } from "react-router-dom"; // Import useOutletContext
 
 function TrainingForm() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -20,6 +21,14 @@ function TrainingForm() {
   const [editIndex, setEditIndex] = useState(null);
   const [isEditingTemp, setIsEditingTemp] = useState(false);
   const [initialFormValues, setInitialFormValues] = useState(null);
+
+  const { setIsFormDirty } = useOutletContext();
+
+  const [isDirty, setIsDirty] = useState(false);
+
+  useEffect(() => {
+    setIsFormDirty(isDirty);
+  }, [isDirty, setIsFormDirty]);
 
   const tempTrainingList = useSelector(
     (state) => state.profileForms.tempTrainingDetails || []
@@ -32,6 +41,9 @@ function TrainingForm() {
   useEffect(() => {
     if (tempTrainingList.length > 0 || finalTrainingList.length > 0) {
       setHasFilledForm(true);
+    }
+    if (tempTrainingList.length ){
+      setIsDirty(true);
     }
   }, [tempTrainingList, finalTrainingList]);
 
@@ -57,6 +69,7 @@ function TrainingForm() {
       : finalTrainingList[index];
     setInitialFormValues({ ...selectedPaper });
     setIsModalOpen(true);
+    setIsDirty(true);
   };
 
   const handleSaveEdit = (updatedData) => {
@@ -66,6 +79,7 @@ function TrainingForm() {
       dispatch(editFinalTraining({ index: editIndex, updatedData }));
     }
     setIsModalOpen(false);
+    setIsDirty(false);
     setEditIndex(null);
     setIsEditingTemp(false);
   };
@@ -94,6 +108,7 @@ function TrainingForm() {
                   className: "bg-green-50",
                 });
                 setHasFilledForm(true);
+                setIsDirty(false);
               }}
             >
               <FaSave />

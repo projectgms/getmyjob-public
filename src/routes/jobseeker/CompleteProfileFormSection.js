@@ -12,12 +12,16 @@ import {
 } from "react-icons/fa";
 import { FaInfoCircle, FaPhoneAlt } from "react-icons/fa";
 import { useNavigate, useLocation, Outlet } from "react-router-dom";
-import MobileNavigationBar from './../../components/JobSeekerComponents/MobileNavigationBar';
+import MobileNavigationBar from "./../../components/JobSeekerComponents/MobileNavigationBar";
+import ConfirmationModal from './../../components/JobSeekerComponents/ReusableComponents/ConfirmationModal';
 
 function CompleteProfileFormSection() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [activeTab, setActiveTab] = useState("");
+  const [activeTab, setActiveTab] = useState(localStorage.getItem("activeTab") || "personalInfo");
+  const [isFormDirty, setIsFormDirty] = useState(false); // Track unsaved changes
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [pendingRoute, setPendingRoute] = useState(null); // Store pending navigation
 
   const sidebarItems = [
     { id: "personalInfo", label: "Personal Information", icon: <FaUser size={20} />, route: "/jobseeker/complete-profile-form/personal-info" },
@@ -33,23 +37,47 @@ function CompleteProfileFormSection() {
     { id: "otherdetails", label: "Other Details", icon: <FaInfoCircle size={20} />, route: "/jobseeker/complete-profile-form/other-details" },
   ];
 
-  // Update active tab based on URL
+  // Persist active tab in localStorage
   useEffect(() => {
-    const activeItem = sidebarItems.find((item) => location.pathname.includes(item.route));
-    if (activeItem) {
-      setActiveTab(activeItem.id);
-    }
-  }, [location.pathname, sidebarItems]);
+    localStorage.setItem("activeTab", activeTab);
+  }, [activeTab]);
+
+  // Warn on page reload or tab close
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      if (isFormDirty) {
+        event.preventDefault();
+        event.returnValue = "You have unsaved changes. Are you sure you want to leave?";
+      }
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [isFormDirty]);
 
   const handleTabClick = (id, route) => {
-    setActiveTab(id);
-    navigate(route);
+    if (isFormDirty) {
+      setIsModalOpen(true);
+      setPendingRoute({ id, route }); // Store the intended route
+    } else {
+      setActiveTab(id);
+      navigate(route);
+    }
+  };
+
+  const confirmNavigation = () => {
+    if (pendingRoute) {
+      setActiveTab(pendingRoute.id);
+      navigate(pendingRoute.route);
+      setIsModalOpen(false);
+      setIsFormDirty(false); // Reset form dirty state
+      setPendingRoute(null);
+    }
   };
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50 pt-20">
       {/* Mobile Navigation Bar (Tabs at the top) */}
-      <MobileNavigationBar sidebarItems={sidebarItems} />
+      <MobileNavigationBar sidebarItems={sidebarItems} isFormDirty={isFormDirty} setIsFormDirty={setIsFormDirty} />
 
       <div className="flex flex-row w-full">
         {/* Sticky Sidebar (Visible on Desktop & Tablet) */}
@@ -75,9 +103,22 @@ function CompleteProfileFormSection() {
 
         {/* Scrollable Main Content */}
         <div className="flex-1 h-[calc(100vh-80px)] overflow-y-auto p-4 mt-10 md:mt-0">
-          <Outlet />
+          <Outlet context={{ setIsFormDirty }} />
         </div>
       </div>
+
+      {/* ✅ MODAL FOR UNSAVED CHANGES */}
+      {isModalOpen && (
+         <ConfirmationModal
+         isOpen={isModalOpen}
+         onClose={() => setIsModalOpen(false)}
+         onConfirm={confirmNavigation}
+         title="Leave this page"
+         message="There might be unsaved changes. Are you sure want to leave this page?"
+         confirmText="Confirm"
+         cancelText="Cancel"
+       />
+      )}
     </div>
   );
 }

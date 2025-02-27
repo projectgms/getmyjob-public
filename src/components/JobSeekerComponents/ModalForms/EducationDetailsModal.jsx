@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import InputField from "../ReusableComponents/InputField";
 import DropDown from "./../ReusableComponents/DropDown";
-import { Form, Formik, Field } from "formik";
+import { Form, Formik, Field, useFormikContext } from "formik";
 import { useDispatch } from "react-redux";
 import { IoMdClose } from "react-icons/io";
 import * as Yup from "yup";
@@ -66,6 +66,7 @@ function EducationDetailsModal({
 }) {
   const dispatch = useDispatch();
 
+
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
       <div className="relative p-4 w-full max-w-4xl max-h-full">
@@ -85,7 +86,7 @@ function EducationDetailsModal({
           <div className="p-4 md:p-5 space-y-4">
             <Formik
               initialValues={{
-                qualification: initialValues?.qualification || "",
+                qualification: title   || "",
                 stream: initialValues?.stream || "",
                 college: initialValues?.college || "",
                 collegeCity: initialValues?.collegeCity || "",
@@ -110,19 +111,14 @@ function EducationDetailsModal({
                       <InputField
                         label="Qualification"
                         {...field}
-                        value={title} // Set default value from prop
-                        disabled // Make it uneditable
+                        value={field.value}  // Set default value from prop
+                        readOnly={true} // Make it readonly
                       />
                     )}
                   </Field>
 
                   <Field name="stream">
-                    {({ field }) => (
-                      <InputField
-                        label="Stream"
-                        {...field}
-                      />
-                    )}
+                    {({ field }) => <InputField label="Stream" {...field} />}
                   </Field>
 
                   <Field name="college">

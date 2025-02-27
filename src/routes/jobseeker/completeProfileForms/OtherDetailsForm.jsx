@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useEffect,useState} from "react";
 import { Formik, Form } from "formik";
 import ReusableInputList from "./../../../components/JobSeekerComponents/ReusableComponents/ReusableInputList";
 import ChipsComponent from "./../../../components/JobSeekerComponents/ReusableComponents/ChipsComponent";
@@ -10,6 +10,10 @@ import {
   editOtherDetails,
 } from "./../../../store/slices/profileFormsSlice";
 import { ToastContainer, toast } from "react-toastify";
+import { useOutletContext } from "react-router-dom"; // Import useOutletContext
+import { processFinalData } from './Form_Functions/processFinalData ';
+import ConfirmationModal from './../../../components/JobSeekerComponents/ReusableComponents/ConfirmationModal';
+
 
 // Yup validation schema
 const validationSchema = Yup.object().shape({
@@ -33,6 +37,14 @@ function OtherDetailsForm() {
     extraCurricular: [],
   };
 
+  const { setIsFormDirty } = useOutletContext();
+
+  const [isDirty, setIsDirty] = useState(false);
+
+  useEffect(() => {
+    setIsFormDirty(isDirty);
+  }, [isDirty, setIsFormDirty]);
+
   // Submit handler: Save the form data to Redux
   const handleSubmit = (values) => {
     // Clean up the arrays to remove empty strings
@@ -44,11 +56,23 @@ function OtherDetailsForm() {
         (item) => item.trim() !== ""
       ),
     };
-    toast.success("Details saved successfully!", {
-      position: "top-right",
-      autoClose: 5000,
-      className: "bg-green-50",
-    });
+
+    const isValid = processFinalData(dispatch);
+
+    if (!isValid) {
+      console.log("Missing Fields:", missingFields);
+      return;
+    }
+
+    console.log("Final Data Saved Successfully");
+
+    if(isValid){
+      toast.success("Details saved successfully!", {
+        position: "top-right",
+        autoClose: 5000,
+        className: "bg-green-50",
+      });
+    }
     // If editing an existing form, use editOtherDetails
     if (values.id) {
       dispatch(editOtherDetails(cleanedValues));
@@ -56,8 +80,12 @@ function OtherDetailsForm() {
       // If new form, save using saveOtherDetails
       dispatch(saveOtherDetails(cleanedValues));
     }
+    setIsFormDirty(false); 
     console.log("Form Submitted:", cleanedValues); // Log the cleaned data
   };
+
+
+  const missingFields = useSelector((state) => state.profileForms.missingFields);
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-8 w-full">
@@ -68,8 +96,14 @@ function OtherDetailsForm() {
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          {({ values, setFieldValue, errors, touched }) => (
-            <Form className="space-y-8 rounded-lg bg-white p-6 shadow-sm">
+          {(formikProps) => {
+
+            const { values, setFieldValue, errors, touched, dirty } = formikProps; 
+
+            setIsDirty(dirty);  
+
+            return(
+              <Form className="space-y-8 rounded-lg bg-white p-6 shadow-sm">
               <div className="mx-auto w-full space-y-6">
                 {/* Brief Summary */}
                 <div>
@@ -146,8 +180,11 @@ function OtherDetailsForm() {
                 </div>
               </div>
             </Form>
-          )}
+            )
+          }}
         </Formik>
+
+        
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import InputField from "./../../../components/JobSeekerComponents/ReusableComponents/InputField";
@@ -6,6 +6,7 @@ import { FaSave } from "react-icons/fa";
 import {saveContactDetails} from './../../../store/slices/profileFormsSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast, ToastContainer } from 'react-toastify';
+import { useOutletContext } from "react-router-dom"; // Import useOutletContext
 
 
 const validationSchema = Yup.object({
@@ -24,7 +25,7 @@ const validationSchema = Yup.object({
 
 function ContactDetailsForm() {
 
-  const savedContactDetails = useSelector((state) => state.profileForms.contactDetails);
+const savedContactDetails = useSelector((state) => state.profileForms.contactDetails);
   
 const initialValues = {
   secondaryPhone: savedContactDetails.secondaryPhone|| "",
@@ -35,7 +36,13 @@ const initialValues = {
 
 
   const dispatch = useDispatch();
+   const { setIsFormDirty } = useOutletContext();
+  
+    const [isDirty, setIsDirty] = useState(false);
 
+      useEffect(() => {
+        setIsFormDirty(isDirty);
+      }, [isDirty, setIsFormDirty]);
 
 
   const handleSubmit = (values, { setSubmitting }) => {
@@ -47,6 +54,7 @@ const initialValues = {
           className:'bg-green-50'
         });
     setSubmitting(false);
+    setIsFormDirty(false); 
   };
 
   return (
@@ -60,7 +68,11 @@ const initialValues = {
           validateOnBlur={true}
           onSubmit={handleSubmit}
         >
-          {({ isSubmitting }) => (
+          {({ isSubmitting, dirty }) => {
+          
+          setIsDirty(dirty);
+          
+          return (
             <Form className="space-y-8 rounded-lg bg-white p-6 shadow-sm">
               <InputField label="Secondary Phone Number" name="secondaryPhone" />
               <InputField label="Other Email" name="otherEmail" type="email" />
@@ -91,6 +103,7 @@ const initialValues = {
               </div>
             </Form>
           )}
+        }
         </Formik>
       </div>
     </div>

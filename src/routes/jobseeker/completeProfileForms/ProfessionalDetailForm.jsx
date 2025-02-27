@@ -12,6 +12,7 @@ import {
 } from "./../../../store/slices/profileFormsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
+import { useOutletContext } from "react-router-dom"; // Import useOutletContext
 
 function ProfessionalDetailForm() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -20,6 +21,14 @@ function ProfessionalDetailForm() {
   const [editIndex, setEditIndex] = useState(null);
   const [isEditingTemp, setIsEditingTemp] = useState(false);
   const [initialFormValues, setInitialFormValues] = useState(null);
+
+  const { setIsFormDirty } = useOutletContext();
+
+  const [isDirty, setIsDirty] = useState(false);
+
+  useEffect(() => {
+    setIsFormDirty(isDirty);
+  }, [isDirty, setIsFormDirty]);
 
   const tempSavedList = useSelector(
     (state) => state.profileForms.tempProfessionalDetails || []
@@ -35,6 +44,9 @@ function ProfessionalDetailForm() {
     // If there is any saved experience, mark form as filled
     if (tempSavedList.length > 0 || finalSavedList.length > 0) {
       setHasFilledForm(true);
+    }
+    if (tempSavedList.length > 0){
+      setIsDirty(true);
     }
   }, [tempSavedList, finalSavedList]);
 
@@ -62,6 +74,7 @@ function ProfessionalDetailForm() {
 
     setInitialFormValues({ ...selectedExperience }); // Ensure values are copied
     setIsModalOpen(true);
+    setIsDirty(true);
   };
 
   const handleSaveEdit = (updatedData) => {
@@ -69,16 +82,14 @@ function ProfessionalDetailForm() {
       dispatch(
         editTempProfessionalExperience({ index: editIndex, updatedData })
       );
-    
     } else {
       dispatch(
         editFinalProfessionalExperience({ index: editIndex, updatedData })
       );
-      
     }
 
- 
     setIsModalOpen(false);
+    setIsDirty(false);
     setEditIndex(null);
     setIsEditingTemp(false);
   };
@@ -111,6 +122,7 @@ function ProfessionalDetailForm() {
                   className: "bg-green-50",
                 });
                 setHasFilledForm(true); // Ensure UI remains updated
+                setIsDirty(false);
               }}
             >
               <FaSave />

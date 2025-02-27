@@ -145,9 +145,12 @@ function InternshipExperienceModal({
                       )}
                     </Field>
                   </div>
-                  <Field name="description">
-                    {({ field }) => <InputField label="Description" {...field} />}
-                  </Field>
+                  <div className="col-span-2">
+                    <Field name="description">
+                      {({ field }) => <InputField label="Description" {...field} />}
+                    </Field>
+                  </div>
+              
                   <div className="col-span-2 flex justify-end">
                     <button
                       type="button"

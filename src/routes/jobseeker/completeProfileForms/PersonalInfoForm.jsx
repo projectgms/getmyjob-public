@@ -1,15 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { FaSave } from "react-icons/fa";
-import InputField from '../../../components/JobSeekerComponents/ReusableComponents/InputField';
-import DropDown from './../../../components/JobSeekerComponents/ReusableComponents/DropDown';
-import FileUploadField from '../../../components/JobSeekerComponents/ReusableComponents/FileUploadField';
-import TextAreaField from '../../../components/JobSeekerComponents/ReusableComponents/TextAreaField';
-import MultiSelectField from './../../../components/JobSeekerComponents/ReusableComponents/MultiSelectField';
-import { useDispatch, useSelector } from 'react-redux';
-import { savePersonalInformation } from './../../../store/slices/profileFormsSlice';
-import { ToastContainer, toast } from 'react-toastify';
+import InputField from "../../../components/JobSeekerComponents/ReusableComponents/InputField";
+import DropDown from "./../../../components/JobSeekerComponents/ReusableComponents/DropDown";
+import FileUploadField from "../../../components/JobSeekerComponents/ReusableComponents/FileUploadField";
+import TextAreaField from "../../../components/JobSeekerComponents/ReusableComponents/TextAreaField";
+import MultiSelectField from "./../../../components/JobSeekerComponents/ReusableComponents/MultiSelectField";
+import { useDispatch, useSelector } from "react-redux";
+import { savePersonalInformation } from "./../../../store/slices/profileFormsSlice";
+import { ToastContainer, toast } from "react-toastify";
+import { useOutletContext } from "react-router-dom"; // Import useOutletContext
 
 // Validation Schema using Yup
 const validationSchema = Yup.object({
@@ -17,7 +18,9 @@ const validationSchema = Yup.object({
   firstName: Yup.string().required("First name is required"),
   middleName: Yup.string().required("Middle name is required"),
   lastName: Yup.string().required("Last name is required"),
-  email: Yup.string().email("Invalid email address").required("Email is required"),
+  email: Yup.string()
+    .email("Invalid email address")
+    .required("Email is required"),
   phoneNumber: Yup.string()
     .matches(/^[0-9]+$/, "Must be only digits")
     .min(10, "Must be exactly 10 digits")
@@ -25,17 +28,13 @@ const validationSchema = Yup.object({
     .required("Phone number is required"),
   dateOfBirth: Yup.date()
     .required("Date of birth is required")
-    .test(
-      "is-16-years-old",
-      "You must be at least 16 years old",
-      (value) => {
-        const today = new Date();
-        const minAgeDate = new Date(today.setFullYear(today.getFullYear() - 16)); // Subtract 16 years from today
+    .test("is-16-years-old", "You must be at least 16 years old", (value) => {
+      const today = new Date();
+      const minAgeDate = new Date(today.setFullYear(today.getFullYear() - 16)); // Subtract 16 years from today
 
-        // Ensure that the user is at least 16 years old
-        return value && value <= minAgeDate;
-      }
-    )
+      // Ensure that the user is at least 16 years old
+      return value && value <= minAgeDate;
+    })
     .test(
       "is-not-in-future",
       "Date of birth cannot be in the future",
@@ -61,16 +60,27 @@ const validationSchema = Yup.object({
   bloodGroup: Yup.string().required("Blood group is required"),
   medicalHistory: Yup.string().required("Medical history is required"),
   disability: Yup.string().required("Disability status is required"),
-  knownLanguages: Yup.array().min(1, "Select at least one language").required("Known languages are required"),
+  knownLanguages: Yup.array()
+    .min(1, "Select at least one language")
+    .required("Known languages are required"),
+  totalExpYear: Yup.string().required("Total Years of Experience Required"),
+  totalExpMonth: Yup.string().required("Total Months of Experience Required")
 });
 
 function PersonalInfoForm() {
   const dispatch = useDispatch();
+  const { setIsFormDirty } = useOutletContext();
+
+  const [isDirty, setIsDirty] = useState(false);
+
+  useEffect(() => {
+    setIsFormDirty(isDirty);
+  }, [isDirty, setIsFormDirty]);
 
   const personalInformation = useSelector(
     (state) => state.profileForms.personalInformation
   );
- 
+
   // Initial Values
   const initialValues = {
     profilePicture: personalInformation.profilePicture || null,
@@ -94,21 +104,22 @@ function PersonalInfoForm() {
     medicalHistory: personalInformation.medicalHistory || "",
     disability: personalInformation.disability || "",
     knownLanguages: personalInformation.knownLanguages || [],
+    totalExpYear: personalInformation.totalExpYear || "",
+    totalExpMonth: personalInformation.totalExpMonth || "",
+
   };
 
-  const handleSubmit = (values, { setSubmitting, setErrors ,validateForm  }) => {
-
-
-
+  const handleSubmit = (values, { setSubmitting, setErrors, validateForm }) => {
     // Saving form data
     dispatch(savePersonalInformation(values));
     // Show success message
     toast.success("Personal information saved successfully!", {
       position: "top-right",
       autoClose: 5000,
-      className:'bg-green-50'
+      className: "bg-green-50",
     });
     setSubmitting(false);
+    setIsFormDirty(false);
   };
 
   return (
@@ -122,122 +133,168 @@ function PersonalInfoForm() {
           validateOnBlur={true} // Ensures validation runs on blur
           onSubmit={handleSubmit}
         >
-          {({ setFieldValue,errors  }) => (
-            <Form className="space-y-8 rounded-lg bg-white p-6 shadow-sm">
-              {/* Profile Picture Upload */}
-              <FileUploadField
-                label="Profile Picture"
-                name="profilePicture"
-                setFieldValue={setFieldValue}
-              />
+          {(formikProps) => {
+            const { setFieldValue, errors, dirty } = formikProps;
 
-              {/* Personal Information */}
-              <div className="grid gap-6 md:grid-cols-3">
-                <InputField label="First Name" name="firstName" />
-                <InputField label="Middle Name" name="middleName" />
-                <InputField label="Last Name" name="lastName" />
-              </div>
+            setIsDirty(dirty);
 
-              <div className="grid gap-6 md:grid-cols-2">
-                <InputField label="Email Address" name="email" type="email" />
-                <InputField label="Phone Number" name="phoneNumber" />
-              </div>
+            return (
+              <Form className="space-y-8 rounded-lg bg-white p-6 shadow-sm">
+                {/* Profile Picture Upload */}
+                <FileUploadField
+                  label="Profile Picture"
+                  name="profilePicture"
+                  setFieldValue={setFieldValue}
+                />
 
-              <div className="grid gap-6 md:grid-cols-2">
-                <InputField label="Date of Birth" name="dateOfBirth" type="date" />
-                <DropDown
-                  label="Gender"
-                  name="gender"
+                {/* Personal Information */}
+                <div className="grid gap-6 md:grid-cols-3">
+                  <InputField label="First Name" name="firstName" />
+                  <InputField label="Middle Name" name="middleName" />
+                  <InputField label="Last Name" name="lastName" />
+                </div>
+
+                <div className="grid gap-6 md:grid-cols-2">
+                  <InputField label="Email Address" name="email" type="email" />
+                  <InputField label="Phone Number" name="phoneNumber" />
+                </div>
+
+                <div className="grid gap-6 md:grid-cols-2">
+                  <InputField
+                    label="Date of Birth"
+                    name="dateOfBirth"
+                    type="date"
+                  />
+                  <DropDown
+                    label="Gender"
+                    name="gender"
+                    options={[
+                      { label: "Male", value: "male" },
+                      { label: "Female", value: "female" },
+                      { label: "Other", value: "other" },
+                    ]}
+                  />
+                  <DropDown
+                    label="Marital Status"
+                    name="maritalStatus"
+                    options={[
+                      { label: "Single", value: "single" },
+                      { label: "Married", value: "married" },
+                      { label: "Divorced", value: "divorced" },
+                    ]}
+                  />
+                </div>
+
+                {/* Address Section */}
+                <div className="grid gap-6 md:grid-cols-2">
+                  <InputField label="Address Line 1" name="addressLine1" />
+                  <InputField label="Address Line 2" name="addressLine2" />
+                  <DropDown
+                    label="Country"
+                    name="country"
+                    options={[
+                      { label: "India", value: "IN" },
+                      { label: "United States", value: "US" },
+                      { label: "United Kingdom", value: "UK" },
+                    ]}
+                  />
+                  <InputField label="State/Province" name="state" />
+                  <InputField label="City" name="city" />
+                  <InputField label="ZIP/Postal Code" name="zipCode" />
+                </div>
+
+                 {/* Total Experince  */}
+                 <p className="font-medium text-gray-700">
+                  Total Experience
+                  <span className="text-red-500">*</span>
+                </p>
+                
+                <div className="grid gap-6 md:grid-cols-3">
+                  <DropDown
+                    label="Years"
+                    name="totalExpYear"
+                    options={[
+                      { label: "0 Years", value: "0" }, // Start from 0
+                      ...Array.from({ length: 30 }, (_, i) => ({
+                        label: `${i + 1} ${i + 1 === 1 ? "Year" : "Years"}`,
+                        value: `${i + 1}`,
+                      })),
+                      { label: "30+ Years", value: "30+" }, // Special case for 30+
+                    ]}
+                  />
+
+                  <DropDown
+                    label="Months"
+                    name="totalExpMonth"
+                    options={[
+                      { label: "0 Months", value: "0" }, // Start from 0
+                      ...Array.from({ length: 11 }, (_, i) => ({
+                      label: `${i + 1} ${i + 1 === 1 ? "Month" : "Months"}`,
+                      value: `${i + 1}`,
+                    }))]}
+                  />
+                </div>
+
+                {/* Education & Specialization */}
+                <div className="grid gap-6 md:grid-cols-2">
+                  <InputField label="Course" name="course" />
+                  <InputField
+                    label="Primary Specialization"
+                    name="specialization"
+                  />
+                </div>
+
+                {/* Additional Information */}
+                <div className="grid gap-6 md:grid-cols-2">
+                  <DropDown
+                    label="Blood Group"
+                    name="bloodGroup"
+                    options={[
+                      { label: "A+", value: "A+" },
+                      { label: "B+", value: "B+" },
+                      { label: "O+", value: "O+" },
+                    ]}
+                  />
+                  <DropDown
+                    label="Disability"
+                    name="disability"
+                    options={[
+                      { label: "Yes", value: "yes" },
+                      { label: "No", value: "no" },
+                    ]}
+                  />
+                </div>
+
+                {/* Multi-Select */}
+                <MultiSelectField
+                  label="Known Languages"
+                  name="knownLanguages"
                   options={[
-                    { label: "Male", value: "male" },
-                    { label: "Female", value: "female" },
-                    { label: "Other", value: "other" },
+                    { label: "English", value: "english" },
+                    { label: "Hindi", value: "hindi" },
+                    { label: "Marathi", value: "marathi" },
                   ]}
                 />
-                <DropDown
-                  label="Marital Status"
-                  name="maritalStatus"
-                  options={[
-                    { label: "Single", value: "single" },
-                    { label: "Married", value: "married" },
-                    { label: "Divorced", value: "divorced" },
-                  ]}
-                />
-              </div>
 
-              {/* Address Section */}
-              <div className="grid gap-6 md:grid-cols-2">
-                <InputField label="Address Line 1" name="addressLine1" />
-                <InputField label="Address Line 2" name="addressLine2" />
-                <DropDown
-                  label="Country"
-                  name="country"
-                  options={[
-                    { label: "India", value: "IN" },
-                    { label: "United States", value: "US" },
-                    { label: "United Kingdom", value: "UK" },
-                  ]}
-                />
-                <InputField label="State/Province" name="state" />
-                <InputField label="City" name="city" />
-                <InputField label="ZIP/Postal Code" name="zipCode" />
-              </div>
+               
 
-              {/* Education & Specialization */}
-              <div className="grid gap-6 md:grid-cols-2">
-                <InputField label="Course" name="course" />
-                <InputField label="Primary Specialization" name="specialization" />
-              </div>
+                {/* Text Area */}
+                <TextAreaField label="Medical History" name="medicalHistory" />
 
-              {/* Additional Information */}
-              <div className="grid gap-6 md:grid-cols-2">
-                <DropDown
-                  label="Blood Group"
-                  name="bloodGroup"
-                  options={[
-                    { label: "A+", value: "A+" },
-                    { label: "B+", value: "B+" },
-                    { label: "O+", value: "O+" },
-                  ]}
-                />
-                <DropDown
-                  label="Disability"
-                  name="disability"
-                  options={[
-                    { label: "Yes", value: "yes" },
-                    { label: "No", value: "no" },
-                  ]}
-                />
-              </div>
-
-              {/* Multi-Select */}
-              <MultiSelectField
-                label="Known Languages"
-                name="knownLanguages"
-                options={[
-                  { label: "English", value: "english" },
-                  { label: "Hindi", value: "hindi" },
-                  { label: "Marathi", value: "marathi" },
-                ]}
-              />
-
-              {/* Text Area */}
-              <TextAreaField label="Medical History" name="medicalHistory" />
-              {/* <InputField label="Dream Company" name="dreamCompany" /> */}
-
-              {/* Submit Button */}
-              <div className="flex justify-end">
-                <button
-                  type="submit"
-                  // disabled={isSubmitting || !isValid}
-                  className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-6 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
-                >
-                  <FaSave />
-                  Save
-                </button>
-              </div>
-            </Form>
-          )}
+                {/* Submit Button */}
+                <div className="flex justify-end">
+                  <button
+                    type="submit"
+                    // disabled={isSubmitting || !isValid}
+                    className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-6 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
+                  >
+                    <FaSave />
+                    Save
+                  </button>
+                </div>
+              </Form>
+            );
+          }}
         </Formik>
       </div>
     </div>

@@ -32,6 +32,8 @@ const loadFormsFromLocalStorage = () => {
             awards: [],
             extraCurricular: [],
           },
+          finalData: null,
+           missingFields: [], // Stores fields that are missing
         };
   } catch (error) {
     console.error("Failed to load forms from local storage", error);
@@ -60,6 +62,8 @@ const loadFormsFromLocalStorage = () => {
         awards: [],
         extraCurricular: [],
       },
+      finalData: null,
+      missingFields: [], // Stores fields that are missing
     };
   }
 };
@@ -498,6 +502,18 @@ const profileFormsSlice = createSlice({
       localStorage.setItem("forms", JSON.stringify(state)); // Save to local storage
     },
 
+
+
+    // FOR FINAL SAVE OF DATA 
+
+    saveFinalData: (state, action) => {
+      state.finalData = action.payload;
+    },
+    setMissingFields: (state, action) => {
+      state.missingFields = action.payload;
+    },
+
+
     clearAllForms: () => {
       localStorage.removeItem("forms");
       return {
@@ -526,9 +542,10 @@ const profileFormsSlice = createSlice({
           summary: "",
           expertise: [],
           achievements: [],
-          awards: [],
           extraCurricular: [],
         },
+        finalData: null,
+        missingFields: [], // Stores fields that are missing
       };
     },
     removeAttachment: (state, action) => {
@@ -603,6 +620,10 @@ export const {
 
   deleteEducationalDetail,
   removeAttachment,
+
+  saveFinalData,
+  setMissingFields
+
 } = profileFormsSlice.actions;
 
 export default profileFormsSlice.reducer;

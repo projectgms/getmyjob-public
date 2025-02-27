@@ -13,6 +13,7 @@ import {
   saveTempProject,
 } from "../../../store/slices/profileFormsSlice";
 import { ToastContainer, toast } from "react-toastify";
+import { useOutletContext } from "react-router-dom"; // Import useOutletContext
 
 function ProjectsForm() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -20,6 +21,13 @@ function ProjectsForm() {
   const [editIndex, setEditIndex] = useState(null);
   const [isEditingTemp, setIsEditingTemp] = useState(false);
   const [initialFormValues, setInitialFormValues] = useState(null);
+  const { setIsFormDirty } = useOutletContext();
+
+  const [isDirty, setIsDirty] = useState(false);
+
+  useEffect(() => {
+    setIsFormDirty(isDirty);
+  }, [isDirty, setIsFormDirty]);
 
   const tempSavedList = useSelector(
     (state) => state.profileForms.tempProjectDetails || []
@@ -34,6 +42,9 @@ function ProjectsForm() {
   useEffect(() => {
     if (tempSavedList.length > 0 || finalSavedList.length > 0) {
       setHasFilledForm(true);
+    }
+    if (tempSavedList.length > 0) {
+      setIsDirty(true);
     }
   }, [tempSavedList, finalSavedList]);
 
@@ -58,6 +69,7 @@ function ProjectsForm() {
       : finalSavedList[index];
     setInitialFormValues({ ...selectedProject });
     setIsModalOpen(true);
+    setIsDirty(true);
   };
 
   const handleSaveEdit = (updatedData) => {
@@ -67,13 +79,14 @@ function ProjectsForm() {
       dispatch(editFinalProject({ index: editIndex, updatedData }));
     }
     setIsModalOpen(false);
+    setIsDirty(false);
     setEditIndex(null);
     setIsEditingTemp(false);
   };
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-8 w-full">
-       <ToastContainer />
+      <ToastContainer />
       <div className="mx-auto w-full">
         {!hasFilledForm && (
           <ModalOpenerForms
@@ -96,6 +109,7 @@ function ProjectsForm() {
                   className: "bg-green-50",
                 });
                 setHasFilledForm(true);
+                setIsDirty(false);
               }}
             >
               <FaSave />

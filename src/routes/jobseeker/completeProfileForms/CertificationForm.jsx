@@ -13,7 +13,7 @@ import {
   saveTempCertification,
 } from "./../../../store/slices/profileFormsSlice";
 import { ToastContainer, toast } from "react-toastify";
-
+import { useOutletContext } from "react-router-dom"; // Import useOutletContext
 
 function CertificationForm() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -21,6 +21,14 @@ function CertificationForm() {
   const [editIndex, setEditIndex] = useState(null);
   const [isEditingTemp, setIsEditingTemp] = useState(false);
   const [initialFormValues, setInitialFormValues] = useState(null);
+
+  const { setIsFormDirty } = useOutletContext();
+
+  const [isDirty, setIsDirty] = useState(false);
+
+  useEffect(() => {
+    setIsFormDirty(isDirty);
+  }, [isDirty, setIsFormDirty]);
 
   const tempCertificationList = useSelector(
     (state) => state.profileForms.tempCertification || []
@@ -35,6 +43,9 @@ function CertificationForm() {
   useEffect(() => {
     if (tempCertificationList.length > 0 || finalCertificationList.length > 0) {
       setHasFilledForm(true);
+    }
+    if (tempCertificationList.length > 0 ){
+      setIsDirty(true);
     }
   }, [tempCertificationList, finalCertificationList]);
 
@@ -91,12 +102,13 @@ function CertificationForm() {
               className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-6 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 mb-4"
               onClick={() => {
                 dispatch(finalizeCertificationDetails());
-                 toast.success("Details saved successfully!", {
-                                  position: "top-right",
-                                  autoClose: 5000,
-                                  className: "bg-green-50",
-                                });
+                toast.success("Details saved successfully!", {
+                  position: "top-right",
+                  autoClose: 5000,
+                  className: "bg-green-50",
+                });
                 setHasFilledForm(true);
+                setIsDirty(false);
               }}
             >
               <FaSave />
@@ -145,7 +157,9 @@ function CertificationForm() {
         {isModalOpen && (
           <CertificationModal
             onClose={() => setIsModalOpen(false)}
-            onSubmit={editIndex !== null ? handleSaveEdit : handleCertificationSubmit}
+            onSubmit={
+              editIndex !== null ? handleSaveEdit : handleCertificationSubmit
+            }
             initialValues={
               initialFormValues || {
                 name: "",

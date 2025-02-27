@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { IoClose } from "react-icons/io5";
-import { useFormikContext } from "formik";
+import { useField, useFormikContext } from "formik";
 
 function ChipsComponent({ label, name, placeholder }) {
   const { values, setFieldValue } = useFormikContext();
   const skills = values[name] || []; // Ensure skills are stored inside the correct field
 
   const [inputValue, setInputValue] = useState("");
+
+  const [field, meta] = useField(name);
 
   const handleKeyDown = (event) => {
     if (
@@ -58,10 +60,14 @@ function ChipsComponent({ label, name, placeholder }) {
           onKeyDown={handleKeyDown}
         />
       </div>
+      {meta.touched && meta.error && (
+        <div className="mt-1 text-sm text-red-600">{meta.error}</div>
+      )}
       <p className="text-sm py-2">
         <span className="text-red-600 font-semibold pe-1">*Note:</span>
         Just type something and Press Enter
       </p>
+      
     </div>
   );
 }

@@ -13,6 +13,7 @@ import {
   saveTempResearchPaper,
 } from "./../../../store/slices/profileFormsSlice";
 import { ToastContainer, toast } from "react-toastify";
+import { useOutletContext } from "react-router-dom"; // Import useOutletContext
 
 function ResearchPaperForm() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -20,6 +21,13 @@ function ResearchPaperForm() {
   const [editIndex, setEditIndex] = useState(null);
   const [isEditingTemp, setIsEditingTemp] = useState(false);
   const [initialFormValues, setInitialFormValues] = useState(null);
+  const { setIsFormDirty } = useOutletContext();
+
+  const [isDirty, setIsDirty] = useState(false);
+
+  useEffect(() => {
+    setIsFormDirty(isDirty);
+  }, [isDirty, setIsFormDirty]);
 
   const tempSavedList = useSelector(
     (state) => state.profileForms.tempResearchPapers || []
@@ -34,6 +42,9 @@ function ResearchPaperForm() {
   useEffect(() => {
     if (tempSavedList.length > 0 || finalSavedList.length > 0) {
       setHasFilledForm(true);
+    }
+    if (tempSavedList.length > 0){
+      setIsDirty(true)
     }
   }, [tempSavedList, finalSavedList]);
 
@@ -55,6 +66,7 @@ function ResearchPaperForm() {
     const selectedPaper = isTemp ? tempSavedList[index] : finalSavedList[index];
     setInitialFormValues({ ...selectedPaper });
     setIsModalOpen(true);
+    setIsDirty(true);
   };
 
   const handleSaveEdit = (updatedData) => {
@@ -64,6 +76,7 @@ function ResearchPaperForm() {
       dispatch(editFinalResearchPaper({ index: editIndex, updatedData }));
     }
     setIsModalOpen(false);
+    setIsDirty(false);
     setEditIndex(null);
     setIsEditingTemp(false);
   };
@@ -92,6 +105,7 @@ function ResearchPaperForm() {
                   className: "bg-green-50",
                 });
                 setHasFilledForm(true);
+                setIsDirty(false);
               }}
             >
               <FaSave />
