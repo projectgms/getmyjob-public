@@ -18,7 +18,7 @@ import {
   ChevronRight,
   ChevronDown,
   ChevronUp,
-ArrowUpRight
+  ArrowUpRight
 
 } from "lucide-react"; // Import icons
 
@@ -26,9 +26,13 @@ ArrowUpRight
 
 
 import { Line } from "react-chartjs-2";
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
+import { Bar } from "react-chartjs-2";
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, BarElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
+import JobManagement from './../recruiter/Jobmanagement/JobManagement';
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend);
+
+
 
 
 export default function Dashboard() {
@@ -194,7 +198,40 @@ export default function Dashboard() {
     },
   };
 
+  const supportchartoptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false,
+      },
+      title: {
+        display: false,
+      },
+    },
+    scales: {
+      x: {
+        display: false,
+      },
+      y: {
+        display: false,
+      },
+    },
+  };
 
+
+
+  const supportdata = {
+    labels: ["Pending Approvals", "Flagged Complaints", "Subscription Issues", "Recruiter Verifications", "User Reports"],
+    datasets: [
+      {
+        label: "Number of Cases",
+        data: [50, 30, 20, 40, 25],
+        backgroundColor: "#3B82F6", // Tailwind blue-500
+        borderRadius: 6,
+      },
+    ],
+  };
 
 
 
@@ -268,9 +305,27 @@ export default function Dashboard() {
 
 
               {/* Recruiter & Job Seeker Registrations Chart */}
-              <div className=" md:col-span-1 mt-6  p-6 rounded-3xl border-gray-300  border-dashed border-2 dark:border-gray-700 relative">
+              <div className=" md:col-span-1 mt-6  p-4 rounded-3xl border-gray-300  border-dashed border-2 dark:border-gray-700 relative">
 
-                helloe
+                <div className="flex h-full flex-col justify-between ">
+                 
+                    <h3 className="text-lg font-semibold ">Support Management</h3>
+                   
+                  <div className="w-full max-w-2xl mx-auto bg-white dark:bg-gray-800 p-6 rounded-3xl ">
+                   
+
+                     <div className="flex justify-between items-center ">
+                    <h3 className="text-md font-semibold">Requests by Category</h3>
+                    <button className="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition">
+                      <ArrowUpRight className="w-5 h-5" />
+                    </button>
+                  </div>
+                    <div className="h-48">
+                      <Bar data={supportdata} options={supportchartoptions} />
+                    </div>
+                  </div>
+                </div>
+
 
               </div>
 
@@ -358,8 +413,8 @@ export default function Dashboard() {
                   </button>
 
                   <button onClick={nextSlide} className="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition">
-                  <ChevronRight className="w-5 h-5" />
-                </button>
+                    <ChevronRight className="w-5 h-5" />
+                  </button>
                 </div>
               </div>
               <div className="space-y-4 overflow-hidden ">

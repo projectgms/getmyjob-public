@@ -38,13 +38,13 @@ const recruiters = [
             <Navbar />
 
 
-            <div className="p-6 min-h-screen bg-gray-50 dark:bg-gray-900">
-                <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-6">Recruiters Management</h2>
+            <div className="pt-24 p-6 min-h-screen bg-gray-50 dark:bg-gray-900">
+               
 
                 {/* Grid Layout - 3 Columns (Filters) | 9 Columns (Table) */}
                 <div className="grid grid-cols-12 gap-6 ">
                     {/* Filter Section (3 Columns) */}
-                    <div className="col-span-12 md:col-span-3 bg-white dark:bg-gray-800 p-6 rounded-3xl shadow-md">
+                    <div className="col-span-12 md:col-span-3 bg-white dark:bg-gray-800 p-6 rounded-3xl ">
                         <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Filters</h3>
 
                         {/* Search Input */}
@@ -109,7 +109,7 @@ const recruiters = [
 
 
 
-                        <RecruitersTable recruiters={recruiters} />
+                         <RecruitersTable recruiters={recruiters} />
 
 
                     </div>

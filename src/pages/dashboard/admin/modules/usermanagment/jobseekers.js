@@ -28,25 +28,31 @@ const Jobseekers = () => {
   }, [jobseekers, searchQuery, filters]); // ✅ Dependency array ensures re-render on state change
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 ">
-      {/* Navbar */}
-      <Navbar />
+     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white">
+               {/* Navbar */}
+               <Navbar />
       
-      <div className="mt-16 p-6  bg-gray-50 dark:bg-gray-900">
+      <div className="pt-24 p-6 min-h-screen bg-gray-50 dark:bg-gray-900">
+
+     
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+          
           {/* Left Section (Sidebar - Search & Filters) */}
-          <div className="md:col-span-4 lg:col-span-3 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
+          <div className="md:col-span-4 lg:col-span-3  border-2 dark:border-gray-600  p-6 rounded-3xl ">
             <SearchBar />
             <Filters />
           </div>
+
+          
           
           {/* Right Section (Jobseekers Table) */}
-          <div className="md:col-span-8 lg:col-span-9 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg overflow-hidden">
+          <div className="md:col-span-8 lg:col-span-9 bg-white dark:bg-gray-800 p-6 rounded-3xl   overflow-hidden">
             {filteredJobseekers.length === 0 ? (
               <div className="text-center text-gray-500 dark:text-gray-400 py-6">
                 No matching jobseekers found
               </div>
             ) : (
+              
               <JobseekersTable data={filteredJobseekers} />
             )}
           </div>

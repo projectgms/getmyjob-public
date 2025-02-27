@@ -4,6 +4,7 @@ const initialState = {
   location: "",
   experience: "",
   jobTitle: "",
+  status: "", // ✅ Add status filter
 };
 
 const filterSlice = createSlice({
@@ -19,8 +20,11 @@ const filterSlice = createSlice({
     setJobTitleFilter: (state, action) => {
       state.jobTitle = action.payload;
     },
+    setStatusFilter: (state, action) => {  // ✅ New status filter
+      state.status = action.payload;
+    },
   },
 });
 
-export const { setLocationFilter, setExperienceFilter, setJobTitleFilter } = filterSlice.actions;
+export const { setLocationFilter, setExperienceFilter, setJobTitleFilter, setStatusFilter } = filterSlice.actions;
 export default filterSlice.reducer;

@@ -43,11 +43,15 @@ import AdminSignUp from './pages/authentication/admin/admin-signup'
 import ForgotPassword from './pages/authentication/admin/admin-forgot-password'
 import Dashboard from './pages/dashboard/admin/Dashboard'
 import Recruiters  from './pages/dashboard/admin/modules/usermanagment/recruiters'
+import Jobseekers from './pages/dashboard/admin/modules/usermanagment/jobseekers'
+import ReportsAnalytics from './pages/dashboard/admin/modules/reportsanalytics/reportsanalytics'
+import SupportManagement from './pages/dashboard/admin/modules/supportmanagment/supportmanagment'
+import SubscriptionPayment from './pages/dashboard/admin/modules/subscriptionandpayment/subscriptionandpayment'
 // added by admin rahul to use flowbit 
 import "flowbite";
 import "./index.css";
 
-import Jobseekers from './pages/dashboard/admin/modules/usermanagment/jobseekers'
+
 
 
 const App = () => {
@@ -110,6 +114,9 @@ const App = () => {
        <Route path='jobseekers' element={<Jobseekers/>}/>
       </Route>
 
+      <Route path='/admin/reportsanalytics' element={<ReportsAnalytics/>}/>
+      <Route path='/admin/supportmanagement' element={<SupportManagement/>}/>
+      <Route path='/admin/subscriptionpayment' element={<SubscriptionPayment/>}/>
 
       <Route path='/admin/signin' element={<AdminSignIn/>}/>
       <Route path='/admin/signup' element={<AdminSignUp/>}/>
